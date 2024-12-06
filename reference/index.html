@@ -160,10 +160,10 @@
 <p><status>PAGE STATUS: early draft</status></p>
 <p>A reference is a pointer from one record to another.</p>
 <p>Mosaic defines two kinds of references</p>
-<h2 id="hash-reference">Hash Reference</h2>
-<p>A <code>hash</code> reference is a pointer to an exact record with no provision for
-replacement or edits. It is a prefix of the <code>hash</code> of the message. Usually
-either a 16-byte (128 bit) or 32-byte (256 bit) prefix is used.</p>
+<h2 id="id-reference">Id Reference</h2>
+<p>A <code>id</code> reference is a pointer to an exact record with no provision for
+replacement or edits. It contains some <code>hash</code> of the message making it
+unique. See <a href="../record/">record</a> for the Id field.</p>
 <h2 id="address-reference">Address Reference</h2>
 <p>An <code>address</code> reference is a pointer to a group of records that have the same
 address, which usually represent an initial record and it's subsequent
@@ -172,9 +172,9 @@ superceding the older records.</p>
 <p>An address consists of four fields which are contiguous and in order in the
 record layout at <code>[128:176]</code> making up 48 bytes.</p>
 <ul>
-<li>The the author's public key (32 bytes),</li>
+<li>The original timestamp (6 bytes) in big-endian,</li>
 <li>The kind (2 bytes),</li>
-<li>The original timestamp (6 bytes),</li>
+<li>The the author's public key (32 bytes),</li>
 <li>The random nonce (8 bytes),</li>
 </ul>
 <p>An author can replace a record by creating a new record with the same address,
@@ -194,6 +194,8 @@ timestamp in the address.</p>
 <li>By containing the kind, records that are edited cannot change their kind.</li>
 <li>By containing the kind, software can filter records that are not
   relevant to a situation without needing to look them up first.</li>
+<li>By putting the timestamp at the front of the address, addresses sort in
+  time order and group temporally (for database performance).</li>
 <li>By containing the original timestamp and a 64-bit nonce, it is statistically
   infeasible for two different records to have the same address
   unintentionally. In fact this is overkill, but using anything shorter

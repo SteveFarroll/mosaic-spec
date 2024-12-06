@@ -184,6 +184,10 @@ according to <a href="https://www.bittorrent.org/beps/bep_0044.html">BEP 0044</a
   disappear over time. Mechanisms for this are out of scope for Mosaic Core.</li>
 <li>Data storage and retrieval may take a few seconds, and should not be done too
   frequently. Software SHOULD cache results for at least 2 hours.</li>
+<li>You need a bootstrap to get started and find peers. <code>router.utorrent.com</code>
+  and <code>router.bittorrent.com</code> are common but could be targetted in an attack.
+  However, you can find many more or setup your own
+  <a href="https://github.com/bittorrent/bootstrap-dht">bootstrap-dht</a>.</li>
 </ul>
 <h3 id="salt">Salt</h3>
 <p>We use a salt of "msb24" for server bootstraps and "mub24" for user
@@ -226,23 +230,22 @@ designated for <a href="../webtransport/">WebTransport</a>)</p>
 <p>The order of the entries expresses the preference or priority. Earlier
 entries are preferred by the server to later ones.</p>
 <p>Here are some examples of server bootstrap lines:</p>
-<p><code>wss://203.0.113.1</code> specifies WebSockets with TLS on port 80 at IP address
-<code>203.0.113.0</code>.</p>
+<p><code>wss://203.0.113.1</code> specifies WebSockets with TLS on port 443 at IP address
+<code>203.0.113.1</code>.</p>
 <p><code>wss://203.0.113.0:5198</code> specifies WebSockets with TLS on port 5198 at IP
 address <code>203.0.113.0</code>.</p>
 <p><code>wss://myserverlk23lkjsefo8u.onion</code> specifies WebSockets with TLS on port 443
-over Tor.</p>
-<p><code>wss://[2001::130F::09C0:876A:130B]</code> specifies WebSockets with TLS over IPv6
-on port 443.</p>
+over Tor to onion site <code>myserverlk23lkjsefo8u.onion</code>.</p>
+<p><code>wss://[2001::130F::09C0:876A:130B]</code> specifies WebSockets with TLS on port 443
+over IPv6 to address <code>2001::130F::09C0:876A:130B</code>.</p>
 <p><code>https://mosaic.example:555</code> specifies WebTransport with TLS on port 555 to DNS
 node mosaic.example (https is to be interpreted as WebTransport, not REST).</p>
 <p>Servers are expected to operate as their own inbox/outbox and encryption
 server. So they do not require the same data as the user bootstrap.</p>
 <h2 id="user-bootstrap">User Bootstrap</h2>
-<p>User bootstraps specify servers that the user uses, and how the user
-uses them.</p>
-<p>The order of the entries expresses the preference or priority. Earlier
-entries are preferred by the user to later ones.</p>
+<p>User bootstraps specify servers that the user uses, and how the user uses them.</p>
+<p>The order of the entries expresses the preference or priority. Earlier entries are
+preferred by the user to later ones.</p>
 <p>A user bootstrap starts with the line <code>U</code>.</p>
 <p>Each line consists of two parts separated by a single ASCII space.</p>
 <h3 id="server-usage-character">Server Usage Character</h3>

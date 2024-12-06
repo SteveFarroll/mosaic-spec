@@ -256,6 +256,8 @@ of the filter.</p>
   the initial response (so long as the query is still open), or</li>
 <li>a <a href="#query-closed"><code>Query Closed</code></a> message if the query could not be served.</li>
 </ul>
+<p>Queries MUST return results in anti-chronological order, from most
+recent backwards.</p>
 <h3 id="close-query">Close Query</h3>
 <blockquote>
 <p><strong>0x2</strong></p>
@@ -291,7 +293,7 @@ subsequent record submitted.</p>
 <p><code>RECORD</code> is the record.</p>
 <p>This is a client initiated message. Servers are expected to reply with:</p>
 <ul>
-<li><a href="#submission-result"><code>Submission Result</code></a> with a hash prefix matching the record.</li>
+<li><a href="#submission-result"><code>Submission Result</code></a> with an id prefix matching the record.</li>
 </ul>
 <h2 id="server-messages">Server messages</h2>
 <h3 id="record">Record</h3>
@@ -371,23 +373,23 @@ the following format:</p>
 <pre><code class="language-text">                    1       2       3
     0       8       6       4       2
  0  +-------------------------------+
-    |  0x82 |  0x0  |  0x0  |  CODE |
+    |  0x83 |  0x0  |  0x0  |  CODE |
     +-------------------------------+
-    |  HASH PREFIX 1/8              |
+    |  ID PREFIX 1/8                |
     +-------------------------------+
-    |  HASH PREFIX 2/8              |
+    |  ID PREFIX 2/8                |
     +-------------------------------+
-    |  HASH PREFIX 3/8              |
+    |  ID PREFIX 3/8                |
     +-------------------------------+
-    |  HASH PREFIX 4/8              |
+    |  ID PREFIX 4/8                |
     +-------------------------------+
-    |  HASH PREFIX 5/8              |
+    |  ID PREFIX 5/8                |
     +-------------------------------+
-    |  HASH PREFIX 6/8              |
+    |  ID PREFIX 6/8                |
     +-------------------------------+
-    |  HASH PREFIX 7/8              |
+    |  ID PREFIX 7/8                |
     +-------------------------------+
-    |  HASH PREFIX 8/8              |
+    |  ID PREFIX 8/8                |
     +-------------------------------+
 </code></pre>
 <p>The <code>CODE</code> indicates the result of the submission from among the following
@@ -411,7 +413,7 @@ defined results:</p>
 <li><code>OTHER</code>: 0xFF - Some other reason</li>
 </ul>
 <p>FIXME: add proof of work (not defined yet)</p>
-<p>The <code>HASH_PREFIX</code> is the first 256-bits of the event hash.</p>
+<p>The <code>ID_PREFIX</code> is the first 32 bytes of the record id</p>
               
             </div>
           </div><footer>

@@ -166,65 +166,139 @@ specify a count or length within their value.</p>
 <p>Filter types MUST not be used more than once within a filter.</p>
 <p>Filters can be up to 65536 bytes long maximum, but this size may not be
 possible given other constraints.</p>
-<h2 id="hash16">Hash16</h2>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x1</td>
+<td><a href="#ids">Ids</a></td>
+</tr>
+<tr>
+<td>0x2</td>
+<td><a href="#addresses">Addresses</a></td>
+</tr>
+<tr>
+<td>0x4</td>
+<td><a href="#author-keys">Author Keys</a></td>
+</tr>
+<tr>
+<td>0x5</td>
+<td><a href="#signing-keys">Signing Keys</a></td>
+</tr>
+<tr>
+<td>0x6</td>
+<td><a href="#timestamps">Timestamps</a></td>
+</tr>
+<tr>
+<td>0x7</td>
+<td><a href="#since">Since</a></td>
+</tr>
+<tr>
+<td>0x8</td>
+<td><a href="#until">Until</a></td>
+</tr>
+<tr>
+<td>0x9</td>
+<td><a href="#received-ats">Received Ats</a></td>
+</tr>
+<tr>
+<td>0xA</td>
+<td><a href="#received-since">Received Since</a></td>
+</tr>
+<tr>
+<td>0xB</td>
+<td><a href="#received-until">Received Until</a></td>
+</tr>
+<tr>
+<td>0xC</td>
+<td><a href="#kinds">Kinds</a></td>
+</tr>
+<tr>
+<td>0xD</td>
+<td><a href="#tag-values">Tag Values</a></td>
+</tr>
+<tr>
+<td>0xE</td>
+<td><a href="#limit">Limit</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="ids">Ids</h2>
 <blockquote>
 <p><strong>0x1</strong></p>
 </blockquote>
-<p>Matches all records that have any of these hashes.</p>
+<p>Matches all records that have any of these ids.</p>
 <pre><code class="language-text">            1   2   3   4   4   5   6
     0   8   6   4   2   0   8   6   4
  0  +-------------------------------+
     |0x1|          0x0          | n |
  8  +-------------------------------+
-    | HASH PREFIX 1/2               |
+    | Id 1/6                        |
  16 +-------------------------------+
-    | HASH PREFIX 2/2               |
+    | Id 2/6                        |
  24 +-------------------------------+
-    | ... additional hash prefixes..|
+    | Id 3/6                        |
+ 32 +-------------------------------+
+    | Id 4/6                        |
+ 40 +-------------------------------+
+    | Id 5/6                        |
+ 48 +-------------------------------+
+    | Id 6/6                        |
+ 56 +-------------------------------+
+    | ... additional ids..          |
     +-------------------------------+
 </code></pre>
 <ul>
 <li>The byte 0x1</li>
 <li>Six bytes 0x0</li>
 <li>A 1-byte count <code>n</code>, then</li>
-<li>A sequence of <code>n</code> 16-byte, 128-bit hash prefixes.</li>
+<li>A sequence of <code>n</code> 48-byte IDs.</li>
 </ul>
-<h2 id="hash32">Hash32</h2>
+<h2 id="addresses">Addresses</h2>
 <blockquote>
 <p><strong>0x2</strong></p>
 </blockquote>
-<p>Matches all records that have any of these hashes.</p>
+<p>Matches all records that have any of these addresses.</p>
 <pre><code class="language-text">            1   2   3   4   4   5   6
     0   8   6   4   2   0   8   6   4
  0  +-------------------------------+
     |0x2|          0x0          | n |
  8  +-------------------------------+
-    | HASH 1/4                      |
+    | ADDR 1/6                      |
  16 +-------------------------------+
-    | HASH 2/4                      |
+    | ADDR 2/6                      |
  24 +-------------------------------+
-    | HASH 3/4                      |
+    | ADDR 3/6                      |
  32 +-------------------------------+
-    | HASH 4/4                      |
+    | ADDR 4/6                      |
+ 32 +-------------------------------+
+    | ADDR 5/6                      |
+ 32 +-------------------------------+
+    | ADDR 6/6                      |
  40 +-------------------------------+
-    | ... additional hash prefixes..|
+    | ... additional addrs..        |
     +-------------------------------+
 </code></pre>
 <ul>
 <li>The byte 0x2</li>
 <li>Six bytes 0x0</li>
 <li>A 1-byte count <code>n</code>, then</li>
-<li>A sequence of <code>n</code> 32-byte, 128-bit hash prefixes.</li>
+<li>A sequence of <code>n</code> 48-byte addresses.</li>
 </ul>
 <h2 id="author-keys">Author Keys</h2>
 <blockquote>
-<p><strong>0x3</strong></p>
+<p><strong>0x4</strong></p>
 </blockquote>
 <p>Matches all records authored by any of these keys.</p>
 <pre><code class="language-text">            1   2   3   4   4   5   6
     0   8   6   4   2   0   8   6   4
  0  +-------------------------------+
-    |0x3|          0x0          | n |
+    |0x4|          0x0          | n |
  8  +-------------------------------+
     | AUTHOR KEY 1/4                |
  16 +-------------------------------+
@@ -238,20 +312,20 @@ possible given other constraints.</p>
     +-------------------------------+
 </code></pre>
 <ul>
-<li>The byte 0x3</li>
+<li>The byte 0x4</li>
 <li>Six bytes 0x0</li>
 <li>A 1-byte count <code>n</code>, then</li>
 <li>A sequence of <code>n</code> 32-byte author public keys.</li>
 </ul>
 <h2 id="signing-keys">Signing Keys</h2>
 <blockquote>
-<p><strong>0x4</strong></p>
+<p><strong>0x5</strong></p>
 </blockquote>
 <p>Matches all records signed by any of these keys.</p>
 <pre><code class="language-text">            1   2   3   4   4   5   6
     0   8   6   4   2   0   8   6   4
  0  +-------------------------------+
-    |0x4|        0x0            | n |
+    |0x5|        0x0            | n |
  8  +-------------------------------+
     | SIGNING KEY 1/4               |
  16 +-------------------------------+
@@ -265,21 +339,21 @@ possible given other constraints.</p>
     +-------------------------------+
 </code></pre>
 <ul>
-<li>The byte 0x4</li>
+<li>The byte 0x5</li>
 <li>Six bytes 0x0</li>
 <li>A 1-byte count <code>n</code>, then</li>
 <li>A sequence of <code>n</code> 32-byte signing public keys.</li>
 </ul>
 <h2 id="timestamps">Timestamps</h2>
 <blockquote>
-<p><strong>0x5</strong></p>
+<p><strong>0x6</strong></p>
 </blockquote>
 <p>Matches all records that have any of these exact timestamps.
 Typically used as part of address lookups.</p>
 <pre><code class="language-text">            1   2   3   4   4   5   6
     0   8   6   4   2   0   8   6   4
  0  +-------------------------------+
-    |0x5|        0x0            | n |
+    |0x6|        0x0            | n |
  8  +-------------------------------+
     |  0x0  |     TIMESTAMP         |
  16 +-------------------------------+
@@ -287,7 +361,7 @@ Typically used as part of address lookups.</p>
  24 +-------------------------------+
 </code></pre>
 <ul>
-<li>The byte 0x5</li>
+<li>The byte 0x6</li>
 <li>Six bytes 0x0</li>
 <li>A 1-byte count <code>n</code>, then</li>
 <li>A sequence of <code>n</code> 8-byte fields, each being:<ul>
@@ -298,28 +372,10 @@ Typically used as part of address lookups.</p>
 </ul>
 <h2 id="since">Since</h2>
 <blockquote>
-<p><strong>0x6</strong></p>
+<p><strong>0x7</strong></p>
 </blockquote>
 <p>Matches all records with a timestamp greater than or equal to
 this value.</p>
-<pre><code class="language-text">            1   2   3   4   4   5   6
-    0   8   6   4   2   0   8   6   4
- 0  +-------------------------------+
-    |0x6|              0x0          |
- 8  +-------------------------------+
-    |  0x0  |     TIMESTAMP         |
- 16 +-------------------------------+
-</code></pre>
-<ul>
-<li>The byte 0x6</li>
-<li>Nine bytes 0x0</li>
-<li>A 6-byte timestamp</li>
-</ul>
-<h2 id="until">Until</h2>
-<blockquote>
-<p><strong>0x7</strong></p>
-</blockquote>
-<p>Matches all records with a timestamp less than this value.</p>
 <pre><code class="language-text">            1   2   3   4   4   5   6
     0   8   6   4   2   0   8   6   4
  0  +-------------------------------+
@@ -333,9 +389,27 @@ this value.</p>
 <li>Nine bytes 0x0</li>
 <li>A 6-byte timestamp</li>
 </ul>
-<h2 id="received-ats">Received Ats</h2>
+<h2 id="until">Until</h2>
 <blockquote>
 <p><strong>0x8</strong></p>
+</blockquote>
+<p>Matches all records with a timestamp less than this value.</p>
+<pre><code class="language-text">            1   2   3   4   4   5   6
+    0   8   6   4   2   0   8   6   4
+ 0  +-------------------------------+
+    |0x8|              0x0          |
+ 8  +-------------------------------+
+    |  0x0  |     TIMESTAMP         |
+ 16 +-------------------------------+
+</code></pre>
+<ul>
+<li>The byte 0x8</li>
+<li>Nine bytes 0x0</li>
+<li>A 6-byte timestamp</li>
+</ul>
+<h2 id="received-ats">Received Ats</h2>
+<blockquote>
+<p><strong>0x9</strong></p>
 </blockquote>
 <p>Matches all records that were received at any of these exact
 timestamps. This is unlikely to be useful but we add it for
@@ -343,7 +417,7 @@ completeness.</p>
 <pre><code class="language-text">            1   2   3   4   4   5   6
     0   8   6   4   2   0   8   6   4
  0  +-------------------------------+
-    |0x8|          0x0          | n |
+    |0x9|          0x0          | n |
  8  +-------------------------------+
     |  0x0  |     TIMESTAMP         |
  16 +-------------------------------+
@@ -351,7 +425,7 @@ completeness.</p>
  24 +-------------------------------+
 </code></pre>
 <ul>
-<li>The byte 0x8</li>
+<li>The byte 0x9</li>
 <li>Six bytes 0x0</li>
 <li>A 1-byte count <code>n</code>, then</li>
 <li>A sequence of <code>n</code> 8-byte fields, each being:<ul>
@@ -362,29 +436,10 @@ completeness.</p>
 </ul>
 <h2 id="received-since">Received Since</h2>
 <blockquote>
-<p><strong>0x9</strong></p>
+<p><strong>0xA</strong></p>
 </blockquote>
 <p>Matches all records that were received by the server at or later
 than this value.</p>
-<pre><code class="language-text">            1   2   3   4   4   5   6
-    0   8   6   4   2   0   8   6   4
- 0  +-------------------------------+
-    |0x9|              0x0          |
- 8  +-------------------------------+
-    |  0x0  |     TIMESTAMP         |
- 16 +-------------------------------+
-</code></pre>
-<ul>
-<li>The byte 0x9</li>
-<li>Nine bytes 0x0</li>
-<li>A 6-byte timestamp</li>
-</ul>
-<h2 id="received-until">Received Until</h2>
-<blockquote>
-<p><strong>0xA</strong></p>
-</blockquote>
-<p>Matches all records that were received by the server before
-this value.</p>
 <pre><code class="language-text">            1   2   3   4   4   5   6
     0   8   6   4   2   0   8   6   4
  0  +-------------------------------+
@@ -398,40 +453,60 @@ this value.</p>
 <li>Nine bytes 0x0</li>
 <li>A 6-byte timestamp</li>
 </ul>
-<h2 id="kinds">Kinds</h2>
+<h2 id="received-until">Received Until</h2>
 <blockquote>
 <p><strong>0xB</strong></p>
 </blockquote>
-<p>Matches all records which are of one of these kinds.</p>
+<p>Matches all records that were received by the server before
+this value.</p>
 <pre><code class="language-text">            1   2   3   4   4   5   6
     0   8   6   4   2   0   8   6   4
  0  +-------------------------------+
-    |0xB|          0x0          | n |
+    |0xB|              0x0          |
+ 8  +-------------------------------+
+    |  0x0  |     TIMESTAMP         |
+ 16 +-------------------------------+
+</code></pre>
+<ul>
+<li>The byte 0xB</li>
+<li>Nine bytes 0x0</li>
+<li>A 6-byte timestamp</li>
+</ul>
+<h2 id="kinds">Kinds</h2>
+<blockquote>
+<p><strong>0xC</strong></p>
+</blockquote>
+<p>Matches all records which are of any one of these kinds.</p>
+<pre><code class="language-text">            1   2   3   4   4   5   6
+    0   8   6   4   2   0   8   6   4
+ 0  +-------------------------------+
+    |0xC|          0x0          | n |
  8  +-------------------------------+
     |   KIND        |  ...KIND      |
  16 +-------------------------------+
 </code></pre>
 <ul>
-<li>The byte 0xB</li>
+<li>The byte 0xC</li>
 <li>6 bytes 0x0</li>
 <li>A 1-byte count <code>n</code>, then</li>
 <li>A sequence of <code>n</code> 4-byte <a href="../kinds/">kinds</a></li>
 </ul>
 <h2 id="tag-values">Tag Values</h2>
 <blockquote>
-<p><strong>0xC</strong></p>
+<p><strong>0xD</strong></p>
 </blockquote>
-<p>Matches all records which have one of these tags.</p>
+<p>Matches all records which have any one of these tag values for the
+tag type.</p>
 <pre><code class="language-text">            1   2   3   4   4   5   6
     0   8   6   4   2   0   8   6   4
  0  +-------------------------------+
-    |0xC|0x0| TTYPE | 0x0       | n |
+    |0xD|0x0| TTYPE | 0x0       | n |
  8  +-------------------------------+
     |   DATA...                     |
  16 +-------------------------------+
 </code></pre>
 <ul>
-<li>The byte 0xC</li>
+<li>The byte 0xD</li>
 <li>1 byte 0x0</li>
 <li>A 2-byte <a href="../tag_types/">tag type</a> in little-endian format</li>
 <li>3 bytes 0x0</li>
@@ -439,6 +514,24 @@ this value.</p>
 <li>DATA being a sequence of n length-value pairs (length being 1 byte)
   representing the n different values of the tag which cause the filter
   to match. This data is not aligned and tag values are of varying length.</li>
+</ul>
+<h2 id="limit">Limit</h2>
+<blockquote>
+<p><strong>0xE</strong></p>
+</blockquote>
+<p>Limits the records to the specified limit, providing only the most recent
+results.</p>
+<pre><code class="language-text">            1   2   3   4   4   5   6
+    0   8   6   4   2   0   8   6   4
+ 0  +-------------------------------+
+    |0xE|    0x0    |     LIMIT     |
+ 8  +-------------------------------+
+</code></pre>
+<ul>
+<li>The byte 0xE</li>
+<li>Three bytes 0x0</li>
+<li>Four bytes representing a LIMIT, an unsigned integer in little-endian
+  order.</li>
 </ul>
               
             </div>

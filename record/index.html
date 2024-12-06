@@ -175,53 +175,57 @@ buffer sizes.</p>
     0   8   6   4   2   0   8   6   4
  0  +-------------------------------+
     | Signature 1/8                 |
-    +-------------------------------+
+ 8  +-------------------------------+
     | Signature 2/8                 |
-    +-------------------------------+
+ 16 +-------------------------------+
     | Signature 3/8                 |
-    +-------------------------------+
+ 24 +-------------------------------+
     | Signature 4/8                 |
-    +-------------------------------+
+ 32 +-------------------------------+
     | Signature 5/8                 |
-    +-------------------------------+
+ 40 +-------------------------------+
     | Signature 6/8                 |
-    +-------------------------------+
+ 48 +-------------------------------+
     | Signature 7/8                 |
-    +-------------------------------+
+ 56 +-------------------------------+
     | Signature 8/8                 |
- 64 +-------------------------------+
-    | Hash 1/4                      |
-    +-------------------------------+
-    | Hash 2/4                      |
-    +-------------------------------+
-    | Hash 3/4                      |
-    +-------------------------------+
-    | Hash 4/4                      |
- 96 +-------------------------------+
+ 64 +-------------------------------+ &lt;-----|
+    | BE Timestamp           | Hash |
+ 72 +-------------------------------+       |
+    | Hash 2/6                      |       |
+ 80 +-------------------------------+       |
+    | Hash 3/6                      |  I    |
+ 88 +-------------------------------+  D    |
+    | Hash 4/6                      |       |
+ 96 +-------------------------------+       |
+    | Hash 5/6                      |       |
+104 +-------------------------------+       |
+    | Hash 6/6                      |       |
+112 +-------------------------------+ &lt;-----|
     | Signing public key, 1/4       |
-    +-------------------------------+
+120 +-------------------------------+
     | Signing public key, 2/4       |
-    +-------------------------------+
-    | Signing public key, 3/4       |
-    +-------------------------------+
-    | Signing public key, 4/4       |
 128 +-------------------------------+
-    | Author public key, 1/4        |
-    +-------------------------------+
-    | Author public key, 2/4        |
-    +-------------------------------+
-    | Author public key, 3/4        |
-    +-------------------------------+
-    | Author public key, 4/4        |
-160 +-------------------------------+
-    | Kind  | Orig Timestamp        |
-168 +-------------------------------+
-    | Nonce                         |
-176 +-------------------------------+
+    | Signing public key, 3/4       |
+136 +-------------------------------+
+    | Signing public key, 4/4       |
+144 +-------------------------------+ &lt;-----|
+    | Orig BE Timestamp     | Kind  |       |
+152 +-------------------------------+       |
+    | Nonce                         |   A   |
+160 +-------------------------------+   D   |
+    | Author public key, 1/4        |   D   |
+168 +-------------------------------+   R   |
+    | Author public key, 2/4        |   E   |
+176 +-------------------------------+   S   |
+    | Author public key, 3/4        |   S   |
+184 +-------------------------------+       |
+    | Author public key, 4/4        |       |
+192 +-------------------------------+ &lt;-----|
     | Flags | Timestamp             |
-184 +-------------------------------+
+200 +-------------------------------+
     |AppFlgs| Len_t | Len_p         |
-192 +-------------------------------+
+208 +-------------------------------+
     | Tags...                       |
     |                   .. +PADDING |
   ? +-------------------------------+
@@ -235,56 +239,46 @@ buffer sizes.</p>
 a record.</p>
 <h3 id="signature">Signature</h3>
 <p>64 bytes at <code>[0:64]</code></p>
-<p>The signature field is the EdDSA ed25519ph signature using the 64-byte hash at
-<code>[64:128]</code>. <code>ph</code> means "pre hashed" (we will hash the content with BLAKE3 and
-tell EdDSA that it is a SHA-512 hash of the message). We also provide a context
-to this algorithm of b"Mosaic";</p>
-<p>This signature is made with the Signing private key and is represented in 64
-bytes.</p>
-<p>Rationale:</p>
-<ul>
-<li>EdDSA uses a SHA-512 hashing internal to the algorithm. But BLAKE3 is a faster
-  especially for longer messages, and EdDSA works just fine with it.</li>
-<li>We provide a context so that users cannot be tricked by one application into
-  signing content for a different application (in case users think they can use
-  the same keypair for every application).</li>
-</ul>
-<h3 id="hash">Hash</h3>
-<p>64 bytes at <code>[64:96]</code></p>
-<p>The hashing function is BLAKE3, unkeyed, with 256-bits (32 bytes) of output.</p>
-<p>Note that we extend this to 512-bits with <code>finalize_xof()</code> for the input of
-the EdDSA algorithm, but we only store in the event the 256-bit prefix.</p>
-<p>This input of the hash is all the data starting at byte 96, <code>[96:]</code>,
-everything except the signature and hash itself.</p>
+<p>The signature field is the EdDSA ed25519ph signature of the record
+produced using the <a href="#construction">construction</a> procedure.</p>
+<h3 id="id">Id</h3>
+<p>48 bytes at <code>[64:112]</code></p>
+<p>This ID field is produced using the <a href="#construction">construction</a>
+procedure.</p>
 <h3 id="signing-public-key">Signing Public Key</h3>
-<p>32 bytes at <code>[96:128]</code></p>
+<p>32 bytes at <code>[112:144]</code></p>
 <p>This is the public key of the signing keypair, which is usually a subkey under
 the author's master keypair (but theoretically could be delegated in some other
 fashion in the future). This is represented in 32 bytes (256 bits).</p>
-<h3 id="author-public-key">Author Public Key</h3>
-<p>32 bytes at <code>[128:160]</code></p>
-<p>This is the identity of the author, expressed as a public key from their master
-EdDSA ed25519 keypair, which is represented in 32 bytes (256 bits).</p>
-<h3 id="kind">Kind</h3>
-<p>2 bytes at <code>[160:162]</code></p>
-<p>This is the <a href="../kinds/">kind</a> of the record which is determines the application
-this record is part of, which then determines the nature of the non-core tags
-and the payload. This is represented in 2 bytes (16 bits) as an
-unsigned integer, little-endian.</p>
-<h3 id="orig-timestamp">Orig Timestamp</h3>
-<p>6 bytes at <code>[162:168]</code></p>
-<p>This is a timestamp represented in 6 bytes (48 bits) according to
-<a href="../timestamps/">timestamps</a>.</p>
+<h3 id="orig-be-timestamp">Orig BE Timestamp</h3>
+<p>6 bytes at <code>[144:150]</code></p>
+<p>This is the original timestamp represented in 6 bytes (48 bits) according
+to <a href="../timestamps/">timestamps</a>, except in big-endian format.</p>
 <p>If the record is not a replacement of another record (the usual case)
-this is the same as <a href="#timestamp">Timestamp</a>.</p>
+this is the same value as <a href="#timestamp">Timestamp</a>.</p>
 <p>If the record is a replacement of another record, it copies the address
 from the original record which will fill this with the original record
 timestamp.</p>
+<p>Rationale:</p>
+<ul>
+<li>By putting the timestamp at the front of the address, addresses sort in
+  time order and group temporally (for database performance).</li>
+</ul>
+<h3 id="kind">Kind</h3>
+<p>2 bytes at <code>[150:152]</code></p>
+<p>This is the <a href="../kinds/">kind</a> of the record which determines the application
+this record is part of, which then determines the nature of the non-core tags
+and the payload. This is represented in 2 bytes (16 bits) as an
+unsigned integer, little-endian.</p>
 <h3 id="nonce">Nonce</h3>
-<p>8 bytes at <code>[168:176]</code> which are randomly generated by the author.
+<p>8 bytes at <code>[152:160]</code> which are randomly generated by the author.
 This keeps addresses unique.</p>
+<h3 id="author-public-key">Author Public Key</h3>
+<p>32 bytes at <code>[160:192]</code></p>
+<p>This is the identity of the author, expressed as a public key from their master
+EdDSA ed25519 keypair, which is represented in 32 bytes (256 bits).</p>
 <h3 id="flags">Flags</h3>
-<p>2 bytes at <code>[176:178]</code></p>
+<p>2 bytes at <code>[192:194]</code></p>
 <ul>
 <li>0x01 ZSTD - The payload is compressed with Zstd</li>
 <li>0x02 FROM_AUTHOR - Servers SHOULD only accept the record from the author (requiring authentication)</li>
@@ -305,29 +299,36 @@ This keeps addresses unique.</p>
 <li>All other bits - RESERVED and MUST be 0</li>
 </ul>
 <h3 id="timestamp">Timestamp</h3>
-<p>6 bytes at <code>[178:184]</code></p>
+<p>6 bytes at <code>[194:200]</code></p>
 <p>This is a timestamp represented in 6 bytes (48 bits) according to
 <a href="../timestamps/">timestamps</a>.</p>
 <p>If this record replaces a previous record, this timestamp MUST be larger
-than <a href="#orig-timestamp">Orig Timestamp</a>.</p>
+than <a href="#orig-be-timestamp">Orig Timestamp</a>.</p>
+<p>Rationale:</p>
+<ul>
+<li>It might seem like we have too many timestamps. But we need a timestamp
+  of the current record, separate from the address, and which gets
+  hashed by the hashing algorithm (the timestamp in the ID was not part
+  of the hashing input).</li>
+</ul>
 <h3 id="appflgs">AppFlgs</h3>
-<p>2 bytes at <code>[184:186]</code></p>
+<p>2 bytes at <code>[200:202]</code></p>
 <p>These are bitflags reserved for use by the specific application based on
 the <a href="#kind">kind</a>.</p>
 <h3 id="len_t">Len_t</h3>
-<p>2 bytes at <code>[186:188]</code> representing the length of the tags section in bytes
+<p>2 bytes at <code>[202:204]</code> representing the length of the tags section in bytes
 as an unsigned integer in little-endian format.</p>
 <p>This represents the exact length of the tags section, not counting padding
 at the end to achieve 64-bit alignment.</p>
 <p>The maximum tags section length is 65536 bytes.</p>
 <h3 id="len_p">Len_p</h3>
-<p>4 bytes at <code>[188:192]</code> representing the length of the payload section in
+<p>4 bytes at <code>[204:208]</code> representing the length of the payload section in
 bytes as an unsigned integer in little-endian format.</p>
 <p>This represents the exact length of the payload section, not counting padding
 at the end to achieve 64-bit alignment.</p>
 <p>The maximum payload section length is 1_048_384 bytes.</p>
 <h3 id="tags">Tags</h3>
-<p>Varying bytes at <code>[192:192+Len_t]</code></p>
+<p>Varying bytes at <code>[208:208+Len_t]</code></p>
 <p>These are searchable key-value tags.</p>
 <p>Unlike nostr tags, all of these are searchable. If an application requires
 unsearchable tags, these can be defined within that application's payload.</p>
@@ -351,18 +352,46 @@ the tags are defined at <a href="../core_tags/">Core Tags</a>.</p>
   type and 8-bit length) to fit within 256 bytes.</li>
 </ul>
 <h3 id="payload">Payload</h3>
-<p>Varying bytes at <code>[192+Len_t:192+Len_t+Len_p].</code></p>
+<p>Varying bytes at <code>[208+Len_t:208+Len_t+Len_p].</code></p>
 <p>Payload is opaque (at this layer of specification) application-specific data.</p>
 <p>The payload section is padded out to 64-bit alignment.</p>
 <p>The maximum payload section length is 1_048_384 bytes</p>
+<h1 id="construction">Construction</h1>
+<ol>
+<li>Fill in all the data from <code>[112:]</code>.</li>
+<li>Take a BLAKE3 hash of <code>[112:]</code>, unkeyed, and extend to 64 bytes
+   of output using BLAKE3's <code>finalize_xof()</code> function. This does not
+   directly go into the record.</li>
+<li>Generate EdDSA ed25519ph pre-hashed signature of that 512-bit hash
+   using the Signing private key, and providing the context string
+   of "Mosaic". NOTE: ed25519 calls for a SHA-512 hash, but we use
+   a BLAKE3 hash instead. Place the signature at bytes <code>[0:64]</code>.</li>
+<li>Copy the first 48 bytes of the hash to <code>[64:112]</code>.</li>
+<li>Write the timestamp as a 48-bit unsigned big-endian overtop of the
+   first 6 bytes of the hash <code>[64:70]</code>.</li>
+</ol>
+<p>Rationale:</p>
+<ul>
+<li>EdDSA specifies SHA-512, but BLAKE3 is faster especially for longer
+  messages, and EdDSA works just fine with it.</li>
+<li>We provide a context so that users cannot be tricked by one application
+  into signing content for a different application (in case users think
+  they can use the same keypair for every application).</li>
+<li>In order for IDs to sort in time order, and to group temporally (for
+  database performance) we start them with the timestamp.</li>
+<li>We want the ID to have at least 32 bytes of hash, and with the timestamp
+  overwrite part we extended it.</li>
+<li>This makes IDs 48-bytes long, which conveniently matches the length of
+  addrs.</li>
+</ul>
 <h1 id="validation">Validation</h1>
 <p>Records MUST be fully validated by clients.</p>
 <p>Records MUST be fully validated by servers except for the
 steps marked CLIENTS ONLY.</p>
 <p>Validation steps</p>
 <ol>
-<li>The length must be between 192 and 1048576 bytes.</li>
-<li>The length must equal 192 + Len_t + Len_p.</li>
+<li>The length must be between 208 and 1048576 bytes.</li>
+<li>The length must equal 208 + Len_t + Len_p.</li>
 <li>The Signing public key must be validated according to the
    <a href="../cryptography/">cryptography</a> key validation checks.</li>
 <li>The Author public key must be validated according to the
@@ -370,12 +399,17 @@ steps marked CLIENTS ONLY.</p>
 <li>CLIENTS ONLY: The Signing public key must be verified to be
    a non-revoked subkey of the Author via the Author's
    <a href="../bootstrap/">bootstrap</a>.</li>
-<li>The bytes after the hash to the end of the record must hash
-   with BLAKE3 to the hash stored in the record.</li>
-<li>The signature must be a valid EdDSA ed25519 signature of
-   the hash with the signing public key.</li>
+<li>Take a BLAKE3 hash of <code>[112:]</code>, unkeyed, and extend to
+   64 bytes of output using BLAKE3's <code>finalize_xof()</code> function.</li>
+<li>Verify the hash: Compare bytes <code>[6:48]</code> of this hash with bytes
+   <code>[70:112]</code> of the record. They MUST match.</li>
+<li>Verify the ID timestamp: bytes <code>[64:70]</code> taken as a big-endian
+   48-bit unsigned integer must equal bytes <code>[194:200]</code> taken as a
+   little-endian unsigned 48-bit integer.</li>
+<li>Verify the signature: The signature must be a valid EdDSA ed25519
+   signature of the hash taken in step 6 with the signing public key.</li>
 <li>The timestamp and the orig timestamp must be validated according to
-   <a href="../timestamps/">timestamps</a>.</li>
+    <a href="../timestamps/">timestamps</a>.</li>
 <li>All reserved flags must be set to 0.</li>
 <li>CLIENTS ONLY: Application specific validation should be performed.</li>
 </ol>

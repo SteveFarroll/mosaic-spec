@@ -159,7 +159,7 @@
 <p><status>PAGE STATUS: early draft</status></p>
 <h2 id="introduction">Introduction</h2>
 <p>Mosaic is a <em>distributed</em> <em>sovereign</em> <em>general-purpose</em> application protocol for the Internet.</p>
-<p><strong>distributed</strong>: There is no central point of failure, or place that can be taken down. There is no central place to "bootstrap" Mosaic (other than Mainline DHT's bootstrapping).</p>
+<p><strong>distributed</strong>: There is no central point of failure, or place that can be taken down. There is no central place to "bootstrap" Mosaic (we use Mainline DHT's bootstrapping, there are mutiple and you can run your own).</p>
 <p><strong>sovereign</strong>: All nodes (users/clients and servers) participation is self-managed and nobody can cancel your account. You manage your own keys. Mosaic does not depend on DNS and Mosaic does not depend on Certification Authorities to issue certificates.</p>
 <p><strong>general-purpose</strong>: Although it started as social media, this architecture has been shown to serve many general-purpose applications.</p>
 <p>Mosaic is a <strong>work in progress</strong>.  This specification is EARLY DRAFT.</p>
@@ -195,9 +195,9 @@
   Refer to
   <a href="https://github.com/SteveFarroll/mosaic-spec/issues/8">debate: Binary</a></li>
 <li>Mosaic records are <a href="reference/">editable</a> if an application wants them to
-  be, as all records can be addressed either by their hash (not replaceable)
-  or their address (replaceable) and all records have both a hash and an
-  address.</li>
+  be, as all records can be addressed either by their hash-based id (not
+  replaceable) or their address (replaceable) and all records have both a
+  hash-based id and an address.</li>
 <li><a href="timestamps/">Timestamps</a> account for leap seconds (unlike unixtime) and
   have millisecond accuracy.</li>
 <li>Clients and Servers remember the time that records are received, so that
@@ -210,7 +210,6 @@
 <p>Terminology differences</p>
 <ul>
 <li>Nostr <em>events</em> are akin to Mosaic <em>records</em></li>
-<li>Nostr <em>event IDs</em> are akin to Mosaic <em>hashes</em></li>
 <li>Nostr <em>relays</em> are akin to Mosaic <em>servers</em></li>
 </ul>
 <h3 id="the-name-mosaic">The name Mosaic</h3>
@@ -267,5 +266,5 @@ capitalize it even in the middle of a sentence.</p>
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2024-12-06 02:18:14.307030+00:00
+Build Date UTC : 2024-12-06 23:50:30.811152+00:00
 -->
