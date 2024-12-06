@@ -67,6 +67,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../record/">Record Format</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../human_readable_content/">Human Readable Content</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../core_tags/">Core Tags</a>
                 </li>
     </ul>
@@ -280,7 +282,7 @@ of the filter.</p>
     |  0x3  |   LENGTH              |
     +-------------------------------+
     | RECORD ...                    |
-    | ...                           | 
+    | ...                           |
     +-------------------------------+
 </code></pre>
 <p><code>LENGTH</code> is a 24-bit little-endian length, with a maximum value of the max
@@ -305,7 +307,7 @@ subsequent record submitted.</p>
     |  0x0  |   LENGTH              |
     +-------------------------------+
     | RECORD ...                    |
-    | ...                           | 
+    | ...                           |
     +-------------------------------+
 </code></pre>
 <p>The <code>QUERY_ID</code> is the client query that this record matched.</p>

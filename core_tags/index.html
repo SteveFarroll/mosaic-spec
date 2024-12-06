@@ -67,6 +67,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../record/">Record Format</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../human_readable_content/">Human Readable Content</a>
+                </li>
                 <li class="toctree-l2 current"><a class="reference internal current" href="#">Core Tags</a>
                 </li>
     </ul>
@@ -182,8 +184,7 @@ their data.</p>
 <blockquote>
 <p><strong>0x1</strong></p>
 </blockquote>
-<pre><code class="language-text">
-      0       2    3                  8
+<pre><code class="language-text">      0       2    3                  8
  0x0  +-------------------------------+ 0
       |  0x1  |0x28|       0x0        |
  0x8  +-------------------------------+ 8
@@ -248,17 +249,17 @@ indicating which other record this record replies to.</p>
  0x0  +-------------------------------+ 0
       |  0x3  |0x38| 0|     KIND      |
  0x8  +-------------------------------+ 8
-      | ADDR 1/4                      |
+      | ADDR 1/6                      |
  0x10 +-------------------------------+ 16
-      | ADDR 2/4                      |
+      | ADDR 2/6                      |
  0x18 +-------------------------------+ 24
-      | ADDR 3/4                      |
+      | ADDR 3/6                      |
  0x20 +-------------------------------+ 32
-      | ADDR 4/4                      |
+      | ADDR 4/6                      |
  0x28 +-------------------------------+ 40
-      | ADDR 5/4                      |
+      | ADDR 5/6                      |
  0x30 +-------------------------------+ 48
-      | ADDR 6/4                      |
+      | ADDR 6/6                      |
  0x38 +-------------------------------+ 56
 </code></pre>
 <ul>
@@ -354,83 +355,208 @@ record which is the root of the thread.</p>
 <p>If a record includes this tag, it must also include a
 <a href="#reply-by-hash">Reply by Hash</a> or <a href="#reply-by-addr">Reply by Addr</a> tag
 as well.</p>
-<h2 id="quote-by-hash">Quote by Hash</h2>
+<h2 id="content-segment-user-mention">Content Segment: User Mention</h2>
 <blockquote>
-<p><strong>0x6</strong></p>
+<p>**0x20</p>
 </blockquote>
-<pre><code class="language-text">      0       2   3   4               8
+<pre><code class="language-text">      0       2    3   4              8
  0x0  +-------------------------------+ 0
-      |  0x6  |0x28| 0|     KIND      |
+      |  0x20 |0x28|0x0|   OFFSET     |
  0x8  +-------------------------------+ 8
-      | HASH 1/4                      |
+      | PUBLIC KEY 1/4                |
  0x10 +-------------------------------+ 16
-      | HASH 2/4                      |
+      | PUBLIC KEY 2/4                |
  0x18 +-------------------------------+ 24
-      | HASH 3/4                      |
+      | PUBLIC KEY 3/4                |
  0x20 +-------------------------------+ 32
-      | HASH 4/4                      |
+      | PUBLIC KEY 4/4                |
  0x28 +-------------------------------+ 40
 </code></pre>
 <ul>
-<li><code>[0:2]</code> - The type 0x6 as a little-endian encoded unsigned integer</li>
+<li><code>[0:2]</code> - The type 0x20 as a little-endian encoded unsigned integer</li>
 <li><code>[2:3]</code> - The length 0x28</li>
 <li><code>[3:4]</code> - Zeroed</li>
-<li><code>[4:8]</code> - The <a href="../kinds/">kind</a></li>
-<li><code>[8:40]</code> - The hash (32 bytes)</li>
+<li><code>[4:8]</code> - The offset as a little-endian encoded unsigned integer.</li>
+<li><code>[8:40]</code> - public key (32 bytes)</li>
 </ul>
-<p>This is a quote of another record.</p>
-<p><code>KIND</code> is a 4-byte record <a href="../kinds/">kind</a> indicating the kind of record
-that this one quotes. Quotes are application-independent and may
-reference records of any type. This information is provided to prevent
-lookup of records of kinds that software is not able to or does not wish
-to handle.</p>
-<p><code>HASH</code> is a 32-byte hash <a href="../reference/">reference</a> to some other record
-indicating which other record this record quotes.</p>
-<p>Records with this tag can also have reply and root tags, but not to the
-same record that is quoted.</p>
-<h2 id="quote-by-addr">Quote by Addr</h2>
+<p>This is a mention of a person.</p>
+<p><code>OFFSET</code> is the offset into the content where the mention appears.</p>
+<p><code>PUBLIC_KEY</code> is the master public key of the person mentioned.</p>
+<p>Note that this is different from a <a href="#notify-public-key">Notify Public Key</a> tag
+which indicates the event should be delivered to that person.  Instead, this
+tag indicates that a <code>@name</code> for the person should be rendered when rendering
+the content.</p>
+<h2 id="content-segment-server-mention">Content Segment: Server Mention</h2>
 <blockquote>
-<p><strong>0x7</strong></p>
+<p><strong>0x21</strong></p>
+</blockquote>
+<pre><code class="language-text">      0       2    3   4              8
+ 0x0  +-------------------------------+ 0
+      |  0x21 |0x28|0x0|   OFFSET     |
+ 0x8  +-------------------------------+ 8
+      | PUBLIC KEY 1/4                |
+ 0x10 +-------------------------------+ 16
+      | PUBLIC KEY 2/4                |
+ 0x18 +-------------------------------+ 24
+      | PUBLIC KEY 3/4                |
+ 0x20 +-------------------------------+ 32
+      | PUBLIC KEY 4/4                |
+ 0x28 +-------------------------------+ 40
+</code></pre>
+<ul>
+<li><code>[0:2]</code> - The type 0x20 as a little-endian encoded unsigned integer</li>
+<li><code>[2:3]</code> - The length 0x28</li>
+<li><code>[3:4]</code> - Zeroed</li>
+<li><code>[4:8]</code> - The offset as a little-endian encoded unsigned integer.</li>
+<li><code>[8:40]</code> - public key (32 bytes)</li>
+</ul>
+<p>This is a mention of a server.</p>
+<p><code>OFFSET</code> is the offset into the content where the mention appears.</p>
+<p><code>PUBLIC_KEY</code> is the public key of the server.</p>
+<h2 id="content-segment-quote-by-id">Content Segment: Quote by Id</h2>
+<blockquote>
+<p><strong>0x22</strong></p>
 </blockquote>
 <pre><code class="language-text">      0       2   3   4               8
  0x0  +-------------------------------+ 0
-      |  0x7  |0x38| 0|     KIND      |
+      |  0x22 |0x30| 0|     KIND      |
  0x8  +-------------------------------+ 8
-      | ADDR 1/4                      |
+      |     0x0       |    OFFSET     |
  0x10 +-------------------------------+ 16
-      | ADDR 2/4                      |
+      | HASH 1/4                      |
  0x18 +-------------------------------+ 24
-      | ADDR 3/4                      |
+      | HASH 2/4                      |
  0x20 +-------------------------------+ 32
-      | ADDR 4/4                      |
+      | HASH 3/4                      |
  0x28 +-------------------------------+ 40
-      | ADDR 5/4                      |
+      | HASH 4/4                      |
  0x30 +-------------------------------+ 48
-      | ADDR 6/4                      |
- 0x38 +-------------------------------+ 56
 </code></pre>
 <ul>
-<li><code>[0:2]</code> - The type 0x7 as a little-endian encoded unsigned integer</li>
-<li><code>[2:3]</code> - The length 0x38</li>
+<li><code>[0:2]</code> - The type 0x22 as a little-endian encoded unsigned integer</li>
+<li><code>[2:3]</code> - The length 0x30</li>
 <li><code>[3:4]</code> - Zeroed</li>
-<li><code>[4:8]</code> - The <a href="../kinds/">kind</a></li>
-<li><code>[8:56]</code> - The address (48 bytes)</li>
+<li><code>[4:8]</code> - The <a href="../kinds/">kind</a> of the quoted record</li>
+<li><code>[8:12]</code> - Zeroed</li>
+<li><code>[12:16]</code> - The offset as a little-endian encoded unsigned integer.</li>
+<li><code>[16:48]</code> - The hash (32 bytes) of the quoted record</li>
 </ul>
-<p>This is a quote of another record.</p>
 <p><code>KIND</code> is a 4-byte record <a href="../kinds/">kind</a> indicating the kind of record
-that this one quotes. Quotes are application-independent and may
+that this one replies to. Replies are application-independent and may
 reference records of any type. This information is provided to prevent
 lookup of records of kinds that software is not able to or does not wish
 to handle.</p>
-<p><code>ADDR</code> is a 48-byte address <a href="../reference/">reference</a> to some other
-record indicating which other record this record quotes.</p>
-<p>Records with this tag can also have reply and root tags, but not to the
-same record that is quoted.</p>
+<p><code>OFFSET</code> is the offset into the content where the mention appears.</p>
+<p><code>HASH</code> is the hash of the quoted record.</p>
+<p>This is a quote of another record by id.</p>
+<h2 id="content-segment-quote-by-addr">Content Segment: Quote by Addr</h2>
+<blockquote>
+<p><strong>0x23</strong></p>
+</blockquote>
+<pre><code class="language-text">      0       2   3   4               8
+ 0x0  +-------------------------------+ 0
+      |  0x23 |0x40| 0|     KIND      |
+ 0x8  +-------------------------------+ 8
+      |     0x0       |    OFFSET     |
+ 0x10 +-------------------------------+ 16
+      | ADDR 1/4                      |
+ 0x18 +-------------------------------+ 24
+      | ADDR 2/4                      |
+ 0x20 +-------------------------------+ 32
+      | ADDR 3/4                      |
+ 0x28 +-------------------------------+ 40
+      | ADDR 4/4                      |
+ 0x30 +-------------------------------+ 48
+      | ADDR 5/6                      |
+ 0x38 +-------------------------------+ 56
+      | ADDR 6/6                      |
+ 0x40 +-------------------------------+ 64
+</code></pre>
+<ul>
+<li><code>[0:2]</code> - The type 0x23 as a little-endian encoded unsigned integer</li>
+<li><code>[2:3]</code> - The length 0x40</li>
+<li><code>[3:4]</code> - Zeroed</li>
+<li><code>[4:8]</code> - The <a href="../kinds/">kind</a> of the quoted record</li>
+<li><code>[8:12]</code> - Zeroed</li>
+<li><code>[12:16]</code> - The offset as a little-endian encoded unsigned integer.</li>
+<li><code>[16:64]</code> - The address (48 bytes) of the quoted record</li>
+</ul>
+<p><code>KIND</code> is a 4-byte record <a href="../kinds/">kind</a> indicating the kind of record
+that this one replies to. Replies are application-independent and may
+reference records of any type. This information is provided to prevent
+lookup of records of kinds that software is not able to or does not wish
+to handle.</p>
+<p><code>OFFSET</code> is the offset into the content where the mention appears.</p>
+<p><code>HASH</code> is the hash of the quoted record.</p>
+<p>This is a quote of another record by address.</p>
+<h2 id="content-segment-url">Content Segment: URL</h2>
+<blockquote>
+<p><strong>0x24</strong></p>
+</blockquote>
+<pre><code class="language-text">      0       2    3   4              8
+ 0x0  +-------------------------------+ 0
+      |  0x24 |LEN |0x0|   OFFSET     |
+ 0x8  +-------------------------------+ 8
+      | URL...                        |
+      +-------------------------------+
+</code></pre>
+<ul>
+<li><code>[0:2]</code> - The type 0x24 as a little-endian encoded unsigned integer</li>
+<li><code>[2:3]</code> - The length of the tag (8 + the length of the URL)</li>
+<li><code>[3:4]</code> - Zeroed</li>
+<li><code>[4:8]</code> - The offset as a little-endian encoded unsigned integer.</li>
+<li><code>[8:]</code> - The URL to be included (up to 248 bytes long)</li>
+</ul>
+<p><code>OFFSET</code> is the offset into the content where the mention appears.</p>
+<p><code>URL</code> is the URL to be inserted at the offset.</p>
+<p>This is a URL to a web page.</p>
+<h2 id="content-segment-image">Content Segment: Image</h2>
+<blockquote>
+<p><strong>0x25</strong></p>
+</blockquote>
+<pre><code class="language-text">      0       2    3   4              8
+ 0x0  +-------------------------------+ 0
+      |  0x25 |LEN |0x0|   OFFSET     |
+ 0x8  +-------------------------------+ 8
+      | URL...                        |
+      +-------------------------------+
+</code></pre>
+<ul>
+<li><code>[0:2]</code> - The type 0x25 as a little-endian encoded unsigned integer</li>
+<li><code>[2:3]</code> - The length of the tag (8 + the length of the URL)</li>
+<li><code>[3:4]</code> - Zeroed</li>
+<li><code>[4:8]</code> - The offset as a little-endian encoded unsigned integer.</li>
+<li><code>[8:]</code> - The URL to be included (up to 248 bytes long)</li>
+</ul>
+<p><code>OFFSET</code> is the offset into the content where the mention appears.</p>
+<p><code>URL</code> is the URL to be inserted at the offset.</p>
+<p>This is a URL to an image</p>
+<h2 id="content-segment-video">Content Segment: Video</h2>
+<blockquote>
+<p><strong>0x26</strong></p>
+</blockquote>
+<pre><code class="language-text">      0       2    3   4              8
+ 0x0  +-------------------------------+ 0
+      |  0x26 |LEN |0x0|   OFFSET     |
+ 0x8  +-------------------------------+ 8
+      | URL...                        |
+      +-------------------------------+
+</code></pre>
+<ul>
+<li><code>[0:2]</code> - The type 0x26 as a little-endian encoded unsigned integer</li>
+<li><code>[2:3]</code> - The length of the tag (8 + the length of the URL)</li>
+<li><code>[3:4]</code> - Zeroed</li>
+<li><code>[4:8]</code> - The offset as a little-endian encoded unsigned integer.</li>
+<li><code>[8:]</code> - The URL to be included (up to 248 bytes long)</li>
+</ul>
+<p><code>OFFSET</code> is the offset into the content where the mention appears.</p>
+<p><code>URL</code> is the URL to be inserted at the offset.</p>
+<p>This is a URL to a video</p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../record/" class="btn btn-neutral float-left" title="Record Format"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../human_readable_content/" class="btn btn-neutral float-left" title="Human Readable Content"><span class="icon icon-circle-arrow-left"></span> Previous</a>
         <a href="../reference/" class="btn btn-neutral float-right" title="References">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
@@ -456,7 +582,7 @@ same record that is quoted.</p>
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../record/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../human_readable_content/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
       <span><a href="../reference/" style="color: #fcfcfc">Next &raquo;</a></span>

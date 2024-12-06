@@ -67,6 +67,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../record/">Record Format</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../human_readable_content/">Human Readable Content</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../core_tags/">Core Tags</a>
                 </li>
     </ul>
@@ -206,7 +208,7 @@ account, make payment, view logs, or anything else that is relevant to
 that relationship). These kinds of activities are not standardized here.</p>
 <h2 id="binary">Binary</h2>
 <p>All messages use websockets binary.</p>
-<p>Messages are formed as the binary message protocol specified in 
+<p>Messages are formed as the binary message protocol specified in
 <a href="../protocol/">protocol</a>. Each message starts with a single byte indicating
 the type, followed by the data that such type requires.</p>
 <p>Clients MUST only send client messages. If a server reads a server message
