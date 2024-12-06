@@ -355,9 +355,37 @@ record which is the root of the thread.</p>
 <p>If a record includes this tag, it must also include a
 <a href="#reply-by-hash">Reply by Hash</a> or <a href="#reply-by-addr">Reply by Addr</a> tag
 as well.</p>
+<h2 id="nostr-sister-event">Nostr Sister Event</h2>
+<blockquote>
+<p><strong>0x8</strong></p>
+</blockquote>
+<pre><code class="language-text">      0       2    3                  8
+ 0x0  +-------------------------------+ 0
+      |  0x8  |0x28|       0x0        |
+ 0x8  +-------------------------------+ 8
+      | NOSTR ID 1/4                  |
+ 0x10 +-------------------------------+ 16
+      | NOSTR ID 2/4                  |
+ 0x18 +-------------------------------+ 24
+      | NOSTR ID 3/4                  |
+ 0x20 +-------------------------------+ 32
+      | NOSTR ID 4/4                  |
+ 0x28 +-------------------------------+ 40
+</code></pre>
+<ul>
+<li><code>[0:2]</code> - The type 0x8 as a little-endian encoded unsigned integer</li>
+<li><code>[2:3]</code> - The length 0x38</li>
+<li><code>[3:8]</code> - Zeroed</li>
+<li><code>[8:56]</code> - The Nostr ID (32 bytes)</li>
+</ul>
+<p>For dual-stack clients that produce Nostr events alongside Mosaic records,
+and who want to track replies on sister events in nostr as well as here in
+Mosaic, this is a pointer to the sister event in nostr.</p>
+<p>NOTE: The nostr sister event will have a "mosaic" tag that contains the
+hex of the id of its Mosaic sister record.</p>
 <h2 id="content-segment-user-mention">Content Segment: User Mention</h2>
 <blockquote>
-<p>**0x20</p>
+<p><strong>0x20</strong></p>
 </blockquote>
 <pre><code class="language-text">      0       2    3   4              8
  0x0  +-------------------------------+ 0
