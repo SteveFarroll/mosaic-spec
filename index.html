@@ -164,8 +164,8 @@
 <p><strong>general-purpose</strong>: Although it started as social media, this architecture has been shown to serve many general-purpose applications.</p>
 <p>Mosaic is a <strong>work in progress</strong>.  This specification is EARLY DRAFT.</p>
 <h3 id="what-mosaic-is-not">What Mosaic is not</h3>
-<p><em>Mosaic is NOT peer-to-peer</em>: <small>Around the turn of the century, a lot of distributed sovereign protocol work focused on peer-to-peer:  Freenet, GnuNET, and later DHTs.</small> As it turns out, peer-to-peer is difficult because most computers are not fully connected to the Internet. And as there is nothing particular difficult in running a server that <em>is</em> fully connected to the Internet (given VPS availability), being strictly peer-to-peer doesn't seem advantageous. So we choose the more rock-solid client-server architecture.</p>
-<p><em>Mosaic does NOT provide IP privacy</em>: <small>Around the turn of the century, a lot of distributed sovereign protocol work focused on IP privacy: Freenet, GnuNET, etc.</small>  However, Tor took off as a general privacy layer, and other alternatives exist including i2p and VPNs.  Architecturally, it makes sense to separate application layers from privacy layers.  There is no good reason to reinvent another privacy layer since Mosaic can run on top of an already existing privacy layer.</p>
+<p><em>Mosaic is NOT peer-to-peer</em>: It turns out that peer-to-peer is difficult because most computers are not fully connected to the Internet. And as there is nothing particular difficult in running a server that <em>is</em> fully connected to the Internet (given VPS availability), being strictly peer-to-peer doesn't seem advantageous. So we choose the more rock-solid client-server architecture.</p>
+<p><em>Mosaic does NOT provide IP privacy</em>: Several IP privacy network layers exist which already do a good job (Tor, i2p, VPNs). Architecturally, it makes sense to separate application layers from privacy layers. There is no good reason to reinvent another privacy layer since Mosaic can run on top of an already existing privacy layer.</p>
 <h3 id="where-mosaic-came-from">Where Mosaic came from</h3>
 <p>Mosaic is an offshoot of <a href="https://github.com/nostr-protocol">nostr</a>.</p>
 <p>Like nostr:</p>
@@ -266,5 +266,5 @@ capitalize it even in the middle of a sentence.</p>
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2024-12-06 23:50:30.811152+00:00
+Build Date UTC : 2024-12-11 23:19:41.773612+00:00
 -->
