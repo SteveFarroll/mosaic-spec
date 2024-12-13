@@ -49,6 +49,10 @@
                 <li class="toctree-l1"><a class="reference internal" href="status/">Status and Development</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="rationale/">Rationale</a>
+                </li>
+              </ul>
               <p class="caption"><span class="caption-text">Mosaic Core</span></p>
               <ul>
                   <li class="toctree-l1"><a class="reference internal" >Identity</a>
@@ -157,61 +161,50 @@
               
                 <h1 id="mosaic">Mosaic</h1>
 <p><status>PAGE STATUS: early draft</status></p>
+<p>Mosaic is a <em>work in progress</em>.  This specification is incomplete and an early draft.</p>
 <h2 id="introduction">Introduction</h2>
-<p>Mosaic is a <em>distributed</em> <em>sovereign</em> <em>general-purpose</em> application protocol for the Internet.</p>
-<p><strong>distributed</strong>: There is no central point of failure, or place that can be taken down. There is no central place to "bootstrap" Mosaic (we use Mainline DHT's bootstrapping, there are mutiple and you can run your own).</p>
-<p><strong>sovereign</strong>: All nodes (users/clients and servers) participation is self-managed and nobody can cancel your account. You manage your own keys. Mosaic does not depend on DNS and Mosaic does not depend on Certification Authorities to issue certificates.</p>
-<p><strong>general-purpose</strong>: Although it started as social media, this architecture has been shown to serve many general-purpose applications.</p>
-<p>Mosaic is a <strong>work in progress</strong>.  This specification is EARLY DRAFT.</p>
-<h3 id="what-mosaic-is-not">What Mosaic is not</h3>
-<p><em>Mosaic is NOT peer-to-peer</em>: It turns out that peer-to-peer is difficult because most computers are not fully connected to the Internet. And as there is nothing particular difficult in running a server that <em>is</em> fully connected to the Internet (given VPS availability), being strictly peer-to-peer doesn't seem advantageous. So we choose the more rock-solid client-server architecture.</p>
-<p><em>Mosaic does NOT provide IP privacy</em>: Several IP privacy network layers exist which already do a good job (Tor, i2p, VPNs). Architecturally, it makes sense to separate application layers from privacy layers. There is no good reason to reinvent another privacy layer since Mosaic can run on top of an already existing privacy layer.</p>
-<h3 id="where-mosaic-came-from">Where Mosaic came from</h3>
+<p>Mosaic is a
+<t>distributed</t> <a href="rationale/#distributed"><sup>rat</sup></a>
+and
+<t>sovereign</t> <a href="rationale/#sovereign"><sup>rat</sup></a>
+social application protocol for the Internet.</p>
+<p>Mosaic uses a
+<t>client-server</t> <a href="rationale/#client-server"><sup>rat</sup></a>
+architecture (as opposed to peer-to-peer).</p>
+<p>Mosaic runs over any
+<t>duplex communication</t> <a href="rationale/#duplex-communication"><sup>rat</sup></a>
+transport protocol that is
+<t>TLS</t> <a href="rationale/#tls"><sup>rat</sup></a>
+secured such as <a href="websockets/">WebSockets</a>.</p>
+<p>Mosaic does not provide
+<t>IP privacy</t> <a href="rationale/#no-ip-privacy"><sup>rat</sup></a>
+because this is better provided at a lower network layer.</p>
+<p>Mosaic users generate their own identities as
+<t>EdDSA ed25519</t> <a href="rationale/#eddsa-ed25519"><sup>rat</sup></a>
+keypairs and Mosaic uses a
+<a href="identity/#master-keys-and-subkeys">master-key subkey</a>
+<a href="rationale/#master-key-subkey"><sup>rat</sup></a>
+design.</p>
+<p>Mosaic <a href="identity/#users-and-servers">servers</a> have key-based
+<t>server identites</t> <a href="rationale/#server-identities"><sup>rat</sup></a>.</p>
+<p>Mosaic identity and endpoint information is <a href="bootstrap/">bootstrapped</a> from
+<t>Mainline DHT</t> <a href="rationale/#mainline-dht"><sup>rat</sup></a></p>
+<p>Mosaic uses the <t>BLAKE3</t> <a href="rationale/#blake3"><sup>rat</sup></a> hashing function.</p>
+<p>Mosaic <a href="record/">records</a> are
+<t>binary</t> <a href="rationale/#binary-records"><sup>rat</sup></a>.</p>
+<p>Mosaic <a href="record/">records</a> are <a href="reference/">editable</a>
+if an application wants them to be, as all records have (and can be addressed by)
+a unique <a href="reference/#id-reference">hash-based id</a>
+and a separate <a href="reference/#address-reference">reusable address</a>.</p>
+<p><a href="timestamps/">Timestamps</a> <a href="rationale/#timestamps"><sup>rat</sup></a>
+account for <t>leap seconds</t> and have <t>millisecond accuracy</t>.</p>
+<p>Clients and Servers
+<t>remember the time that records are received</t>
+<a href="rationale/#storing-received-at-timestamps"><sup>rat</sup></a>.</p>
+<p>The Mosaic specification is layered with Core, Transport, Extensions, and
+Applications being separate specification layer. Only Core and WebSockets are
+required by all participants.</p>
 <p>Mosaic is an offshoot of <a href="https://github.com/nostr-protocol">nostr</a>.</p>
-<p>Like nostr:</p>
-<ul>
-<li>Mosaic uses sovereign user-controlled key pairs</li>
-<li>Mosaic uses WebSockets</li>
-<li>Mosaic uses client-server architecture, since peer-to-peer has connectivity problems</li>
-<li>Mosaic doesn't provide IP privacy</li>
-</ul>
-<p>Unlike nostr:</p>
-<ul>
-<li>Mosaic uses different <a href="cryptography/">cryptography</a> (EdDSA ed25519 and BLAKE3)</li>
-<li>Mosaic uses <a href="identity/#master-keys-and-subkeys">subkeys</a> from the start for better key management</li>
-<li>Mosaic <a href="identity/#users-and-servers">servers</a> have keypair-based identities too, so you can be sure that
-  you are connecting to the right server. Servers are identified by their
-  keypair, not their DNS-based URL.</li>
-<li>Mosaic <a href="websockets/">WebSockets</a> uses TLS 1.2 or 1.3 with either
-  self-signed certificates or RawPublicKey, so that no dependency is made upon
-  self-proclaimed certificate authority companies.</li>
-<li>Client authentication by servers is done at the TLS layer where clients
-  also present self-signed or RawPublicKey certificates.</li>
-<li>Mosaic information (server's IP addresses and user's home server information)
-  is <a href="bootstrap/">bootstrapped</a> from Mainline DHT</li>
-<li>Mosaic <a href="record/">records</a> are binary, meaning they are smaller,
-  have no parsing overhead, and have no layout or character encoding
-  ambiguities. If you think we should have used CBOR or JSON,
-  Refer to
-  <a href="https://github.com/SteveFarroll/mosaic-spec/issues/8">debate: Binary</a></li>
-<li>Mosaic records are <a href="reference/">editable</a> if an application wants them to
-  be, as all records can be addressed either by their hash-based id (not
-  replaceable) or their address (replaceable) and all records have both a
-  hash-based id and an address.</li>
-<li><a href="timestamps/">Timestamps</a> account for leap seconds (unlike unixtime) and
-  have millisecond accuracy.</li>
-<li>Clients and Servers remember the time that records are received, so that
-  key revocation can revoke all records received after a certain time,
-  and not rely on the possibly fake timestamps in the records themselves.</li>
-<li>The specification is layered with Core, Transport, Extensions, and
-  Applications being separate. Only Core and WebSockets are required by
-  all participants.</li>
-</ul>
-<p>Terminology differences</p>
-<ul>
-<li>Nostr <em>events</em> are akin to Mosaic <em>records</em></li>
-<li>Nostr <em>relays</em> are akin to Mosaic <em>servers</em></li>
-</ul>
 <h3 id="the-name-mosaic">The name Mosaic</h3>
 <p>No reason. Just a name. Easy to remember and pronounce. A throwback to
 the old NCSA Mosaic browser I suppose. It is not an acronym. We always
@@ -266,5 +259,5 @@ capitalize it even in the middle of a sentence.</p>
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2024-12-11 23:19:41.773612+00:00
+Build Date UTC : 2024-12-13 10:08:15.144839+00:00
 -->

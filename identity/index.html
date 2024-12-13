@@ -49,6 +49,10 @@
                 <li class="toctree-l1"><a class="reference internal" href="../status/">Status and Development</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../rationale/">Rationale</a>
+                </li>
+              </ul>
               <p class="caption"><span class="caption-text">Mosaic Core</span></p>
               <ul class="current">
                   <li class="toctree-l1 current"><a class="reference internal current" >Identity</a>
@@ -161,35 +165,34 @@
 <p><status>PAGE STATUS: early draft</status></p>
 <h2 id="users-and-servers">Users and Servers</h2>
 <p>Identities are split between Users and Servers.</p>
-<p>Users in Mosaic are self-created and self-administered. This puts each user in
-control of their own account, allowing them to digitally sign their content,
-move to different servers and not to rely on any central service or authority.</p>
-<p>This however also requires each end user to securely manage their private key
-material. Convenient methods for doing so, as well as recovery, are outside of
-the scope of Mosaic except insomuch as we define master keys and subkeys with
-the purpose that subkeys are intended for online use, and master keys are
-intended to be long-term and kept more securely, perhaps being offline, in
-hardware, or managed by a trusted service.</p>
-<h2 id="public-key-cryptosystem-keypair">Public key cryptosystem keypair</h2>
-<p>Identities are realized as a keypair produced within a public key cryptosystem.
-We use the EdDSA ed25519 cryptosystem for digital signature.
-See <a href="../cryptography/">cryptography</a>.</p>
-<p>A user is identified by their ed25519 master public key.</p>
+<p>Users in Mosaic are self-created and self-administered.</p>
+<p>This requires each end user to securely manage their private key material.
+Convenient methods for doing so are outside of the scope of Mosaic
+except insomuch as we define master keys and subkeys with the purpose that
+subkeys are intended for online use, and master keys are intended to be
+long-term and kept more securely, perhaps being offline, in hardware, or
+managed by a trusted service.</p>
+<h2 id="user-identity">User Identity</h2>
+<p>A user is defined to be the person, organization, or other entity with knowledge
+of the private half of an <a href="../cryptography/#digital-signature-with-eddsa-ed25519">EdDSA</a>
+keypair.  This key pair is considered their <em>master keypair</em>.</p>
+<p>A user is referenced by the public half of their <em>master keypair</em>.</p>
 <h2 id="master-keys-and-subkeys">Master keys and Subkeys</h2>
-<p>Users may have subsidiary public keys, known as <code>subkeys</code>. At times this may
-also be called <code>signing keys</code> or <code>device keys</code>.</p>
+<p>Users may have subsidiary public keys, known as <em>subkeys</em>, <em>signing keys</em> or
+<em>device keys</em> (these terms being mostly functionally interchangeable).</p>
 <p>The purpose of subkeys is for online usage in less secure environments, where
 compromise and revocation do not invalidate the master key identity that the
 user is known by.</p>
 <p>Subkeys also support alternative algorithms, such as X25519 public keys for
-receiving encrypted information, or nostr secp256k1 keys for backwards
-compatibility with nostr.</p>
+receiving encrypted information, or secp256k1 keys for backwards compatibility
+with nostr.</p>
 <p>Users publish their subkeys in a <a href="../keyschedule/">key schedule record</a>, defined
 within the core records specification.</p>
 <p>A limited number of low-frequency operations in Mosaic require a signature from
 the master key. These include (presently):</p>
 <ul>
-<li>Publishing/modifying a <a href="../bootstrap/">User Bootstrap</a> listing their servers</li>
+<li>Publishing/modifying a <a href="../bootstrap/">User Bootstrap</a> listing their servers (or
+  a <a href="../bootstrap/">Server Bootstrap</a> listing it's endpoints)</li>
 <li>Publishing/modifying a user's <a href="../keyschedule/">Key Schedule</a> with new keys and/or revocations.</li>
 <li>Publishing/modifying a user's <a href="../profile/">Profile</a> record.</li>
 </ul>

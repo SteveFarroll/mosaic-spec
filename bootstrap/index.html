@@ -49,6 +49,10 @@
                 <li class="toctree-l1"><a class="reference internal" href="../status/">Status and Development</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../rationale/">Rationale</a>
+                </li>
+              </ul>
               <p class="caption"><span class="caption-text">Mosaic Core</span></p>
               <ul class="current">
                   <li class="toctree-l1 current"><a class="reference internal current" >Identity</a>
@@ -159,25 +163,22 @@
               
                 <h1 id="bootstrap">Bootstrap</h1>
 <p><status>PAGE STATUS: draft</status></p>
-<p>When you first find out about a new public key, you may already know if it
-represents a user or a server (by the context) or you may not even know that.
-And you also may not know what servers this key uses to host it's
-<a href="../keyschedule/">key schedule</a>, and <a href="../profile/">profile</a> information, or to
-publish it's records or receive messages.</p>
+<p>When you first find out about a new public key, you may already know by the
+context if it represents a user or a server. But sometimes you don't even
+know that.  You also may not know what servers this key uses to host it's
+<a href="../keyschedule/">key schedule</a> and <a href="../profile/">profile</a> information, or which
+it uses to publish it's records or receive messages.</p>
+<p>Bootstraps are public digitally signed records designed to let you acquire
+this kind of information.</p>
 <p>We store bootstraps in Mainline DHT.</p>
 <p>Bootstraps are not <a href="../record/">records</a>. They have their own format.</p>
 <h2 id="mainline-dht">Mainline DHT</h2>
-<p>We use Mainline DHT to store mutable data signed under an ed25519 signature
-according to <a href="https://www.bittorrent.org/beps/bep_0044.html">BEP 0044</a>.</p>
-<p>Rationale:</p>
-<ul>
-<li>Mainline DHT is distributed and censorship resistant, including being
-  resistant to (or able to detect) Sybil attacks. It also has this mutable
-  data functionality and works with ed25519 signed data.</li>
-</ul>
+<p>We use <t>Mainline DHT</t> <a href="../rationale/#mainline-dht"><sup>rat</sup></a>
+to store mutable data signed under an ed25519 signature
+according to <a href="https://www.bittorrent.org/beps/bep_0044.html">BitTorrent BEP 0044</a>.</p>
 <p>Limitations:</p>
 <ul>
-<li>Only 1000 bytes can be reliably stored, and some will be used for bencoding
+<li>Only 1000 bytes can be reliably stored, and some will be used for <em>bencoding</em>
   overhead and the salt, leaving us only 983 bytes of usable data.</li>
 <li>Data must be refreshed periodically otherwise it may be removed after a time.
   Users are responsible for refreshing data in the Mainline DHT which will
@@ -187,43 +188,32 @@ according to <a href="https://www.bittorrent.org/beps/bep_0044.html">BEP 0044</a
 <li>You need a bootstrap to get started and find peers. <code>router.utorrent.com</code>
   and <code>router.bittorrent.com</code> are common but could be targetted in an attack.
   However, you can find many more or setup your own
-  <a href="https://github.com/bittorrent/bootstrap-dht">bootstrap-dht</a>.</li>
+  <a href="https://github.com/bittorrent/bootstrap-dht">bootstrap server</a>.</li>
 </ul>
 <h3 id="salt">Salt</h3>
-<p>We use a salt of "msb24" for server bootstraps and "mub24" for user
-bootstraps.</p>
-<p>Rationale:</p>
-<ul>
-<li>We use the salt to avoid collisions, in case the same ed25519 identity
-  keypair is used by both mosaic and <a href="https://github.com/pubky">pubky</a>, or in
-  case we need to change the format of the bootstrap in the future, and
-  because we have two different kinds of bootstraps already (this
-  allows a server keypair to also be a user keypair without collision).</li>
-<li>These salts are short enough to not use too much space.</li>
-</ul>
+<p>We use a <t>salt</t> <a href="../rationale/#salt"><sup>rat</sup></a>  of <code>msb24</code>
+for server bootstraps and <code>mub24</code> for user bootstraps.</p>
 <h3 id="sequence-numbers">Sequence Numbers</h3>
-<p>Sequence numbers should start at 1 and monotonically increase with each write.</p>
+<p><t>Sequence numbers</t> <a href="../rationale/#sequence-numbers"><sup>rat</sup></a>
+should start at 1 and monotonically increase with each write.</p>
 <h3 id="rust-code">Rust code</h3>
 <p>There is a rust library to access this called <a href="https://github.com/pubky/mainline">mainline</a></p>
 <h2 id="bootstrap-format">Bootstrap Format</h2>
 <p>Bootstraps (the data after the bencoded prefix) are UTF-8 valid text up
 to 983 bytes long, and consist of a series of lines separated with a single
-ASCII Line Feed (LF) character (0x0A, \n). Lines MUST not have trailing
-whitespace.</p>
+ASCII Line Feed (LF) character (<code>\n</code>). Lines MUST not have trailing whitespace.</p>
 <p>Two kinds of bootstraps may be stored, based on whether the identity
 represents a server or a user.</p>
 <h2 id="server-bootstraps">Server Bootstraps</h2>
-<p>Server bootstraps specify the internet locations (protocol, host and
+<p>Server bootstraps specify the Internet locations (protocol, host and
 port) that the server is available at.</p>
 <p>A server bootstrap starts with the line <code>S</code>.</p>
-<p>Each subsequent line in a server bootstrap specifies a pathless URL where
-the server can be accessed. There can be any number of lines. However, the
-total length of the data cannot exceed 983 bytes.</p>
-<p>Pathless URLs MUST contain a scheme and a host, and may optionally contain
-a port. Pathless URLs must NOT contain user, password, path, query, or
-fragment sections. If any of those is found in a pathless URL, software MUST
-prune such information. This includes pruning trailing slashes (which are
-paths).</p>
+<p>Each subsequent line in a server bootstrap specifies a URL where
+the server can be accessed.</p>
+<p>These URLs MUST contain a scheme and a host, may optionally contain a port, and must
+specify the root path (<code>/</code>).  They must NOT contain user, password, query, or fragment
+section. If any of those is found in one of these URL, software MUST prune such
+information.</p>
 <p>Only secure transports with TLS are defined. TLS must be version 1.2 or 1.3.
 The only known schemes currently are <code>wss</code> and <code>https</code> (<code>https</code> being
 designated for <a href="../webtransport/">WebTransport</a>)</p>

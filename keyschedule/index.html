@@ -49,6 +49,10 @@
                 <li class="toctree-l1"><a class="reference internal" href="../status/">Status and Development</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../rationale/">Rationale</a>
+                </li>
+              </ul>
               <p class="caption"><span class="caption-text">Mosaic Core</span></p>
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" >Identity</a>
@@ -161,15 +165,16 @@
 <p><status>PAGE STATUS: early draft</status></p>
 <p>A key schedule record lists subkey information and revocation information for a
 master key.</p>
-<p>A key schedule record has kind 0x1.</p>
+<p>A key schedule record has kind <code>0x1</code>.</p>
 <p>A key schedule record MUST be considered invalid if it does not conform to this
 specification.</p>
 <p>A key schedule record MUST be considered invalid if the signing key and the
 master key are not identical.</p>
 <h2 id="tags">Tags</h2>
-<p>Every subkey listed in a key schedule record must have an associated <code>Subkey</code>
-tag listing the subkey.</p>
+<p>Every subkey listed in a key schedule record must have an associated
+<a href="../core_tags/#subkey">subkey tag</a> listing the subkey.</p>
 <h2 id="payload">Payload</h2>
+<p>The payload is not <a href="../human_readable_content/">human readable</a>.</p>
 <p>`The payload contains a sequence of 40-byte subkey records laid out as follows:</p>
 <pre><code>            1   2   3   4   4   5   6
     0   8   6   4   2   0   8   6   4

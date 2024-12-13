@@ -49,6 +49,10 @@
                 <li class="toctree-l1"><a class="reference internal" href="../status/">Status and Development</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../rationale/">Rationale</a>
+                </li>
+              </ul>
               <p class="caption"><span class="caption-text">Mosaic Core</span></p>
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" >Identity</a>
@@ -159,7 +163,8 @@
               
                 <h1 id="mosaic-core-tags">Mosaic Core Tags</h1>
 <p><status>PAGE STATUS: early draft</status></p>
-<p>Tags are laid out as follows:</p>
+<p><t>Tags</t> <a href="../rationale/#tags"><sup>rat</sup></a>
+are laid out as follows:</p>
 <pre><code class="language-text">0           2      3         256 max
 +-----------+------+----------+
 | type      | len  | value ...|
@@ -171,15 +176,6 @@
     This must be at least 3.</li>
 <li><code>[3:]</code> - The value, which is at most 253 bytes long.</li>
 </ul>
-<p>Rationale</p>
-<ul>
-<li>While for some tag types a length could be inferred, this is not
-  true in general. Applications are not required to recognize every
-  tag type to look up its known length or method of length
-  calculation.</li>
-</ul>
-<p>Some tag types start with padding in the value in order to better align
-their data.</p>
 <table>
 <thead>
 <tr>
@@ -204,6 +200,9 @@ their data.</p>
 </tr>
 <tr>
 <td><a href="#nostr-sister-event">Nostr Sister Event</a></td>
+</tr>
+<tr>
+<td><a href="#subkey">Subkey</a></td>
 </tr>
 <tr>
 <td><a href="#content-segment-user-mention">Content Segment: User Mention</a></td>
@@ -251,9 +250,9 @@ their data.</p>
 <li><code>[3:8]</code> - Zeroed</li>
 <li><code>[8:40]</code> - public key (32 bytes)</li>
 </ul>
-<p>Records with this tag indicate that the record is if interest to the
+<p>Records with this tag indicate that the record is of interest to the
 person identified by that public key (as their master key).  Being tagged
-as such, it should be delivered to all of this persons' INBOX servers as
+as such, it SHOULD be delivered to all of this persons' INBOX servers as
 specified in their <a href="../bootstrap/">bootstrap</a> record.</p>
 <h2 id="reply-by-id">Reply by Id</h2>
 <blockquote>
@@ -289,7 +288,7 @@ that this one replies to. Replies are application-independent and may
 reference records of any type. This information is provided to prevent
 lookup of records of kinds that software is not able to or does not wish
 to handle.</p>
-<p><code>ID</code> is a 48-byte id <a href="../reference/">reference</a> to some other record
+<p><code>ID</code> is a 48-byte <a href="../reference/#id-reference">id reference</a> to some other record
 indicating which other record this record replies to.</p>
 <p>If a record includes this tag, it must also include a
 <a href="#root-by-addr">Root by Addr</a> tag as well.</p>
@@ -327,7 +326,7 @@ that this one replies to. Replies are application-independent and may
 reference records of any type. This information is provided to prevent
 lookup of records of kinds that software is not able to or does not wish
 to handle.</p>
-<p><code>ADDR</code> is a 48-byte address <a href="../reference/">reference</a> to some other
+<p><code>ADDR</code> is a 48-byte <a href="../reference/#address-reference">address reference</a> to some other
 record indicating which other record this record replies to.</p>
 <p>If a record includes this tag, it must also include a
 <a href="#root-by-addr">Root by Addr</a> tag as well.</p>
@@ -366,8 +365,8 @@ that the root record is. Threads are application-independent and may
 reference records of any type. This information is provided to prevent
 lookup of records of kinds that software is not able to or does not wish
 to handle.</p>
-<p><code>ID</code> is a 48-byte id <a href="../reference/">reference</a> to some other record
-indicating which other record this record replies to.</p>
+<p><code>ID</code> is a 48-byte <a href="../reference/#id-reference">id reference</a> to some other record
+which is the root of the thread.</p>
 <p>If a record includes this tag, it must also include a
 <a href="#reply-by-id">Reply by Id</a> or <a href="#reply-by-addr">Reply by Addr</a> tag
 as well.</p>
@@ -406,8 +405,8 @@ that the root record is. Threads are application-independent and may
 reference records of any type. This information is provided to prevent
 lookup of records of kinds that software is not able to or does not wish
 to handle.</p>
-<p><code>ADDR</code> is a 48-byte address <a href="../reference/">reference</a> to some other
-record which is the root of the thread.</p>
+<p><code>ADDR</code> is a 48-byte <a href="../reference/#address-reference">address reference</a>
+to some other record which is the root of the thread.</p>
 <p>If a record includes this tag, it must also include a
 <a href="#reply-by-id">Reply by Id</a> or <a href="#reply-by-addr">Reply by Addr</a> tag
 as well.</p>
@@ -432,13 +431,38 @@ as well.</p>
 <li><code>[0:2]</code> - The type 0x8 as a little-endian encoded unsigned integer</li>
 <li><code>[2:3]</code> - The length 0x38</li>
 <li><code>[3:8]</code> - Zeroed</li>
-<li><code>[8:56]</code> - The Nostr ID (32 bytes)</li>
+<li><code>[8:40]</code> - The Nostr ID (32 bytes)</li>
 </ul>
 <p>For dual-stack clients that produce Nostr events alongside Mosaic records,
 and who want to track replies on sister events in nostr as well as here in
 Mosaic, this is a pointer to the sister event in nostr.</p>
 <p>NOTE: The nostr sister event will have a "mosaic" tag that contains the
 hex of the id of its Mosaic sister record.</p>
+<h2 id="subkey">Subkey</h2>
+<blockquote>
+<p><strong>0x10</strong></p>
+</blockquote>
+<pre><code class="language-text">      0       2    3   4              8
+ 0x0  +-------------------------------+ 0
+      |  0x10 |0x28|    0x0           |
+ 0x8  +-------------------------------+ 8
+      | PUBLIC SUBKEY 1/4             |
+ 0x10 +-------------------------------+ 16
+      | PUBLIC SUBKEY 2/4             |
+ 0x18 +-------------------------------+ 24
+      | PUBLIC SUBKEY 3/4             |
+ 0x20 +-------------------------------+ 32
+      | PUBLIC SUBKEY 4/4             |
+ 0x28 +-------------------------------+ 40
+</code></pre>
+<ul>
+<li><code>[0:2]</code> - The type 0x10 as a little-endian encoded unsigned integer</li>
+<li><code>[2:3]</code> - The length 0x28</li>
+<li><code>[3:8]</code> - Zeroed</li>
+<li><code>[8:40]</code> - The subkey public key</li>
+</ul>
+<p>This is used only on <a href="../keyschedule/">key schedule</a> records so that clients
+can look up a subkey to verify it's association to a master key.</p>
 <h2 id="content-segment-user-mention">Content Segment: User Mention</h2>
 <blockquote>
 <p><strong>0x20</strong></p>

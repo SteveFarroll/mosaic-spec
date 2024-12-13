@@ -3,3 +3,15 @@ status {
     color: #805010;
     font-variant: small-caps;
 }
+
+t {
+    color: #465927;
+    padding: 2px 3px;
+    border: 1px solid #e1e4e5;
+}
+
+.rst-content code {
+    color: #004d00;
+    white-space: pre;
+    word-break: keep-all;
+}

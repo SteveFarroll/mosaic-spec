@@ -49,6 +49,10 @@
                 <li class="toctree-l1"><a class="reference internal" href="../status/">Status and Development</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../rationale/">Rationale</a>
+                </li>
+              </ul>
               <p class="caption"><span class="caption-text">Mosaic Core</span></p>
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" >Identity</a>
@@ -159,9 +163,11 @@
               
                 <h1 id="timestamps">Timestamps</h1>
 <p><status>PAGE STATUS: draft</status></p>
-<p>Timestamps are unixtimes, adjusted for leap seconds, expressed in milliseconds,
+<p>Timestamps are unixtimes, adjusted for leap seconds, expressed in
+<t>milliseconds</t> <a href="../rationale/#milliseconds"><sup>rat</sup></a>
 and encoded into a 48-bit unsigned integer in little-endian format.</p>
-<p>The first bit is 0. Records that have a 1 bit here SHOULD be ignored.</p>
+<p>The first bit is 0 <a href="../rationale/#bit-48"><sup>rat</sup></a>.
+Records that have a 1 bit here SHOULD be ignored.</p>
 <p>The next 47 bits represent the number of milliseconds that have actually elapsed
 on the surface of the Earth since the UNIX epoch. The epoch is defined as (these
 definitions are believed to be equivalent):</p>
@@ -176,8 +182,10 @@ definitions are believed to be equivalent):</p>
 </ul>
 </li>
 </ul>
-<p>Timestamps account for all leap seconds, unlike unixtime and unlike NTP
-timestamps (both of which pretend that leap seconds did not happen).</p>
+<p>Timestamps account for all
+<t>leap seconds</t> <a href="../rationale/#leap-seconds"><sup>rat</sup></a>
+unlike unixtime and unlike NTP timestamps
+(both of which pretend that leap seconds did not happen).</p>
 <p>Before 1 Jan 1972, timestamps match unixtime.</p>
 <p>As of this writing (unixtime 1732829887) the current timetstamp which includes
 28 additional leap seconds is 1732829915.</p>
@@ -194,17 +202,6 @@ The data should be interpreted as follows:</p>
   thereafter (until the next entry).</li>
 <li>A timestamp is the current unixtime, plus the number of leap seconds that have
   elapsed.</li>
-</ul>
-<p>Rationale:</p>
-<ul>
-<li>UTC is a discontinous time scale that is occasionally adjusted by leap seconds.
-  Unixtime is derived from UTC and is thus also discontinuous.  Subtracting two
-  unixtimes could give a time interval that is off by up to 28 seconds (for
-  example when comparing dates before 1 Jan 1972 with today).</li>
-<li>The first bit is zero in case it is ever interpreted as a sign bit, in order
-  to preserve sorting.</li>
-<li>Millisecond unixtimes in 47 bits give us more than 4000 years before they
-  roll over.</li>
 </ul>
 <p>Refer to the <a href="https://data.iana.org/time-zones/data/leap-seconds.list">IANA leap second list</a></p>
               

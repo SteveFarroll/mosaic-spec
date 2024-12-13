@@ -49,6 +49,10 @@
                 <li class="toctree-l1"><a class="reference internal" href="../status/">Status and Development</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../rationale/">Rationale</a>
+                </li>
+              </ul>
               <p class="caption"><span class="caption-text">Mosaic Core</span></p>
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" >Identity</a>
@@ -161,11 +165,12 @@
 <p>A reference is a pointer from one record to another.</p>
 <p>Mosaic defines two kinds of references</p>
 <h2 id="id-reference">Id Reference</h2>
-<p>A <code>id</code> reference is a pointer to an exact record with no provision for
-replacement or edits. It contains some <code>hash</code> of the message making it
+<p>An <t>id reference</t> is a pointer to an exact record with no provision for
+replacement or edits. It contains some <em>hash</em> of the message making it
 unique. See <a href="../record/">record</a> for the Id field.</p>
 <h2 id="address-reference">Address Reference</h2>
-<p>An <code>address</code> reference is a pointer to a group of records that have the same
+<p>An <t>address reference</t> <a href="../rationale/#address-fields"><sup>rat</sup></a>
+is a pointer to a group of records that have the same
 address, which usually represent an initial record and it's subsequent
 replacements, often (and by default presumably) with the most recent record
 superceding the older records.</p>
@@ -180,27 +185,11 @@ record layout at <code>[128:176]</code> making up 48 bytes.</p>
 <p>An author can replace a record by creating a new record with the same address,
 in which case the address is copied (the nonce is not randomly generated).
 Replaced records must then contain the same author key and be of the same
-kind.  They may however be signed by a different signing keypair or have
-their flags modified, their tags changed, and their content changed.</p>
+kind, and refer to the original timestamp.  They may however be signed by a
+different signing keypair or have their flags modified, their tags changed,
+and their content changed.</p>
 <p>The timestamp of a replacement record MUST be larger than the original
 timestamp in the address.</p>
-<p>Rationale:</p>
-<ul>
-<li>By containing the Author public key, record location can be determined
-  through <a href="../bootstrap/">bootstrapping</a>.</li>
-<li>At only 48 bytes long, these can easily fit into a 253 byte tag when needed.</li>
-<li>By not including the hash of content, records can be edited and replaced by
-  the author (where edits make sense)</li>
-<li>By containing the kind, records that are edited cannot change their kind.</li>
-<li>By containing the kind, software can filter records that are not
-  relevant to a situation without needing to look them up first.</li>
-<li>By putting the timestamp at the front of the address, addresses sort in
-  time order and group temporally (for database performance).</li>
-<li>By containing the original timestamp and a 64-bit nonce, it is statistically
-  infeasible for two different records to have the same address
-  unintentionally. In fact this is overkill, but using anything shorter
-  that still aligns at 64-bits ends up being not unique enough.</li>
-</ul>
               
             </div>
           </div><footer>

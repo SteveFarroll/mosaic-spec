@@ -49,6 +49,10 @@
                 <li class="toctree-l1"><a class="reference internal" href="../status/">Status and Development</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../rationale/">Rationale</a>
+                </li>
+              </ul>
               <p class="caption"><span class="caption-text">Mosaic Core</span></p>
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" >Identity</a>
@@ -158,9 +162,37 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="profile-record">Profile Record</h1>
-<p><status>PAGE STATUS: TBD</status></p>
+<p><status>PAGE STATUS: early draft</status></p>
 <p>A profile record contains user profile information.</p>
 <p>A profile record has kind 0x2.</p>
+<p>A profile record MUST be considered invalid if the signing key and the
+master key are not identical.</p>
+<p>The payload is not <a href="../human_readable_content/">human readable</a>.</p>
+<h2 id="tags">Tags</h2>
+<p>No specific tags are defined.</p>
+<h2 id="content">Content</h2>
+<p>Content is a <a href="https://www.rfc-editor.org/rfc/rfc8949.html">CBOR</a> map.
+All field names are snake-case.</p>
+<p>The only required field is <code>name</code>.</p>
+<p>The following fields are available:</p>
+<ul>
+<li><code>name</code> - (REQUIRED) this is the user's name, used for <code>@name</code> tagging,
+  containing only typeable ASCII characters.</li>
+<li><code>display_name</code> - this is a name for display purposes which can contain
+  any sort of UTF-8 character.</li>
+<li><code>about</code> - This is prose where the user can describe themself.</li>
+<li><code>avatar</code> - This is a URL to an avatar (e.g. a profile picture) in a
+  standard format (PNG, JPEG, SVG, WebP, GIF, BMP or ICO) expected to be
+  dimensionally square and no bigger than 512x512.</li>
+<li><code>website</code> - This is a URL to the user's website.</li>
+<li><code>banner</code> - This is a URL to a background picture in a standard format
+  (PNG, JPEG, SVG, WebP, GIF, BMP or ICO) expected to be of size 1024x768</li>
+<li><code>org</code> - A boolean designating that this profile represents an organisation</li>
+<li><code>bot</code> - A boolean designating that this profile is a bot</li>
+<li><code>lud16</code> - This is a lightning payment address
+  defined by <a href="https://github.com/lnurl/luds/blob/luds/16.md">LUD-16</a></li>
+</ul>
+<p>Additional fields MAY be used.</p>
 <h2 id="server-used">Server Used</h2>
 <p>These are posted to all of the author's Outbox servers.</p>
               

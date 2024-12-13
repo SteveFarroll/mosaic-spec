@@ -49,6 +49,10 @@
                 <li class="toctree-l1"><a class="reference internal" href="../status/">Status and Development</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../rationale/">Rationale</a>
+                </li>
+              </ul>
               <p class="caption"><span class="caption-text">Mosaic Core</span></p>
               <ul>
                   <li class="toctree-l1"><a class="reference internal" >Identity</a>
@@ -160,6 +164,9 @@
                 <h1 id="blog">Blog</h1>
 <p><status>PAGE STATUS: early draft</status></p>
 <p>Kind = 0x6 - Blog post</p>
+<h2 id="tags">Tags</h2>
+<p>Blogs SHOULD not have the following tags: 0x1, 0x2, 0x3, 0x4, 0x5, 0x6.</p>
+<p>Blogs MAY have 0x7.</p>
 <h2 id="payload">Payload</h2>
 <p>The payload follows the <a href="../human_readable_content/">Human Readable Content</a> rules.</p>
 <h2 id="flags">Flags</h2>
@@ -170,9 +177,7 @@
 <li>0x08 NOBRIDGE - may be on or off</li>
 <li>0x10 EPHEMERAL- MUST be off. Blogs are not ephemeral.</li>
 </ul>
-<h2 id="tags">Tags</h2>
-<p>Blogs SHOULD not have the following tags: 0x1, 0x2, 0x3, 0x4, 0x5, 0x6.</p>
-<p>Blogs MAY have 0x7.</p>
+<h2 id="tags_1">Tags</h2>
 <h2 id="server-used">Server Used</h2>
 <p>These are posted to all of the author's Outbox servers.</p>
               
