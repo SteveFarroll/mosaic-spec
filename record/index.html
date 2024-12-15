@@ -268,9 +268,10 @@ fashion in the future).</p>
 <h4 id="orig-be-timestamp">Orig BE Timestamp</h4>
 <p>6 bytes at <code>[144:150]</code></p>
 <p>This is the original timestamp represented in 6 bytes (48 bits) according
-to <a href="../timestamps/">timestamps</a>, except in big-endian format.</p>
+to <a href="../timestamps/">timestamps</a>, except in big-endian format, and also the
+most significant bit is set to 1. <a href="../rationale/#address-fields"><sup>ref</sup></a></p>
 <p>If the record is not a replacement of another record (the usual case)
-then this is the same value as <a href="#timestamp">Timestamp</a>.</p>
+then this comes from the same value as <a href="#timestamp">Timestamp</a>.</p>
 <h4 id="kind">Kind</h4>
 <p>2 bytes at <code>[150:152]</code></p>
 <p>This is the <a href="../kinds/">kind</a> of the record which determines the application
@@ -361,7 +362,7 @@ size minus the header size).</p>
    of output using BLAKE3's <code>finalize_xof()</code> function. This does not
    directly go into the record.</li>
 <li>Generate EdDSA ed25519ph pre-hashed signature of that 512-bit hash
-   using the Signing private key, and providing the context string
+   using the Signing secret key, and providing the context string
    of "Mosaic". NOTE: ed25519 calls for a SHA-512 hash, but we use
    a BLAKE3 hash instead. Place the signature at bytes <code>[0:64]</code>.</li>
 <li>Copy the first 40 bytes of the hash to <code>[72:112]</code>.</li>

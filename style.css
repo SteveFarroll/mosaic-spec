@@ -15,3 +15,7 @@ t {
     white-space: pre;
     word-break: keep-all;
 }
+
+not {
+    text-decoration: overline;
+}

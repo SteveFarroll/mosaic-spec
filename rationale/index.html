@@ -200,6 +200,9 @@ to this page with <a href="#"><sup>rat</sup></a> links.</p>
 <td><a href="#records">Records</a></td>
 </tr>
 <tr>
+<td><a href="#references">References</a></td>
+</tr>
+<tr>
 <td><a href="#server-identities">Server Identities</a></td>
 </tr>
 <tr>
@@ -260,7 +263,7 @@ to this page with <a href="#"><sup>rat</sup></a> links.</p>
 <p>Except for human readability, CBOR is better than JSON in cases where extensibility
 is needed.</p>
 <p>Other than that, binary is better in all respects.</p>
-<p>We argue that extensibility of the main Record is sufficiently done via Record kinds,
+<p>We argue that extensibility of the main record is sufficiently done via record kinds,
 tags and content, and therefore extensibility is not needed for this structure.</p>
 <p>We sacrifice:</p>
 <ul>
@@ -296,8 +299,9 @@ advantageous. So we choose the more rock-solid client-server architecture.</p>
 <hr />
 <h2 id="distributed">Distributed</h2>
 <p>Centralized systems have a fatal flaw: they can easily be captured and controlled by people you do not
-agree with such as corporate or censors, or hackers. By having a central point of attack, the entire
-system can be taken down or modified deleteriously by bad actors.</p>
+agree with such as corporate or government censors or hackers. By having a
+central point of attack, the entire
+system can be taken down or damaged by bad actors.</p>
 <p>Mosaic is desgined to be fully distributed, with no centralized points of failure.</p>
 <p>There is no central place to bootstrap Mosaic either. We use Mainline DHT's bootstrapping, there are
 mutiple bootstrap servers and you can run your own.</p>
@@ -309,7 +313,7 @@ Web Transport.  This is in opposition to a request-response architecture such as
 For example when a new record that matches a user's subscribed filters arrives at the server,
 the server can immediately shuttle it to the client. In a request-response architecture, there
 would be a delay until the client polled again. And due to the polling nature, the client would
-need to make many poll requests when nothing was ready for them.</p>
+need to make many poll requests even when nothing was ready for them.</p>
 <hr />
 <h2 id="eddsa-ed25519">EdDSA ed25519</h2>
 <p>We chose this elliptic curve because it is the state of the art.</p>
@@ -355,8 +359,8 @@ do not expect people to write often from multiple places.</p>
 compatible.</p>
 <hr />
 <h2 id="master-key-subkey">Master-Key Subkey</h2>
-<p>Users need to keep their private key secure so they don't have their identity stolen. But
-they also need to access their private key online in order to use the protocol. By splitting
+<p>Users need to keep their secret key secure so they don't have their identity stolen. But
+they also need to access their secret key online in order to use the protocol. By splitting
 the keys into a master key and multiple device keys (or subkeys) we can enable very secure
 master key storage and usage without impeding the ability to operate online with subkeys.</p>
 <hr />
@@ -376,32 +380,6 @@ alignment of fields.</p>
 <p>All data that needs hashing is contigous so that no data needs to be copied in order to produce
 the hash. The hash-based id and signature could have appeared before or after, and we have chosen
 to place them before to give them well defined offsets.</p>
-<h3 id="id-fields">Id Fields</h3>
-<p>By putting the big-endian timestamp at the front of the ID, IDs sort in time order
-and group temporally (for database performance).</p>
-<p>The zeroes in the ID maintain 64-bit alignment.</p>
-<p>The hash in the ID cryptographically represents all the data that was hashed. It is 40 bytes
-long because we needed at least 32 bytes for cryptographic reasons, and because addresses
-are already 48 bytes long, we used the extra 8 bytes to extend the hash.</p>
-<p>The entire 512-bit (64 byte) hash is overkill. Even though we have to produce it for the
-EdDSA ed25519 signature, we don't have to waste precious record space with that entire
-long hash.</p>
-<h3 id="address-fields">Address Fields</h3>
-<p>By not including the hash of content, records can be edited and replaced by
-the author (where edits make sense). Application will specify which kind of
-reference to use in which context.</p>
-<p>By containing the Author public key, record location can be determined
-through <a href="../bootstrap/">bootstrapping</a>.</p>
-<p>At only 48 bytes long, these can easily fit into a 253 byte tag when needed.</p>
-<p>By containing the kind, records that are edited cannot change their kind.</p>
-<p>By containing the kind, software can filter records that are not relevant to
-a situation without needing to look them up first.</p>
-<p>By putting the timestamp at the front of the address in big-endian format,
-addresses sort in time order and group temporally (for database performance).</p>
-<p>By containing the original timestamp and a 64-bit nonce, it is statistically
-infeasible for two different records to have the same address unintentionally.
-In fact this is overkill, but using anything shorter that still aligns at 64-bits
-ends up being not unique enough.</p>
 <h3 id="flags">Flags</h3>
 <p>A number of record properties that span applications have been conceived of and we
 provided space to set these.</p>
@@ -425,6 +403,37 @@ method of length calculation.</p>
 <p>Some tag types start with padding in the value in order to better align
 their data.</p>
 <hr />
+<h2 id="references">References</h2>
+<h3 id="id-fields">Id Fields</h3>
+<p>The hash in the ID cryptographically represents all the data that was hashed.
+It is 40 bytes long because we needed at least 32 bytes for cryptographic
+reasons, and because addresses are already 48 bytes long, we used the extra
+8 bytes to extend the hash.</p>
+<p>The entire 512-bit (64 byte) hash is overkill. Even though we have to produce
+it for the EdDSA ed25519 signature, we don't have to waste precious record
+space with that entire long hash.</p>
+<p>By putting the big-endian timestamp at the front of the ID, IDs sort in time
+order and group temporally (for database performance).</p>
+<p>The zeroes in the ID maintain 64-bit alignment.</p>
+<h3 id="address-fields">Address Fields</h3>
+<p>By not including the hash of content, records can be edited and replaced by
+the author (where edits make sense). Application will specify which kind of
+reference to use in which context.</p>
+<p>By containing the Author public key, record location can be determined
+through <a href="../bootstrap/">bootstrapping</a>.</p>
+<p>By containing the kind, records that are edited cannot change their kind.</p>
+<p>By containing the kind, software can filter records that are not relevant to
+a situation without needing to look them up first.</p>
+<p>By putting the timestamp at the front of the address in big-endian format,
+addresses sort in time order and group temporally (for database performance).</p>
+<p>By containing the original timestamp and a 64-bit nonce, it is statistically
+infeasible for two different records to have the same address unintentionally.
+In fact this is overkill, but using anything shorter that still aligns at
+64-bits ends up being not unique enough.</p>
+<p>At only 48 bytes long, these can easily fit into a 253 byte tag when needed.</p>
+<p>By the first bit being a 1, IDs and ADDRs can be intermixed and their type
+determined by that bit.</p>
+<p>--</p>
 <h2 id="server-identities">Server Identities</h2>
 <p>By recognizing a server by it's key, we can verify server identity directly.</p>
 <ul>
@@ -470,7 +479,7 @@ to preserve sorting.</p>
 <p>Millisecond unixtimes only take 6 bytes and in 47 bits give us more than
 4000 years before they roll over.</p>
 <h3 id="bit-48">Bit 48</h3>
-<p>The most significant bit of timestamps is always a 0 in case software interprets
+<p>The most significant bit of timestamps is set to 0 in case software interprets
 it as a signed integer, to preserve sorting.</p>
 <hr />
 <h2 id="tls">TLS</h2>

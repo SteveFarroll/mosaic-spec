@@ -166,7 +166,7 @@
 <h2 id="users-and-servers">Users and Servers</h2>
 <p>Identities are split between Users and Servers.</p>
 <p>Users in Mosaic are self-created and self-administered.</p>
-<p>This requires each end user to securely manage their private key material.
+<p>This requires each end user to securely manage their secret key material.
 Convenient methods for doing so are outside of the scope of Mosaic
 except insomuch as we define master keys and subkeys with the purpose that
 subkeys are intended for online use, and master keys are intended to be
@@ -174,7 +174,7 @@ long-term and kept more securely, perhaps being offline, in hardware, or
 managed by a trusted service.</p>
 <h2 id="user-identity">User Identity</h2>
 <p>A user is defined to be the person, organization, or other entity with knowledge
-of the private half of an <a href="../cryptography/#digital-signature-with-eddsa-ed25519">EdDSA</a>
+of the secret half of an <a href="../cryptography/#digital-signature-with-eddsa-ed25519">EdDSA</a>
 keypair.  This key pair is considered their <em>master keypair</em>.</p>
 <p>A user is referenced by the public half of their <em>master keypair</em>.</p>
 <h2 id="master-keys-and-subkeys">Master keys and Subkeys</h2>
@@ -196,7 +196,7 @@ the master key. These include (presently):</p>
 <li>Publishing/modifying a user's <a href="../keyschedule/">Key Schedule</a> with new keys and/or revocations.</li>
 <li>Publishing/modifying a user's <a href="../profile/">Profile</a> record.</li>
 </ul>
-<p>Subkeys might be deterministically derived from the master private key, or they
+<p>Subkeys might be deterministically derived from the master secret key, or they
 might not. Nothing in the Mosaic spec requires such, but some implementations
 may make use of this.</p>
               

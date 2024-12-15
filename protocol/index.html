@@ -196,209 +196,318 @@ of each type. Following this is the data of the message.</p>
 <tr>
 <th>Initiator</th>
 <th>Message</th>
+<th>Type</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Client</td>
-<td><a href="#query">Query</a></td>
+<td><a href="#get">Get</a></td>
+<td>0x1</td>
 </tr>
 <tr>
 <td>Client</td>
-<td><a href="#close-query">Close Query</a></td>
+<td><a href="#query">Query</a></td>
+<td>0x2</td>
+</tr>
+<tr>
+<td>Client</td>
+<td><a href="#subscribe">Subscribe</a></td>
+<td>0x3</td>
+</tr>
+<tr>
+<td>Client</td>
+<td><a href="#unsubscribe">Unsubscribe</a></td>
+<td>0x4</td>
 </tr>
 <tr>
 <td>Client</td>
 <td><a href="#submission">Submission</a></td>
+<td>0x5</td>
 </tr>
 <tr>
 <td>Server</td>
 <td><a href="#record">Record</a></td>
+<td>0x80</td>
 </tr>
 <tr>
 <td>Server</td>
-<td><a href="#query-complete">Query Complete</a></td>
+<td><a href="#locally-complete">Locally Complete</a></td>
+<td>0x81</td>
 </tr>
 <tr>
 <td>Server</td>
 <td><a href="#query-closed">Query Closed</a></td>
+<td>0x82</td>
 </tr>
 <tr>
 <td>Server</td>
 <td><a href="#submission-result">Submission Result</a></td>
+<td>0x83</td>
 </tr>
 </tbody>
 </table>
-<h2 id="client-messages">Client messages</h2>
-<h3 id="query">Query</h3>
+<hr />
+<h2 id="client-messages">Client Messages</h2>
+<h3 id="get">Get</h3>
 <blockquote>
 <p><strong>0x1</strong></p>
 </blockquote>
-<p>This is a query for records in the following format:</p>
-<pre><code class="language-text">                    1       2       3
-    0       8       6       4       2
- 0  +-------------------------------+
-    |  0x1  |   QUERY_ID    | 0x0   |
-    +-------------------------------+
-    |  FILTER LEN   | 0x0           |
-    +-------------------------------+
-    |  FILTER ...                   |
-    |  ...                          |
-    +-------------------------------+
+<p>This is a query for specific records.</p>
+<p>It has the following format:</p>
+<pre><code class="language-text">
+    0     1     2     3     4     5     6     7     8
+ 0  +-----------------------------------------------+
+    | 0x1 | 0x0 | QUERY_ID  |          0x0          |
+ 8  +-----------------------------------------------+
+    | Mixed IDs or ADDRs ...                        |
+    | ...                                           |
+    +-----------------------------------------------+
 </code></pre>
-<p>The <code>QUERY_ID</code> should be made up by the client. It can be any 16-bit
-number and is used for associating responses.</p>
-<p><code>FILTER_LEN</code> is a 16-bit little-endian integer indicating the length
-of the filter.</p>
-<p>The <code>FILTER</code> is defined in <a href="../filter/">filter</a>.</p>
+<ul>
+<li><code>[0:1]</code> - The type 0x1</li>
+<li><code>[1:2]</code> - Zeroed</li>
+<li><code>[2:4]</code> - <code>QUERY_ID</code>, two bytes which should be made up by the client and
+  used to associate returned <a href="#record"><code>Record</code></a> responses to this request.</li>
+<li><code>[4:8]</code> - Zeroed</li>
+<li><code>[*]</code> - A sequence of mixed IDs and ADDRs.  Note that ADDRs start
+  with a 1 bit, whereas IDs start with a 0 bit, and both of them are 48
+  bytes long.</li>
+</ul>
+<p>This is a client initiated message. Servers are expected to reply with:</p>
+<ul>
+<li>A series of zero or more <a href="#record"><code>Record</code></a> messages representing all
+  the matched records on the server, followed by a
+  <a href="#query-closed"><code>Query Closed</code></a> message.</li>
+</ul>
+<h3 id="query">Query</h3>
+<blockquote>
+<p><strong>0x2</strong></p>
+</blockquote>
+<p>This is a query for records that closes once served.</p>
+<p>It has the following format:</p>
+<pre><code class="language-text">    0     1     2     3     4     5     6     7     8
+ 0  +-----------------------------------------------+
+    | 0x2 | 0x0 | QUERY_ID  |         LIMIT         |
+ 8  +-----------------------------------------------+
+    | FILTER_LEN|              0x0                  |
+16  +-----------------------------------------------+
+    | FILTER ...                                    |
+    | ...                                           |
+    +-----------------------------------------------+
+</code></pre>
+<ul>
+<li><code>[0:1]</code> - The type 0x2</li>
+<li><code>[1:2]</code> - Zeroed</li>
+<li><code>[2:4]</code> - <code>QUERY_ID</code> two bytes which should be made up by the client and used
+  to associate returned <a href="#record"><code>Record</code></a> responses to this request.</li>
+<li><code>[4:8]</code> - <code>LIMIT</code>, an unsigned integer in little-endian format, specifies
+  the maximum number of responses that the client wishes to receive.  A value
+  of 0 indicates unlimited.</li>
+<li><code>[8:10]</code> - <code>FILTER_LEN</code> specifies the length of the <code>FILTER</code> in bytes.</li>
+<li><code>[10:16]</code> - Zeroed</li>
+<li><code>[*]</code> - The <code>FILTER</code>, see <a href="../filter/">Filter</a>.</li>
+</ul>
 <p>This is a client initiated message. Servers are expected to reply with:</p>
 <ul>
 <li>a series of zero or more <a href="#record"><code>Record</code></a> messages representing all
   the matching records on the server initially, followed by
-  a <a href="#query-complete"><code>Query Complete</code></a> message, potentially followed by zero or
+  a <a href="#query-closed"><code>Query Closed</code></a> message.</li>
+</ul>
+<p>Queries MUST return results in anti-chronological order, from most
+recent backwards.</p>
+<h3 id="subscribe">Subscribe</h3>
+<blockquote>
+<p><strong>0x3</strong></p>
+</blockquote>
+<p>This is a query for records that is kept open after the initial records are
+served so that newly arriving records that match can be sent to the client
+immediately.</p>
+<p>It has the following format:</p>
+<pre><code class="language-text">    0     1     2     3     4     5     6     7     8
+ 0  +-----------------------------------------------+
+    | 0x3 | 0x0 | QUERY_ID  |         LIMIT         |
+ 8  +-----------------------------------------------+
+    | FILTER_LEN|              0x0                  |
+16  +-----------------------------------------------+
+    | FILTER ...                                    |
+    | ...                                           |
+    +-----------------------------------------------+
+</code></pre>
+<ul>
+<li><code>[0:1]</code> - The type 0x3</li>
+<li><code>[1:2]</code> - Zeroed</li>
+<li><code>[2:4]</code> - <code>QUERY_ID</code>, two bytes which should be made up by the client and
+  used to associate returned <a href="#record"><code>Record</code></a> responses to this request.</li>
+<li><code>[4:8]</code> - <code>LIMIT</code>, an unsigned integer in little-endian format, specifies
+  the maximum number of responses that the client wishes to receive.  A value
+  of 0 indicates unlimited.</li>
+<li><code>[8:10]</code> - <code>FILTER_LEN</code> specifies the length of the <code>FILTER</code> in bytes.</li>
+<li><code>[10:16]</code> - Zeroed</li>
+<li><code>[*]</code> - The <code>FILTER</code>, see <a href="../filter/">Filter</a>.</li>
+</ul>
+<p>This is a client initiated message. Servers are expected to reply with:</p>
+<ul>
+<li>a series of zero or more <a href="#record"><code>Record</code></a> messages representing all
+  the matching records on the server initially, followed by
+  a <a href="#locally-complete"><code>Locally Complete</code></a> message, potentially followed by
+  zero or
   more <a href="#record"><code>Record</code></a> messages that flow in to the server after
   the initial response (so long as the query is still open), or</li>
 <li>a <a href="#query-closed"><code>Query Closed</code></a> message if the query could not be served.</li>
 </ul>
 <p>Queries MUST return results in anti-chronological order, from most
 recent backwards.</p>
-<h3 id="close-query">Close Query</h3>
+<h3 id="unsubscribe">Unsubscribe</h3>
 <blockquote>
-<p><strong>0x2</strong></p>
+<p><strong>0x4</strong></p>
 </blockquote>
-<p>This is a client request to close a query in the following format:</p>
-<pre><code class="language-text">                    1       2       3
-    0       8       6       4       2
- 0  +-------------------------------+
-    |  0x2  |   QUERY_ID    | 0x0   |
-    +-------------------------------+
+<p>This is a client request to close an open subscription query.</p>
+<p>It has the following format:</p>
+<pre><code class="language-text">    0     1     2     3     4     5     6     7     8
+ 0  +-----------------------------------------------+
+     | 0x4 | 0x0 | QUERY_ID |         0x0           |
+ 8  +-----------------------------------------------+
 </code></pre>
+<ul>
+<li><code>[0:1]</code> - The type 0x3</li>
+<li><code>[1:2]</code> - Zeroed</li>
+<li><code>[2:4]</code> - <code>QUERY_ID</code>, two bytes indicating which query should be closed.</li>
+<li><code>[4:8]</code> - Zeroed</li>
+</ul>
 <p>This is a client initiated message. Servers are expected to reply with:</p>
 <ul>
 <li><a href="#query-closed"><code>Query Closed</code></a></li>
 </ul>
 <h3 id="submission">Submission</h3>
 <blockquote>
-<p><strong>0x3</strong></p>
+<p><strong>0x5</strong></p>
 </blockquote>
-<p>This is the submission of a record in the following format:</p>
-<pre><code class="language-text">                    1       2       3
-    0       8       6       4       2
- 0  +-------------------------------+
-    |  0x3  |   LENGTH              |
-    +-------------------------------+
-    | RECORD ...                    |
-    | ...                           |
-    +-------------------------------+
+<p>This is the submission of a record.</p>
+<p>It has the following format:</p>
+<pre><code class="language-text">    0     1     2     3     4     5     6     7     8
+ 0  +-----------------------------------------------+
+    | 0x5 |    LENGTH       |          0x0          |
+ 8  +-----------------------------------------------+
+    | RECORD ...                                    |
+    | ...                                           |
+    +-----------------------------------------------+
 </code></pre>
-<p><code>LENGTH</code> is a 24-bit little-endian length, with a maximum value of the max
-length of a record (1024576 bytes) and representing the actual length of the
-subsequent record submitted.</p>
-<p><code>RECORD</code> is the record.</p>
+<ul>
+<li><code>[0:1]</code> - The type 0x5</li>
+<li><code>[1:4]</code> - <code>LENGTH</code> is a 24-bit little-endian length, with a maximum value of
+   the max length of a record (1024576 bytes) and representing the actual
+   length of the subsequent record submitted.</li>
+<li><code>[5:8]</code> - Zeroed</li>
+<li><code>[*]</code> - <code>RECORD</code> is the record submitted</li>
+</ul>
 <p>This is a client initiated message. Servers are expected to reply with:</p>
 <ul>
 <li><a href="#submission-result"><code>Submission Result</code></a> with an id prefix matching the record.</li>
 </ul>
-<h2 id="server-messages">Server messages</h2>
+<hr />
+<h2 id="server-messages">Server Messages</h2>
 <h3 id="record">Record</h3>
 <blockquote>
 <p><strong>0x80</strong></p>
 </blockquote>
-<p>This is a record returned from a query in the following format:</p>
-<pre><code class="language-text">                    1       2       3
-    0       8       6       4       2
- 0  +-------------------------------+
-    |  0x80 |   QUERY_ID    | 0x0   |
-    +-------------------------------+
-    |  0x0  |   LENGTH              |
-    +-------------------------------+
-    | RECORD ...                    |
-    | ...                           |
-    +-------------------------------+
+<p>This is a record returned from a query.</p>
+<p>It has the following format:</p>
+<pre><code class="language-text">    0     1     2     3     4     5     6     7     8
+ 0  +-----------------------------------------------+
+    | 0x80| 0x0 | QUERY_ID  | 0x0 |     LENGTH      |
+ 8  +-----------------------------------------------+
+    | RECORD ...                                    |
+    | ...                                           |
+    +-----------------------------------------------+
 </code></pre>
-<p>The <code>QUERY_ID</code> is the client query that this record matched.</p>
-<p>The <code>LENGTH</code> is the length of the record as a 24-bit little-endian
-encoded value.</p>
-<p>The <code>RECORD</code> is the actual record</p>
-<p>This is a server response message in response to <a href="#query"><code>Query</code></a>.</p>
-<h3 id="query-complete">Query Complete</h3>
+<ul>
+<li><code>[0:1]</code> - The type 0x80</li>
+<li><code>[1:2]</code> - Zeroed</li>
+<li><code>[2:4]</code> - <code>QUERY_ID</code> indicates the client query that this record matched.</li>
+<li><code>[4:5]</code> - Zeroed</li>
+<li><code>[5:8]</code> - <code>LENGTH</code> is a 24-bit little-endian length, with a maximum value of
+   the max length of a record (1024576 bytes) and representing the actual
+   length of the subsequent record supplied.</li>
+<li><code>[*]</code> - <code>RECORD</code> is the returned record.</li>
+</ul>
+<p>This is a server response message in response to <a href="#get"><code>Get</code></a>
+or <a href="#query"><code>Query</code></a> or <a href="#subscribe"><code>Subscribe</code></a>.</p>
+<h3 id="locally-complete">Locally Complete</h3>
 <blockquote>
 <p><strong>0x81</strong></p>
 </blockquote>
-<p>This is a message indicating that a query is complete, in the following
-format:</p>
-<pre><code class="language-text">                    1       2       3
-    0       8       6       4       2
- 0  +-------------------------------+
-    |  0x81 |   QUERY_ID    | 0x0   |
-    +-------------------------------+
+<p>This is a message indicating that a query has served all matching local records,
+but remains open to serve matching records that subsequently arrive.</p>
+<p>It has the following format:</p>
+<pre><code class="language-text">    0     1     2     3     4     5     6     7     8
+ 0  +-----------------------------------------------+
+    | 0x81| 0x0 |  Query_ID |  0x0                  |
+ 8  +-----------------------------------------------+
 </code></pre>
-<p>This indicates that a query is complete. This does not mean the query will
-close, as subsequently received records that match the query will be
-subsequently returned.</p>
-<p>This is a server response message in response to <a href="#query"><code>Query</code></a>.</p>
+<ul>
+<li><code>[0:1]</code> - The type 0x81</li>
+<li><code>[1:2]</code> - Zeroed</li>
+<li><code>[2:4]</code> - <code>QUERY_ID</code> indicates the client query that is now locally complete.</li>
+<li><code>[4:8]</code> - zeroed</li>
+</ul>
+<p>This is a server response message in response to <a href="#subscribe"><code>Subscribe</code></a>.</p>
 <h3 id="query-closed">Query Closed</h3>
 <blockquote>
 <p><strong>0x82</strong></p>
 </blockquote>
-<p>This is a message indicating that a query has been closed, in the following
-format:</p>
-<pre><code class="language-text">                    1       2       3
-    0       8       6       4       2
- 0  +-------------------------------+
-    |  0x82 |   QUERY_ID    | CODE  |
-    +-------------------------------+
+<p>This is a message indicating that a query has been closed.</p>
+<p>It has the following format:</p>
+<pre><code class="language-text">    0     1     2     3     4     5     6     7     8
+ 0  +-----------------------------------------------+
+    | 0x82| CODE|  Query_ID |  0x0                  |
+ 8  +-----------------------------------------------+
 </code></pre>
-<p>The <code>QUERY_ID</code> is the client query that is being closed that was
-previously supplied by the client in a <a href="#query"><code>Query</code></a>.</p>
-<p>The <code>CODE</code> indicates the reason for closure, from among the following
-defined reasons.</p>
 <ul>
-<li><code>ON_REQUEST</code>: 0x1 - In response to <a href="#close-query"><code>Close Query</code></a></li>
+<li><code>[0:1]</code> - The type 0x82</li>
+<li><code>[1:2]</code> - <code>CODE</code> indicates the reason for closure from among the
+  following defined reasons:<ul>
+<li><code>ON_REQUEST</code>: 0x1 - In response to <a href="#unsubscribe"><code>Unsubscribe</code></a></li>
 <li><code>REJECTED_INVALID</code>: 0x10 - Query was rejected due to being invalid</li>
 <li><code>REJECTED_TOO_OPEN</code>: 0x11 - Query was rejected due to being too open
-   (scraping too many records)</li>
+  (scraping too many records)</li>
 <li><code>REJECTED_TOO_FAST</code>: 0x12 - Query was rejected due to too many queries
-   (or messages of any type) being submitted recently by this client</li>
+  (or messages of any type) being submitted recently by this client</li>
 <li><code>REJECTED_TEMP_BANNED</code>: 0x13 - Query was rejected due to the client
-   beint temporarily banned</li>
+   being temporarily banned</li>
 <li><code>REJECTED_PERM_BANNED</code>: 0x14 - Query was rejected due to the client
-   beint permanently banned</li>
+   being permanently banned</li>
 <li><code>SHUTTING_DOWN</code>: 0x30 - The server is shutting down</li>
 <li><code>INTERNAL_ERROR</code>: 0xF0 - A server error occured</li>
 <li><code>OTHER</code>: 0xFF - Some other reason</li>
+</ul>
+</li>
+<li><code>[2:4]</code> - <code>QUERY_ID</code> indicates the client query that is now closed.</li>
+<li><code>[4:8]</code> - zeroed</li>
 </ul>
 <h3 id="submission-result">Submission Result</h3>
 <blockquote>
 <p><strong>0x83</strong></p>
 </blockquote>
-<p>This is a message returning the result of a <a href="#submission">Submission</a> in
-the following format:</p>
-<pre><code class="language-text">                    1       2       3
-    0       8       6       4       2
- 0  +-------------------------------+
-    |  0x83 |  0x0  |  0x0  |  CODE |
-    +-------------------------------+
-    |  ID PREFIX 1/8                |
-    +-------------------------------+
-    |  ID PREFIX 2/8                |
-    +-------------------------------+
-    |  ID PREFIX 3/8                |
-    +-------------------------------+
-    |  ID PREFIX 4/8                |
-    +-------------------------------+
-    |  ID PREFIX 5/8                |
-    +-------------------------------+
-    |  ID PREFIX 6/8                |
-    +-------------------------------+
-    |  ID PREFIX 7/8                |
-    +-------------------------------+
-    |  ID PREFIX 8/8                |
-    +-------------------------------+
+<p>This is a message returning the result of a <a href="#submission">Submission</a>.</p>
+<p>It has the following format:</p>
+<pre><code class="language-text">    0     1     2     3     4     5     6     7     8
+ 0  +-----------------------------------------------+
+    | 0x83|CODE |   0x0                             |
+ 8  +-----------------------------------------------+
+    | ID PREFIX bytes 0..8                          |
+16  +-----------------------------------------------+
+    | ID PREFIX bytes 8..16                         |
+24  +-----------------------------------------------+
+    | ID PREFIX bytes 16..24                        |
+32  +-----------------------------------------------+
+    | ID PREFIX bytes 24..32                        |
+40  +-----------------------------------------------+
 </code></pre>
-<p>The <code>CODE</code> indicates the result of the submission from among the following
-defined results:</p>
 <ul>
+<li><code>[0:1]</code> - The type 0x83</li>
+<li><code>[1:2]</code> - <code>CODE</code> which indicates the result of the submission from among the
+  following defined results:<ul>
 <li><code>OK</code>: 0x1 - Record submission was accepted</li>
 <li><code>DUPLICATE</code>: 0x2 - Record is a duplicate. Servers may use this or
   they may optionally use <code>OK</code> in the same circumstance.</li>
@@ -416,8 +525,10 @@ defined results:</p>
 <li><code>INTERNAL_ERROR</code>: 0xF0 - A server error occured</li>
 <li><code>OTHER</code>: 0xFF - Some other reason</li>
 </ul>
-<p>FIXME: add proof of work (not defined yet)</p>
-<p>The <code>ID_PREFIX</code> is the first 32 bytes of the record id</p>
+</li>
+<li><code>[2:8]</code> - Zeroed</li>
+<li><code>[8:40]</code> - A 32-byte prefix of the 48-byte Id.</li>
+</ul>
               
             </div>
           </div><footer>

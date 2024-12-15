@@ -166,7 +166,8 @@
 <p>A filter is a binary structure used within the <a href="../protocol/">Core Protocol</a>.</p>
 <p>It is defined as a contiguous sequence of type-value pairs.  Some types
 specify a count or length within their value.</p>
-<p>Each entry restricts the set of records that the filter matches.</p>
+<p>Each entry restricts the set of records that the filter matches. For an
+event to pass the filter, it must pass all entries.</p>
 <p>Filter types MUST not be used more than once within a filter.</p>
 <p>Filters can be up to 65536 bytes long maximum, but this size may not be
 possible given other constraints.</p>
@@ -180,11 +181,7 @@ possible given other constraints.</p>
 <tbody>
 <tr>
 <td>0x1</td>
-<td><a href="#ids">Ids</a></td>
-</tr>
-<tr>
-<td>0x2</td>
-<td><a href="#addresses">Addresses</a></td>
+<td><a href="#exclude">Exclude</a></td>
 </tr>
 <tr>
 <td>0x4</td>
@@ -226,73 +223,34 @@ possible given other constraints.</p>
 <td>0xD</td>
 <td><a href="#tag-values">Tag Values</a></td>
 </tr>
-<tr>
-<td>0xE</td>
-<td><a href="#limit">Limit</a></td>
-</tr>
 </tbody>
 </table>
-<h2 id="ids">Ids</h2>
+<h2 id="exclude">Exclude</h2>
 <blockquote>
 <p><strong>0x1</strong></p>
 </blockquote>
-<p>Matches all records that have any of these ids.</p>
+<p>Excludes all records with the given IDs or Addresses.</p>
 <pre><code class="language-text">            1   2   3   4   4   5   6
     0   8   6   4   2   0   8   6   4
  0  +-------------------------------+
-    |0x1|          0x0          | n |
+    |0x1|         0x0           | n |
  8  +-------------------------------+
-    | Id 1/6                        |
- 16 +-------------------------------+
-    | Id 2/6                        |
- 24 +-------------------------------+
-    | Id 3/6                        |
- 32 +-------------------------------+
-    | Id 4/6                        |
- 40 +-------------------------------+
-    | Id 5/6                        |
- 48 +-------------------------------+
-    | Id 6/6                        |
- 56 +-------------------------------+
-    | ... additional ids..          |
+    | ID or ADDR prefix bytes 0..8  |
+16  +-------------------------------+
+    | ID or ADDR prefix bytes 8..16 |
+24  +-------------------------------+
+    | ID or ADDR prefx bytes 16..24 |
+32  +-------------------------------+
+    | ID or ADDR prefx bytes 24..32 |
+40  +-------------------------------+
+    | ... additional references     |
     +-------------------------------+
 </code></pre>
 <ul>
-<li>The byte 0x1</li>
-<li>Six bytes 0x0</li>
-<li>A 1-byte count <code>n</code>, then</li>
-<li>A sequence of <code>n</code> 48-byte IDs.</li>
-</ul>
-<h2 id="addresses">Addresses</h2>
-<blockquote>
-<p><strong>0x2</strong></p>
-</blockquote>
-<p>Matches all records that have any of these addresses.</p>
-<pre><code class="language-text">            1   2   3   4   4   5   6
-    0   8   6   4   2   0   8   6   4
- 0  +-------------------------------+
-    |0x2|          0x0          | n |
- 8  +-------------------------------+
-    | ADDR 1/6                      |
- 16 +-------------------------------+
-    | ADDR 2/6                      |
- 24 +-------------------------------+
-    | ADDR 3/6                      |
- 32 +-------------------------------+
-    | ADDR 4/6                      |
- 32 +-------------------------------+
-    | ADDR 5/6                      |
- 32 +-------------------------------+
-    | ADDR 6/6                      |
- 40 +-------------------------------+
-    | ... additional addrs..        |
-    +-------------------------------+
-</code></pre>
-<ul>
-<li>The byte 0x2</li>
-<li>Six bytes 0x0</li>
-<li>A 1-byte count <code>n</code>, then</li>
-<li>A sequence of <code>n</code> 48-byte addresses.</li>
+<li><code>[0:1]</code> - The type 0x1</li>
+<li><code>[1:7]</code> - Zeroed</li>
+<li><code>[7:8]</code> - A 1-byte count <code>n</code> of references</li>
+<li><code>[*]</code> - A sequence of <code>n</code> 32-byte ID or Address prefixes.</li>
 </ul>
 <h2 id="author-keys">Author Keys</h2>
 <blockquote>
@@ -316,10 +274,10 @@ possible given other constraints.</p>
     +-------------------------------+
 </code></pre>
 <ul>
-<li>The byte 0x4</li>
-<li>Six bytes 0x0</li>
-<li>A 1-byte count <code>n</code>, then</li>
-<li>A sequence of <code>n</code> 32-byte author public keys.</li>
+<li><code>[0:1]</code> - The type 0x4</li>
+<li><code>[1:7]</code> - Zeroed</li>
+<li><code>[7:8]</code> - A 1-byte count <code>n</code> of author keys</li>
+<li><code>[*]</code> - A sequence of <code>n</code> 32-byte author public keys.</li>
 </ul>
 <h2 id="signing-keys">Signing Keys</h2>
 <blockquote>
@@ -343,10 +301,10 @@ possible given other constraints.</p>
     +-------------------------------+
 </code></pre>
 <ul>
-<li>The byte 0x5</li>
-<li>Six bytes 0x0</li>
-<li>A 1-byte count <code>n</code>, then</li>
-<li>A sequence of <code>n</code> 32-byte signing public keys.</li>
+<li><code>[0:1]</code> - The type 0x5</li>
+<li><code>[1:7]</code> - Zeroed</li>
+<li><code>[7:8]</code> - A 1-byte count <code>n</code> of signing keys</li>
+<li><code>[*]</code> - A sequence of <code>n</code> 32-byte signing public keys.</li>
 </ul>
 <h2 id="timestamps">Timestamps</h2>
 <blockquote>
@@ -365,12 +323,12 @@ Typically used as part of address lookups.</p>
  24 +-------------------------------+
 </code></pre>
 <ul>
-<li>The byte 0x6</li>
-<li>Six bytes 0x0</li>
-<li>A 1-byte count <code>n</code>, then</li>
-<li>A sequence of <code>n</code> 8-byte fields, each being:<ul>
-<li>Two bytes 0x0</li>
-<li>A six byte <a href="../timestamps/">timestamp</a>.</li>
+<li><code>[0:1]</code> - The type 0x6</li>
+<li><code>[1:7]</code> - Zeroed</li>
+<li><code>[7:8]</code> - A 1-byte count <code>n</code> of timestamp fields</li>
+<li><code>[*]</code> - A sequence of <code>n</code> 8-byte fields, each being:<ul>
+<li><code>[0:2]</code> - Zeroed</li>
+<li><code>[2:8]</code> - A six byte <a href="../timestamps/">timestamp</a>.</li>
 </ul>
 </li>
 </ul>
@@ -389,9 +347,9 @@ this value.</p>
  16 +-------------------------------+
 </code></pre>
 <ul>
-<li>The byte 0x7</li>
-<li>Nine bytes 0x0</li>
-<li>A 6-byte timestamp</li>
+<li><code>[0:1]</code> - The type 0x7</li>
+<li><code>[1:10]</code> - Zeroed</li>
+<li><code>[10:16]</code> - A six byte <a href="../timestamps/">timestamp</a>.</li>
 </ul>
 <h2 id="until">Until</h2>
 <blockquote>
@@ -407,9 +365,9 @@ this value.</p>
  16 +-------------------------------+
 </code></pre>
 <ul>
-<li>The byte 0x8</li>
-<li>Nine bytes 0x0</li>
-<li>A 6-byte timestamp</li>
+<li><code>[0:1]</code> - The type 0x8</li>
+<li><code>[1:10]</code> - Zeroed</li>
+<li><code>[10:16]</code> - A six byte <a href="../timestamps/">timestamp</a>.</li>
 </ul>
 <h2 id="received-ats">Received Ats</h2>
 <blockquote>
@@ -429,12 +387,12 @@ completeness.</p>
  24 +-------------------------------+
 </code></pre>
 <ul>
-<li>The byte 0x9</li>
-<li>Six bytes 0x0</li>
-<li>A 1-byte count <code>n</code>, then</li>
-<li>A sequence of <code>n</code> 8-byte fields, each being:<ul>
-<li>Two bytes 0x0</li>
-<li>A six byte <a href="../timestamps/">timestamp</a>.</li>
+<li><code>[0:1]</code> - The type 0x9</li>
+<li><code>[1:7]</code> - Zeroed</li>
+<li><code>[7:8]</code> - A 1-byte count <code>n</code> of timestamp fields</li>
+<li><code>[*]</code> - A sequence of <code>n</code> 8-byte fields, each being:<ul>
+<li><code>[0:2]</code> - Zeroed</li>
+<li><code>[2:8]</code> - A six byte <a href="../timestamps/">timestamp</a>.</li>
 </ul>
 </li>
 </ul>
@@ -453,9 +411,9 @@ than this value.</p>
  16 +-------------------------------+
 </code></pre>
 <ul>
-<li>The byte 0xA</li>
-<li>Nine bytes 0x0</li>
-<li>A 6-byte timestamp</li>
+<li><code>[0:1]</code> - The type 0xA</li>
+<li><code>[1:10]</code> - Zeroed</li>
+<li><code>[10:16]</code> - A six byte <a href="../timestamps/">timestamp</a>.</li>
 </ul>
 <h2 id="received-until">Received Until</h2>
 <blockquote>
@@ -472,9 +430,9 @@ this value.</p>
  16 +-------------------------------+
 </code></pre>
 <ul>
-<li>The byte 0xB</li>
-<li>Nine bytes 0x0</li>
-<li>A 6-byte timestamp</li>
+<li><code>[0:1]</code> - The type 0xB</li>
+<li><code>[1:10]</code> - Zeroed</li>
+<li><code>[10:16]</code> - A six byte <a href="../timestamps/">timestamp</a>.</li>
 </ul>
 <h2 id="kinds">Kinds</h2>
 <blockquote>
@@ -490,52 +448,55 @@ this value.</p>
  16 +-------------------------------+
 </code></pre>
 <ul>
-<li>The byte 0xC</li>
-<li>6 bytes 0x0</li>
-<li>A 1-byte count <code>n</code>, then</li>
-<li>A sequence of <code>n</code> 4-byte <a href="../kinds/">kinds</a></li>
+<li><code>[0:1]</code> - The type 0xC</li>
+<li><code>[1:7]</code> - Zeroed</li>
+<li><code>[7:8]</code> - A 1-byte count <code>n</code> of kinds</li>
+<li><code>[8]</code> - A sequence of <code>n</code> 4-byte <a href="../kinds/">kinds</a></li>
 </ul>
 <h2 id="tag-values">Tag Values</h2>
 <blockquote>
 <p><strong>0xD</strong></p>
 </blockquote>
-<p>Matches all records which have any one of these tag values for the
-tag type.</p>
+<p>Matches all records where the tags of the given tag type pass an
+encoded boolean algebraic condition.</p>
 <pre><code class="language-text">            1   2   3   4   4   5   6
     0   8   6   4   2   0   8   6   4
  0  +-------------------------------+
-    |0xD|0x0| TTYPE | 0x0       | n |
+    |0xD|0x0| TTYPE | 0x0   |  LEN  |
  8  +-------------------------------+
-    |   DATA...                     |
- 16 +-------------------------------+
+    |   CONDITION..                 |
+    +-------------------------------+
 </code></pre>
 <ul>
-<li>The byte 0xD</li>
-<li>1 byte 0x0</li>
-<li>A 2-byte <a href="../tag_types/">tag type</a> in little-endian format</li>
-<li>3 bytes 0x0</li>
-<li>A 1-byte count <code>n</code>, then</li>
-<li>DATA being a sequence of n length-value pairs (length being 1 byte)
-  representing the n different values of the tag which cause the filter
-  to match. This data is not aligned and tag values are of varying length.</li>
+<li><code>[0:1]</code> - The type 0xD</li>
+<li><code>[1:2]</code> - Zeroed</li>
+<li><code>[2:4]</code> - A 2-byte <a href="../tag_types/">tag type</a> in little-endian format.</li>
+<li><code>[4:6]</code> - Zeroed</li>
+<li><code>[6:8]</code> - A 2-byte <code>LEN</code> unsigned integer in little-endian format
+  indicating the length in bytes of the <code>CONDITION</code></li>
+<li><code>[*]</code> - The <code>CONDITION</code> which is described next</li>
 </ul>
-<h2 id="limit">Limit</h2>
-<blockquote>
-<p><strong>0xE</strong></p>
-</blockquote>
-<p>Limits the records to the specified limit, providing only the most recent
-results.</p>
-<pre><code class="language-text">            1   2   3   4   4   5   6
-    0   8   6   4   2   0   8   6   4
- 0  +-------------------------------+
-    |0xE|    0x0    |     LIMIT     |
- 8  +-------------------------------+
-</code></pre>
+<p>All boolean expressions can be reduced to
+<a href="https://en.wikipedia.org/wiki/Disjunctive_normal_form">disjunctive normal form</a>.
+We require this form.</p>
+<p><code>CONDITION</code> is encoded as follows:</p>
 <ul>
-<li>The byte 0xE</li>
-<li>Three bytes 0x0</li>
-<li>Four bytes representing a LIMIT, an unsigned integer in little-endian
-  order.</li>
+<li><code>[0:1]</code> - A count of how many values are listed (maximum of 127)</li>
+<li><code>[*]</code> - A sequence of Length-Value pairs with 1-byte length, where the
+  value is a tag value to match</li>
+<li><code>[*]</code> - The encoded <code>EXPRESSION</code> which references these previous values
+  by their index.</li>
+</ul>
+<p>The encoded <code>EXPRESSION</code> is written as follows:</p>
+<ul>
+<li><code>[0:1]</code> - Number of terms</li>
+<li><code>[*]</code> - the <code>TERMS</code></li>
+</ul>
+<p>The <code>TERMS</code> are written as follows</p>
+<ul>
+<li><code>[0:1]</code> - The number of values <code>n</code></li>
+<li><code>[1:n]</code> - <code>n</code> value references, referred to by the index where they were
+  defined in the <code>CONDITION</code>.</li>
 </ul>
               
             </div>
