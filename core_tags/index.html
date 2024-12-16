@@ -187,16 +187,10 @@ are laid out as follows:</p>
 <td><a href="#notify-public-key">Notify Public Key</a></td>
 </tr>
 <tr>
-<td><a href="#reply-by-id">Reply by Id</a></td>
+<td><a href="#reply">Reply</a></td>
 </tr>
 <tr>
-<td><a href="#reply-by-addr">Reply by Addr</a></td>
-</tr>
-<tr>
-<td><a href="#root-by-id">Root by Id</a></td>
-</tr>
-<tr>
-<td><a href="#root-by-addr">Root by Addr</a></td>
+<td><a href="#root">Root</a></td>
 </tr>
 <tr>
 <td><a href="#nostr-sister-event">Nostr Sister Event</a></td>
@@ -211,10 +205,7 @@ are laid out as follows:</p>
 <td><a href="#content-segment-server-mention">Content Segment: Server Mention</a></td>
 </tr>
 <tr>
-<td><a href="#content-segment-quote-by-id">Content Segment: Quote by Id</a></td>
-</tr>
-<tr>
-<td><a href="#content-segment-quote-by-addr">Content Segment: Quote by Addr</a></td>
+<td><a href="#content-segment-quote">Content Segment: Quote</a></td>
 </tr>
 <tr>
 <td><a href="#content-segment-url">Content Segment: URL</a></td>
@@ -254,162 +245,83 @@ are laid out as follows:</p>
 person identified by that public key (as their master key).  Being tagged
 as such, it SHOULD be delivered to all of this persons' INBOX servers as
 specified in their <a href="../bootstrap/">bootstrap</a> record.</p>
-<h2 id="reply-by-id">Reply by Id</h2>
+<h2 id="reply">Reply</h2>
 <blockquote>
 <p><strong>0x2</strong></p>
 </blockquote>
-<pre><code class="language-text">      0       2   3   4               8
+<pre><code class="language-text">      0       2   3          6         8
  0x0  +-------------------------------+ 0
-      |  0x2  |0x28| 0|     KIND      |
+      |  0x2  |0x38|   0     |  KIND  |
  0x8  +-------------------------------+ 8
-      | ID 1/6                        |
+      | REFERENCE 1/6                 |
  0x10 +-------------------------------+ 16
-      | ID 2/6                        |
+      | REFERENCE 2/6                 |
  0x18 +-------------------------------+ 24
-      | ID 3/6                        |
+      | REFERENCE 3/6                 |
  0x20 +-------------------------------+ 32
-      | ID 4/6                        |
+      | REFERENCE 4/6                 |
  0x28 +-------------------------------+ 40
-      | ID 5/6                        |
+      | REFERENCE 5/6                 |
  0x30 +-------------------------------+ 48
-      | ID 6/6                        |
+      | REFERENCE 6/6                 |
  0x38 +-------------------------------+ 56
 </code></pre>
 <ul>
 <li><code>[0:2]</code> - The type 0x2 as a little-endian encoded unsigned integer</li>
 <li><code>[2:3]</code> - The length 0x38</li>
-<li><code>[3:4]</code> - Zeroed</li>
-<li><code>[4:8]</code> - The <a href="../kinds/">kind</a></li>
-<li><code>[8:56]</code> - The id (48 bytes)</li>
+<li><code>[3:6]</code> - Zeroed</li>
+<li><code>[6:8]</code> - The <a href="../kinds/">kind</a></li>
+<li><code>[8:56]</code> - The reference (48 bytes)</li>
 </ul>
 <p>This is a reply to another record in a threading sense.</p>
-<p><code>KIND</code> is a 4-byte record <a href="../kinds/">kind</a> indicating the kind of record
+<p><code>KIND</code> is a 2-byte record <a href="../kinds/">kind</a> indicating the kind of record
 that this one replies to. Replies are application-independent and may
 reference records of any type. This information is provided to prevent
 lookup of records of kinds that software is not able to or does not wish
 to handle.</p>
-<p><code>ID</code> is a 48-byte <a href="../reference/#id-reference">id reference</a> to some other record
+<p><code>REFERENCE</code> is a 48-byte <a href="../reference/">reference</a> to some other record
 indicating which other record this record replies to.</p>
 <p>If a record includes this tag, it must also include a
-<a href="#root-by-addr">Root by Addr</a> tag as well.</p>
-<h2 id="reply-by-addr">Reply by Addr</h2>
+<a href="#root">Root</a> tag as well.</p>
+<h2 id="root">Root</h2>
 <blockquote>
 <p><strong>0x3</strong></p>
 </blockquote>
-<pre><code class="language-text">      0       2   3   4               8
+<pre><code class="language-text">      0       2   3          6        8
  0x0  +-------------------------------+ 0
-      |  0x3  |0x38| 0|     KIND      |
+      |  0x3  |0x38|    0    |  KIND  |
  0x8  +-------------------------------+ 8
-      | ADDR 1/6                      |
+      | REFERENCE 1/6                 |
  0x10 +-------------------------------+ 16
-      | ADDR 2/6                      |
+      | REFERENCE 2/6                 |
  0x18 +-------------------------------+ 24
-      | ADDR 3/6                      |
+      | REFERENCE 3/6                 |
  0x20 +-------------------------------+ 32
-      | ADDR 4/6                      |
+      | REFERENCE 4/6                 |
  0x28 +-------------------------------+ 40
-      | ADDR 5/6                      |
+      | REFERENCE 5/6                 |
  0x30 +-------------------------------+ 48
-      | ADDR 6/6                      |
+      | REFERENCE 6/6                 |
  0x38 +-------------------------------+ 56
 </code></pre>
 <ul>
 <li><code>[0:2]</code> - The type 0x3 as a little-endian encoded unsigned integer</li>
 <li><code>[2:3]</code> - The length 0x38</li>
-<li><code>[3:4]</code> - Zeroed</li>
-<li><code>[4:8]</code> - The <a href="../kinds/">kind</a></li>
-<li><code>[8:56]</code> - The address (48 bytes)</li>
-</ul>
-<p>This is a reply to another record in a threading sense.</p>
-<p><code>KIND</code> is a 4-byte record <a href="../kinds/">kind</a> indicating the kind of record
-that this one replies to. Replies are application-independent and may
-reference records of any type. This information is provided to prevent
-lookup of records of kinds that software is not able to or does not wish
-to handle.</p>
-<p><code>ADDR</code> is a 48-byte <a href="../reference/#address-reference">address reference</a> to some other
-record indicating which other record this record replies to.</p>
-<p>If a record includes this tag, it must also include a
-<a href="#root-by-addr">Root by Addr</a> tag as well.</p>
-<h2 id="root-by-id">Root by Id</h2>
-<blockquote>
-<p><strong>0x4</strong></p>
-</blockquote>
-<pre><code class="language-text">      0       2   3   4               8
- 0x0  +-------------------------------+ 0
-      |  0x4  |0x28| 0|     KIND      |
- 0x8  +-------------------------------+ 8
-      | ID 1/6                        |
- 0x10 +-------------------------------+ 16
-      | ID 2/6                        |
- 0x18 +-------------------------------+ 24
-      | ID 3/6                        |
- 0x20 +-------------------------------+ 32
-      | ID 4/6                        |
- 0x28 +-------------------------------+ 40
-      | ID 5/6                        |
- 0x30 +-------------------------------+ 48
-      | ID 6/6                        |
- 0x38 +-------------------------------+ 56
-</code></pre>
-<ul>
-<li><code>[0:2]</code> - The type 0x4 as a little-endian encoded unsigned integer</li>
-<li><code>[2:3]</code> - The length 0x28</li>
-<li><code>[3:4]</code> - Zeroed</li>
-<li><code>[4:8]</code> - The <a href="../kinds/">kind</a></li>
-<li><code>[8:56]</code> - The id (48 bytes)</li>
+<li><code>[3:6]</code> - Zeroed</li>
+<li><code>[6:8]</code> - The <a href="../kinds/">kind</a></li>
+<li><code>[8:56]</code> - The reference (48 bytes)</li>
 </ul>
 <p>This indicates the root of the reply thread. This is to support loading
 an entire thread in one round trip.</p>
-<p><code>KIND</code> is a 4-byte record <a href="../kinds/">kind</a> indicating the kind of record
+<p><code>KIND</code> is a 2-byte record <a href="../kinds/">kind</a> indicating the kind of record
 that the root record is. Threads are application-independent and may
 reference records of any type. This information is provided to prevent
 lookup of records of kinds that software is not able to or does not wish
 to handle.</p>
-<p><code>ID</code> is a 48-byte <a href="../reference/#id-reference">id reference</a> to some other record
+<p><code>REFERENCE</code> is a 48-byte <a href="../reference/">reference</a> to some other record
 which is the root of the thread.</p>
 <p>If a record includes this tag, it must also include a
-<a href="#reply-by-id">Reply by Id</a> or <a href="#reply-by-addr">Reply by Addr</a> tag
-as well.</p>
-<h2 id="root-by-addr">Root by Addr</h2>
-<blockquote>
-<p><strong>0x5</strong></p>
-</blockquote>
-<pre><code class="language-text">      0       2   3   4               8
- 0x0  +-------------------------------+ 0
-      |  0x5  |0x38| 0|     KIND      |
- 0x8  +-------------------------------+ 8
-      | ADDR 1/4                      |
- 0x10 +-------------------------------+ 16
-      | ADDR 2/4                      |
- 0x18 +-------------------------------+ 24
-      | ADDR 3/4                      |
- 0x20 +-------------------------------+ 32
-      | ADDR 4/4                      |
- 0x28 +-------------------------------+ 40
-      | ADDR 5/4                      |
- 0x30 +-------------------------------+ 48
-      | ADDR 6/4                      |
- 0x38 +-------------------------------+ 56
-</code></pre>
-<ul>
-<li><code>[0:2]</code> - The type 0x5 as a little-endian encoded unsigned integer</li>
-<li><code>[2:3]</code> - The length 0x38</li>
-<li><code>[3:4]</code> - Zeroed</li>
-<li><code>[4:8]</code> - The <a href="../kinds/">kind</a></li>
-<li><code>[8:56]</code> - The address (48 bytes)</li>
-</ul>
-<p>This indicates the root of the reply thread. This is to support loading
-an entire thread in one round trip.</p>
-<p><code>KIND</code> is a 4-byte record <a href="../kinds/">kind</a> indicating the kind of record
-that the root record is. Threads are application-independent and may
-reference records of any type. This information is provided to prevent
-lookup of records of kinds that software is not able to or does not wish
-to handle.</p>
-<p><code>ADDR</code> is a 48-byte <a href="../reference/#address-reference">address reference</a>
-to some other record which is the root of the thread.</p>
-<p>If a record includes this tag, it must also include a
-<a href="#reply-by-id">Reply by Id</a> or <a href="#reply-by-addr">Reply by Addr</a> tag
-as well.</p>
+<a href="#reply">Reply</a> tag as well.</p>
 <h2 id="nostr-sister-event">Nostr Sister Event</h2>
 <blockquote>
 <p><strong>0x8</strong></p>
@@ -521,86 +433,45 @@ the content.</p>
 <p>This is a mention of a server.</p>
 <p><code>OFFSET</code> is the offset into the content where the mention appears.</p>
 <p><code>PUBLIC_KEY</code> is the public key of the server.</p>
-<h2 id="content-segment-quote-by-id">Content Segment: Quote by Id</h2>
+<h2 id="content-segment-quote">Content Segment: Quote</h2>
 <blockquote>
 <p><strong>0x22</strong></p>
 </blockquote>
 <pre><code class="language-text">      0       2   3   4               8
  0x0  +-------------------------------+ 0
-      |  0x22 |0x40| 0|     KIND      |
+      |  0x22 |0x40| 0|    OFFSET     |
  0x8  +-------------------------------+ 8
-      |     0x0       |    OFFSET     |
+      |     0x0               | KIND  |
  0x10 +-------------------------------+ 16
-      | ID 1/6                        |
+      | REFERENCE 1/6                 |
  0x18 +-------------------------------+ 24
-      | ID 2/6                        |
+      | REFERENCE 2/6                 |
  0x20 +-------------------------------+ 32
-      | ID 3/6                        |
+      | REFERENCE 3/6                 |
  0x28 +-------------------------------+ 40
-      | ID 4/6                        |
+      | REFERENCE 4/6                 |
  0x30 +-------------------------------+ 48
-      | ID 5/6                        |
+      | REFERENCE 5/6                 |
  0x38 +-------------------------------+ 56
-      | ID 6/6                        |
+      | REFERENCE 6/6                 |
  0x40 +-------------------------------+ 64
 </code></pre>
 <ul>
 <li><code>[0:2]</code> - The type 0x22 as a little-endian encoded unsigned integer</li>
 <li><code>[2:3]</code> - The length 0x30</li>
 <li><code>[3:4]</code> - Zeroed</li>
-<li><code>[4:8]</code> - The <a href="../kinds/">kind</a> of the quoted record</li>
-<li><code>[8:12]</code> - Zeroed</li>
-<li><code>[12:16]</code> - The offset as a little-endian encoded unsigned integer.</li>
+<li><code>[4:8]</code> - The offset as a little-endian encoded unsigned integer.</li>
+<li><code>[8:14]</code> - Zeroed</li>
+<li><code>[14:16]</code> - The <a href="../kinds/">kind</a> of the quoted record</li>
 <li><code>[16:64]</code> - The id (48 bytes) of the quoted record</li>
 </ul>
-<p><code>KIND</code> is a 4-byte record <a href="../kinds/">kind</a> indicating the kind of record
+<p><code>OFFSET</code> is the offset into the content where the mention appears.</p>
+<p><code>KIND</code> is a 2-byte record <a href="../kinds/">kind</a> indicating the kind of record
 that this one replies to. Replies are application-independent and may
 reference records of any type. This information is provided to prevent
 lookup of records of kinds that software is not able to or does not wish
 to handle.</p>
-<p><code>OFFSET</code> is the offset into the content where the mention appears.</p>
-<p><code>ID</code> is the id of the quoted record.</p>
-<p>This is a quote of another record by id.</p>
-<h2 id="content-segment-quote-by-addr">Content Segment: Quote by Addr</h2>
-<blockquote>
-<p><strong>0x23</strong></p>
-</blockquote>
-<pre><code class="language-text">      0       2   3   4               8
- 0x0  +-------------------------------+ 0
-      |  0x23 |0x40| 0|     KIND      |
- 0x8  +-------------------------------+ 8
-      |     0x0       |    OFFSET     |
- 0x10 +-------------------------------+ 16
-      | ADDR 1/4                      |
- 0x18 +-------------------------------+ 24
-      | ADDR 2/4                      |
- 0x20 +-------------------------------+ 32
-      | ADDR 3/4                      |
- 0x28 +-------------------------------+ 40
-      | ADDR 4/4                      |
- 0x30 +-------------------------------+ 48
-      | ADDR 5/6                      |
- 0x38 +-------------------------------+ 56
-      | ADDR 6/6                      |
- 0x40 +-------------------------------+ 64
-</code></pre>
-<ul>
-<li><code>[0:2]</code> - The type 0x23 as a little-endian encoded unsigned integer</li>
-<li><code>[2:3]</code> - The length 0x40</li>
-<li><code>[3:4]</code> - Zeroed</li>
-<li><code>[4:8]</code> - The <a href="../kinds/">kind</a> of the quoted record</li>
-<li><code>[8:12]</code> - Zeroed</li>
-<li><code>[12:16]</code> - The offset as a little-endian encoded unsigned integer.</li>
-<li><code>[16:64]</code> - The address (48 bytes) of the quoted record</li>
-</ul>
-<p><code>KIND</code> is a 4-byte record <a href="../kinds/">kind</a> indicating the kind of record
-that this one replies to. Replies are application-independent and may
-reference records of any type. This information is provided to prevent
-lookup of records of kinds that software is not able to or does not wish
-to handle.</p>
-<p><code>OFFSET</code> is the offset into the content where the mention appears.</p>
-<p><code>ADDR</code> is the address of the quoted record.</p>
-<p>This is a quote of another record by address.</p>
+<p><code>REFERENCE</code> is a 48-byte <a href="../reference/">reference</a> to the quoted record.</p>
 <h2 id="content-segment-url">Content Segment: URL</h2>
 <blockquote>
 <p><strong>0x24</strong></p>
