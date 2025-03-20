@@ -197,6 +197,9 @@ to this page with <a href="#"><sup>rat</sup></a> links.</p>
 <td><a href="#no-ip-privacy">No IP Privacy</a></td>
 </tr>
 <tr>
+<td><a href="#quic">QUIC</a></td>
+</tr>
+<tr>
 <td><a href="#records">Records</a></td>
 </tr>
 <tr>
@@ -369,6 +372,17 @@ master key storage and usage without impeding the ability to operate online with
 issue is almost entirely orthogonal to the application protocol, and so architecturally it makes sense
 to separate application layers from privacy layers. There is no good reason to reinvent another privacy
 layer just for Mosaic since Mosaic can run on top of an already existing general-purpose privacy layer.</p>
+<hr />
+<h2 id="quic">QUIC</h2>
+<p>HTTP has a lot of baggage. WebSockets layers on top of that.</p>
+<p>What we really need is size-unrestricted datagrams within TLS.  QUIC
+gives us that if we do our own framing within a QUIC stream.</p>
+<p>QUIC is widely deployed due to its use in HTTP 1.3. QUIC is also much
+faster due to fewer roundtrips and no head-of-line blocking, while
+taking care of TLS, multiplexed streams, congestion control and other
+details that we would not dare to reimplement.</p>
+<p>The only concern would be if the port is not opened, and in this case
+a server can run on UDP port 443 (even though it is not speaking HTTP).</p>
 <hr />
 <h2 id="records">Records</h2>
 <h3 id="maximum-size">Maximum Size</h3>
