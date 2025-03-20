@@ -310,8 +310,8 @@ system can be taken down or damaged by bad actors.</p>
 mutiple bootstrap servers and you can run your own.</p>
 <hr />
 <h2 id="duplex-communication">Duplex Communication</h2>
-<p>We base Mosaic on transport protocols that provide duplex communication such as Web Sockets and
-Web Transport.  This is in opposition to a request-response architecture such as HTTP REST.</p>
+<p>We base Mosaic on transport protocols that provide duplex communication such as QUIC and Web
+Sockets. This is in opposition to a request-response architecture such as HTTP REST.</p>
 <p>This allows either side to initiate an action, which turns out to be a very useful feature.
 For example when a new record that matches a user's subscribed filters arrives at the server,
 the server can immediately shuttle it to the client. In a request-response architecture, there
@@ -482,8 +482,6 @@ events.</p>
 Unixtime is derived from UTC and is thus also discontinuous.  Subtracting two
 unixtimes could give a time interval that is off by up to 28 seconds (for
 example when comparing dates before 1 Jan 1972 with today).</p>
-<p>The first bit is zero in case it is ever interpreted as a sign bit, in order
-to preserve sorting.</p>
 <h3 id="milliseconds">Milliseconds</h3>
 <p>Millisecond unixtimes only take 6 bytes and in 47 bits give us more than
 4000 years before they roll over.</p>

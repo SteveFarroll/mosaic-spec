@@ -175,7 +175,7 @@ architecture (as opposed to peer-to-peer).</p>
 <t>duplex communication</t> <a href="rationale.html#duplex-communication"><sup>rat</sup></a>
 transport protocol that is
 <t>TLS</t> <a href="rationale.html#tls"><sup>rat</sup></a>
-secured such as <a href="websockets.html">WebSockets</a>.</p>
+secured such as <a href="quic.html">QUIC</a>.</p>
 <p>Mosaic does not provide
 <t>IP privacy</t> <a href="rationale.html#no-ip-privacy"><sup>rat</sup></a>
 because this is better provided at a lower network layer.</p>
@@ -202,8 +202,8 @@ account for <t>leap seconds</t> and have <t>millisecond accuracy</t>.</p>
 <t>remember the time that records are received</t>
 <a href="rationale.html#storing-received-at-timestamps"><sup>rat</sup></a>.</p>
 <p>The Mosaic specification is layered with Core, Transport, Extensions, and
-Applications being separate specification layer. Only Core and WebSockets are
-required by all participants.</p>
+Applications being separate specification layer. Only Core and Transport:QUIC
+are required by all participants.</p>
 <p>Mosaic is an offshoot of <a href="https://github.com/nostr-protocol">nostr</a>.</p>
 <h3 id="the-name-mosaic">The name Mosaic</h3>
 <p>No reason. Just a name. Easy to remember and pronounce. A throwback to
@@ -259,5 +259,5 @@ capitalize it even in the middle of a sentence.</p>
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-03-20 03:22:33.105539+00:00
+Build Date UTC : 2025-03-20 03:40:42.428777+00:00
 -->
