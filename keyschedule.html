@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="None" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="img/favicon.ico" />
-    <title>Mosaic</title>
+    <title>Key Schedule Record - Mosaic</title>
     <link rel="stylesheet" href="css/theme.css" />
     <link rel="stylesheet" href="css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,8 +13,8 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Mosaic Introduction";
-        var mkdocs_page_input_path = "index.md";
+        var mkdocs_page_name = "Key Schedule Record";
+        var mkdocs_page_input_path = "keyschedule.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -41,8 +41,8 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="#">Mosaic Introduction</a>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Mosaic Introduction</a>
                 </li>
               </ul>
               <ul>
@@ -54,7 +54,7 @@
                 </li>
               </ul>
               <p class="caption"><span class="caption-text">Mosaic Core</span></p>
-              <ul>
+              <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" >Identity</a>
     <ul>
                 <li class="toctree-l2"><a class="reference internal" href="cryptography.html">Cryptography</a>
@@ -79,9 +79,9 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="reference.html">References</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" >Core Records</a>
-    <ul>
-                <li class="toctree-l2"><a class="reference internal" href="keyschedule.html">Key Schedule Record</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" >Core Records</a>
+    <ul class="current">
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Key Schedule Record</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="profile.html">Profile Record</a>
                 </li>
@@ -150,7 +150,9 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Mosaic Introduction</li>
+          <li class="breadcrumb-item">Mosaic Core</li>
+          <li class="breadcrumb-item">Core Records</li>
+      <li class="breadcrumb-item active">Key Schedule Record</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -159,61 +161,74 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="mosaic">Mosaic</h1>
+                <h1 id="key-schedule-record">Key Schedule Record</h1>
 <p><status>PAGE STATUS: early draft</status></p>
-<p>Mosaic is a <em>work in progress</em>.  This specification is incomplete and an early draft.</p>
-<h2 id="introduction">Introduction</h2>
-<p>Mosaic is a
-<t>distributed</t> <a href="rationale.html#distributed"><sup>rat</sup></a>
-and
-<t>sovereign</t> <a href="rationale.html#sovereign"><sup>rat</sup></a>
-social application protocol for the Internet.</p>
-<p>Mosaic uses a
-<t>client-server</t> <a href="rationale.html#client-server"><sup>rat</sup></a>
-architecture (as opposed to peer-to-peer).</p>
-<p>Mosaic runs over any
-<t>duplex communication</t> <a href="rationale.html#duplex-communication"><sup>rat</sup></a>
-transport protocol that is
-<t>TLS</t> <a href="rationale.html#tls"><sup>rat</sup></a>
-secured such as <a href="websockets.html">WebSockets</a>.</p>
-<p>Mosaic does not provide
-<t>IP privacy</t> <a href="rationale.html#no-ip-privacy"><sup>rat</sup></a>
-because this is better provided at a lower network layer.</p>
-<p>Mosaic users generate their own identities as
-<t>EdDSA ed25519</t> <a href="rationale.html#eddsa-ed25519"><sup>rat</sup></a>
-keypairs and Mosaic uses a
-<a href="identity.html#master-keys-and-subkeys">master-key subkey</a>
-<a href="rationale.html#master-key-subkey"><sup>rat</sup></a>
-design.</p>
-<p>Mosaic <a href="identity.html#users-and-servers">servers</a> have key-based
-<t>server identites</t> <a href="rationale.html#server-identities"><sup>rat</sup></a>.</p>
-<p>Mosaic identity and endpoint information is <a href="bootstrap.html">bootstrapped</a> from
-<t>Mainline DHT</t> <a href="rationale.html#mainline-dht"><sup>rat</sup></a></p>
-<p>Mosaic uses the <t>BLAKE3</t> <a href="rationale.html#blake3"><sup>rat</sup></a> hashing function.</p>
-<p>Mosaic <a href="record.html">records</a> are
-<t>binary</t> <a href="rationale.html#binary-records"><sup>rat</sup></a>.</p>
-<p>Mosaic <a href="record.html">records</a> are <a href="reference.html">editable</a>
-if an application wants them to be, as all records have (and can be addressed by)
-a unique <a href="reference.html#id-reference">hash-based id</a>
-and a separate <a href="reference.html#address-reference">reusable address</a>.</p>
-<p><a href="timestamps.html">Timestamps</a> <a href="rationale.html#timestamps"><sup>rat</sup></a>
-account for <t>leap seconds</t> and have <t>millisecond accuracy</t>.</p>
-<p>Clients and Servers
-<t>remember the time that records are received</t>
-<a href="rationale.html#storing-received-at-timestamps"><sup>rat</sup></a>.</p>
-<p>The Mosaic specification is layered with Core, Transport, Extensions, and
-Applications being separate specification layer. Only Core and WebSockets are
-required by all participants.</p>
-<p>Mosaic is an offshoot of <a href="https://github.com/nostr-protocol">nostr</a>.</p>
-<h3 id="the-name-mosaic">The name Mosaic</h3>
-<p>No reason. Just a name. Easy to remember and pronounce. A throwback to
-the old NCSA Mosaic browser I suppose. It is not an acronym. We always
-capitalize it even in the middle of a sentence.</p>
+<p>A key schedule record lists subkey information and revocation information for a
+master key.</p>
+<p>A key schedule record has kind <code>0x1</code>.</p>
+<p>A key schedule record MUST be considered invalid if it does not conform to this
+specification.</p>
+<p>A key schedule record MUST be considered invalid if the signing key and the
+master key are not identical.</p>
+<h2 id="tags">Tags</h2>
+<p>Every subkey listed in a key schedule record must have an associated
+<a href="core_tags.html#subkey">subkey tag</a> listing the subkey.</p>
+<h2 id="payload">Payload</h2>
+<p>The payload is not <a href="human_readable_content.html">human readable</a>.</p>
+<p>`The payload contains a sequence of 40-byte subkey records laid out as follows:</p>
+<pre><code>            1   2   3   4   4   5   6
+    0   8   6   4   2   0   8   6   4
+ 0  +-------------------------------+
+    | SUBKEY    1/4                 |
+ 8  +-------------------------------+
+    | SUBKEY    2/4                 |
+ 16 +-------------------------------+
+    | SUBKEY    3/4                 |
+ 24 +-------------------------------+
+    | SUBKEY    4/4                 |
+ 32 +-------------------------------+
+    |MARKER|RES|REVOC TIMESTAMP     |
+    +-------------------------------+
+</code></pre>
+<p><code>[0:32]</code> - SUBKEY is the 32-byte subkey</p>
+<p><code>[32:33]</code> - MARKER is 1-byte and is one of the following</p>
+<ul>
+<li>0x0 - ACTIVE_SIGNING_KEY - A Mosaic ed25519 signing key (subkey) in current use</li>
+<li>0x1 - ACTIVE_ENCRYPTION_KEY - A Mosaic X25519 encryption key in current use<ul>
+<li>These keys are used for receiving encrypted data only, not for signing.</li>
+<li>Generally the secretkey for encryption is distributed to every device
+  that needs the ability to view encrypted data. Being a separate subkey
+  from the signing keys, it limits the damage from compromise.</li>
+</ul>
+</li>
+<li>0x40 - REVOKED_ALL - All records signed by the key are to be considered
+  invalid.</li>
+<li>0x41 - REVOKED_PAST - Records signed by the key that were received prior to
+  the revocation timestamp (based on when it was received by software and NOT
+  based on the date inside of the record) are still considered valid; however,
+  records either received after the revocation timestamp, or with a timestamp
+  after the revocation timestamp, are considered invalid.</li>
+<li>0x4F - OUT_OF_USE - Key is no longer in use (but nothing is revoked). This
+  may be used for signing keys or encryption keys.</li>
+<li>0x80 - ACTIVE_NOSTR_KEY - A nostr secp256k1 subkey<ul>
+<li>This helps support dual-stack software that works with both nostr and
+  Mosaic.</li>
+</ul>
+</li>
+</ul>
+<p><code>[33:34]</code> - RES is 1-byte and is reserved. It MUST be 0.</p>
+<p><code>[34:40]</code> - REVOC TIMESTAMP is 6-bytes and is in the format described in
+<a href="timestamps.html">timestamps</a>. Timestamp is required for REVOKED ALL and
+REVOKED PAST.  Timestamp is suggested for OUT_OF_USE. Timestamp SHOULD be
+zeroed in all other cases.</p>
+<h2 id="server-used">Server Used</h2>
+<p>These are posted to all of the author's Outbox servers.</p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="status.html" class="btn btn-neutral float-right" title="Status and Development">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="reference.html" class="btn btn-neutral float-left" title="References"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="profile.html" class="btn btn-neutral float-right" title="Profile Record">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -238,8 +253,10 @@ capitalize it even in the middle of a sentence.</p>
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
+      <span><a href="reference.html" style="color: #fcfcfc">&laquo; Previous</a></span>
     
-      <span><a href="status.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+      <span><a href="profile.html" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
@@ -256,8 +273,3 @@ capitalize it even in the middle of a sentence.</p>
 
 </body>
 </html>
-
-<!--
-MkDocs version : 1.6.1
-Build Date UTC : 2025-03-20 03:08:28.580391+00:00
--->

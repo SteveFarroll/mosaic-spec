@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Bootstrap - Mosaic</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="style.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Bootstrap";
+        var mkdocs_page_input_path = "bootstrap.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html">
+          <img src="img/favicon-96x96.png" class="logo" alt="Logo"/>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Mosaic Introduction</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="status.html">Status and Development</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="rationale.html">Rationale</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Mosaic Core</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" >Identity</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="cryptography.html">Cryptography</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="identity.html">Identity</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Bootstrap</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Record Type</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="timestamps.html">Timestamps</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="record.html">Record Format</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="human_readable_content.html">Human Readable Content</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="core_tags.html">Core Tags</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="reference.html">References</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Core Records</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="keyschedule.html">Key Schedule Record</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="profile.html">Profile Record</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Protocol</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="filter.html">Filter</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="protocol.html">Core Protocol</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Registries</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="tag_types.html">Tag Type Registry</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="kinds.html">Record Kind Registry</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Mosaic Accessory</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="human_encodings.html">Human Encodings</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Mosaic Transport</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="quic.html">QUIC</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="websockets.html">WebSockets</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Extensions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="sync_protocol_extension.html">Sync Protocol Extension</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Applications</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Mosaic Social media</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="microblog.html">Microblogging</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="blog.html">Blog</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="reply_comment.html">Reply Comment</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="chat.html">Chat</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Mosaic</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Mosaic Core</li>
+          <li class="breadcrumb-item">Identity</li>
+      <li class="breadcrumb-item active">Bootstrap</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="bootstrap">Bootstrap</h1>
+<p><status>PAGE STATUS: draft</status></p>
+<p>When you first find out about a new public key, you may already know by the
+context if it represents a user or a server. But sometimes you don't even
+know that.  You also may not know what servers this key uses to host it's
+<a href="keyschedule.html">key schedule</a> and <a href="profile.html">profile</a> information, or which
+it uses to publish it's records or receive messages.</p>
+<p>Bootstraps are public digitally signed records designed to let you acquire
+this kind of information.</p>
+<p>We store bootstraps in Mainline DHT.</p>
+<p>Bootstraps are not <a href="record.html">records</a>. They have their own format.</p>
+<h2 id="mainline-dht">Mainline DHT</h2>
+<p>We use <t>Mainline DHT</t> <a href="rationale.html#mainline-dht"><sup>rat</sup></a>
+to store mutable data signed under an ed25519 signature
+according to <a href="https://www.bittorrent.org/beps/bep_0044.html">BitTorrent BEP 0044</a>.</p>
+<p>Limitations:</p>
+<ul>
+<li>Only 1000 bytes can be reliably stored, and some will be used for <em>bencoding</em>
+  overhead and the salt, leaving us only 983 bytes of usable data.</li>
+<li>Data must be refreshed periodically otherwise it may be removed after a time.
+  Users are responsible for refreshing data in the Mainline DHT which will
+  disappear over time. Mechanisms for this are out of scope for Mosaic Core.</li>
+<li>Data storage and retrieval may take a few seconds, and should not be done too
+  frequently. Software SHOULD cache results for at least 2 hours.</li>
+<li>You need a bootstrap to get started and find peers. <code>router.utorrent.com</code>
+  and <code>router.bittorrent.com</code> are common but could be targetted in an attack.
+  However, you can find many more or setup your own
+  <a href="https://github.com/bittorrent/bootstrap-dht">bootstrap server</a>.</li>
+</ul>
+<h3 id="salt">Salt</h3>
+<p>We use a <t>salt</t> <a href="rationale.html#salt"><sup>rat</sup></a>  of <code>msb24</code>
+for server bootstraps and <code>mub24</code> for user bootstraps.</p>
+<h3 id="sequence-numbers">Sequence Numbers</h3>
+<p><t>Sequence numbers</t> <a href="rationale.html#sequence-numbers"><sup>rat</sup></a>
+should start at 1 and monotonically increase with each write.</p>
+<h3 id="rust-code">Rust code</h3>
+<p>There is a rust library to access this called <a href="https://github.com/pubky/mainline">mainline</a></p>
+<h2 id="bootstrap-format">Bootstrap Format</h2>
+<p>Bootstraps (the data after the bencoded prefix) are UTF-8 valid text up
+to 983 bytes long, and consist of a series of lines separated with a single
+ASCII Line Feed (LF) character (<code>\n</code>). Lines MUST not have trailing whitespace.</p>
+<p>Two kinds of bootstraps may be stored, based on whether the identity
+represents a server or a user.</p>
+<h2 id="server-bootstraps">Server Bootstraps</h2>
+<p>Server bootstraps specify the Internet locations (protocol, host and
+port) that the server is available at.</p>
+<p>A server bootstrap starts with the line <code>S</code>.</p>
+<p>Each subsequent line in a server bootstrap specifies a URL where
+the server can be accessed.</p>
+<p>These URLs MUST contain a scheme and a host, may optionally contain a port
+(with defaults to 443 for wss and 1320 for quic), and must specify the root path
+(<code>/</code>). They must NOT contain user, password, query, or fragment section. If
+any of those is found in one of these URL, software MUST prune such
+information.</p>
+<p>Only secure transports with TLS are defined. TLS must be version 1.2 or 1.3,
+and for QUIC is must be 1.3.  The only known schemes currently are <code>wss</code> for
+<a href="websockets.html">WebSockets</a> and <code>quic</code> for <a href="quic.html">QUIC</a>.</p>
+<p>The order of the entries expresses the preference or priority. Earlier
+entries are preferred by the server to later ones.</p>
+<p>Here are some examples of server bootstrap lines:</p>
+<p><code>quic://203.0.113.1</code> specifies QUIC on port 1320 at IP address
+<code>203.0.113.1</code>.</p>
+<p><code>wss://203.0.113.0:5198</code> specifies WebSockets with TLS on port 5198 at IP
+address <code>203.0.113.0</code>.</p>
+<p><code>wss://myserverlk23lkjsefo8u.onion</code> specifies WebSockets with TLS on port 443
+over Tor to onion site <code>myserverlk23lkjsefo8u.onion</code>.</p>
+<p><code>wss://[2001::130F::09C0:876A:130B]</code> specifies WebSockets with TLS on port 443
+over IPv6 to address <code>2001::130F::09C0:876A:130B</code>.</p>
+<p><code>quic://mosaic.example:555</code> specifies QUIC on port 555 to DNS
+node mosaic.example</p>
+<p>Servers are expected to operate as their own inbox/outbox and encryption
+server. So they do not require the same data as the user bootstrap.</p>
+<h2 id="user-bootstrap">User Bootstrap</h2>
+<p>User bootstraps specify servers that the user uses, and how the user uses them.</p>
+<p>The order of the entries expresses the preference or priority. Earlier entries are
+preferred by the user to later ones.</p>
+<p>A user bootstrap starts with the line <code>U</code>.</p>
+<p>Each line consists of two parts separated by a single ASCII space.</p>
+<h3 id="server-usage-character">Server Usage Character</h3>
+<p>This first part is a single character that encodes that kind of usage.</p>
+<p>There are three defined server usages:</p>
+<ul>
+<li>
+<p><strong>Outbox</strong> - Outbox servers are where users publish public records meant to
+be read by anyone who is following the person's public content.
+The <a href="keyschedule.html">key schedule</a> and <a href="profile.html">profile</a> are published
+here.</p>
+</li>
+<li>
+<p><strong>Inbox</strong> - Inbox servers are where users receive records that reference them,
+and where other users can follow replies to messages created by them.</p>
+</li>
+<li>
+<p><strong>Encryption</strong> - Encryption servers function like an inbox but handle
+private encrypted messages (defined outside of Mosaic core) that only the
+user can read back.</p>
+</li>
+</ul>
+<p>Outbox is indicated by bit 0 (<code>1&lt;&lt;0</code>) in the character. A 1 bit means the
+server is an outbox server.</p>
+<p>Inbox is indicated by bit 1 (<code>1&lt;&lt;1</code>) in the character. A 1 bit means the server
+is an inbox server.</p>
+<p>Encryption is indicated by bit 2 (<code>1&lt;&lt;2</code>) in the character. A 1 bit means the
+server is an encryption server.</p>
+<p>Bits 5 and 6 are always on. This is an ASCII '0' (48, 0x30). However a <code>0</code>
+should never be used as a server usage character as this would indicate no
+server usages, which is invalid as such a line should not exist.</p>
+<p>For example, to indicate only outbox usage, use character <code>1</code>. To indicate all
+three usages, use <code>7</code>.</p>
+<p>Conveniently with this encoding the ASCII number also matches the relavant bits.</p>
+<h3 id="server-key">Server Key</h3>
+<p>The second part is the server's public key, encoded using base64 (using the
+standard alphabet of RFC 4648). This will be 44 characters long ending in an
+<code>=</code> symbol.</p>
+<h3 id="example">Example</h3>
+<p>Here is an example user bootstrap:</p>
+<pre><code>U
+1 FB42YsY/CV2FqlMrI4CNeaZ2LnCHXzXmmdGKA+UsuBc=
+3 GQ859t+vK9gfYolOMfGB0VD/+kjk3iGFjxHj0GfhMos=
+2 L+RDYOrIKID+eEK81510TJ1pQOQW7kMrA10MwKOu0Iw=
+3 uBpfOVe3ooWMnc1RdMbYKBAIcHlfl2FsQU67lK2CJ8A=
+6 VKLdex3KykACzM0JpRfduelqwytel1AZGaXuv4sZhfU=
+</code></pre>
+<p>Based on size limits of 983 bytes, no more than 20 server entries can be
+listed (but see below for other limitations on the number of servers).</p>
+<p>Should servers become unreliable, users can change servers and update these
+bootstrap entries at any time.</p>
+<h3 id="usage-of-servers-and-limits-on-their-number">Usage of servers and limits on their number</h3>
+<p><em>Maximums</em>: Users SHOULD list no more than 3 redundant servers of any kind,
+since more redundancy provides strongly diminishing benefit at a linearly
+increasing network traffic cost.  Software MUST utilize the first four
+servers of the appropriate kind listed, and MAY tolerate additional servers
+but optionally MAY ignore additional servers.</p>
+<p><em>Minimums</em>: Users SHOULD have at least one outbox and at least one inbox.
+Users MAY have no encryption servers but they will not be able to receive
+encrypted messages.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="identity.html" class="btn btn-neutral float-left" title="Identity"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="timestamps.html" class="btn btn-neutral float-right" title="Timestamps">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  <div>
+    <i>Steve Farroll edition</i>
+  </div>
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="identity.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="timestamps.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

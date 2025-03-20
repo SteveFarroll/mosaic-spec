@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="None" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="img/favicon.ico" />
-    <title>Mosaic</title>
+    <title>Status and Development - Mosaic</title>
     <link rel="stylesheet" href="css/theme.css" />
     <link rel="stylesheet" href="css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,8 +13,8 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Mosaic Introduction";
-        var mkdocs_page_input_path = "index.md";
+        var mkdocs_page_name = "Status and Development";
+        var mkdocs_page_input_path = "status.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -41,12 +41,12 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="#">Mosaic Introduction</a>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Mosaic Introduction</a>
                 </li>
               </ul>
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="status.html">Status and Development</a>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Status and Development</a>
                 </li>
               </ul>
               <ul>
@@ -150,7 +150,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Mosaic Introduction</li>
+      <li class="breadcrumb-item active">Status and Development</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -159,61 +159,54 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="mosaic">Mosaic</h1>
-<p><status>PAGE STATUS: early draft</status></p>
-<p>Mosaic is a <em>work in progress</em>.  This specification is incomplete and an early draft.</p>
-<h2 id="introduction">Introduction</h2>
-<p>Mosaic is a
-<t>distributed</t> <a href="rationale.html#distributed"><sup>rat</sup></a>
-and
-<t>sovereign</t> <a href="rationale.html#sovereign"><sup>rat</sup></a>
-social application protocol for the Internet.</p>
-<p>Mosaic uses a
-<t>client-server</t> <a href="rationale.html#client-server"><sup>rat</sup></a>
-architecture (as opposed to peer-to-peer).</p>
-<p>Mosaic runs over any
-<t>duplex communication</t> <a href="rationale.html#duplex-communication"><sup>rat</sup></a>
-transport protocol that is
-<t>TLS</t> <a href="rationale.html#tls"><sup>rat</sup></a>
-secured such as <a href="websockets.html">WebSockets</a>.</p>
-<p>Mosaic does not provide
-<t>IP privacy</t> <a href="rationale.html#no-ip-privacy"><sup>rat</sup></a>
-because this is better provided at a lower network layer.</p>
-<p>Mosaic users generate their own identities as
-<t>EdDSA ed25519</t> <a href="rationale.html#eddsa-ed25519"><sup>rat</sup></a>
-keypairs and Mosaic uses a
-<a href="identity.html#master-keys-and-subkeys">master-key subkey</a>
-<a href="rationale.html#master-key-subkey"><sup>rat</sup></a>
-design.</p>
-<p>Mosaic <a href="identity.html#users-and-servers">servers</a> have key-based
-<t>server identites</t> <a href="rationale.html#server-identities"><sup>rat</sup></a>.</p>
-<p>Mosaic identity and endpoint information is <a href="bootstrap.html">bootstrapped</a> from
-<t>Mainline DHT</t> <a href="rationale.html#mainline-dht"><sup>rat</sup></a></p>
-<p>Mosaic uses the <t>BLAKE3</t> <a href="rationale.html#blake3"><sup>rat</sup></a> hashing function.</p>
-<p>Mosaic <a href="record.html">records</a> are
-<t>binary</t> <a href="rationale.html#binary-records"><sup>rat</sup></a>.</p>
-<p>Mosaic <a href="record.html">records</a> are <a href="reference.html">editable</a>
-if an application wants them to be, as all records have (and can be addressed by)
-a unique <a href="reference.html#id-reference">hash-based id</a>
-and a separate <a href="reference.html#address-reference">reusable address</a>.</p>
-<p><a href="timestamps.html">Timestamps</a> <a href="rationale.html#timestamps"><sup>rat</sup></a>
-account for <t>leap seconds</t> and have <t>millisecond accuracy</t>.</p>
-<p>Clients and Servers
-<t>remember the time that records are received</t>
-<a href="rationale.html#storing-received-at-timestamps"><sup>rat</sup></a>.</p>
-<p>The Mosaic specification is layered with Core, Transport, Extensions, and
-Applications being separate specification layer. Only Core and WebSockets are
-required by all participants.</p>
-<p>Mosaic is an offshoot of <a href="https://github.com/nostr-protocol">nostr</a>.</p>
-<h3 id="the-name-mosaic">The name Mosaic</h3>
-<p>No reason. Just a name. Easy to remember and pronounce. A throwback to
-the old NCSA Mosaic browser I suppose. It is not an acronym. We always
-capitalize it even in the middle of a sentence.</p>
+                <h1 id="status-and-development">Status and Development</h1>
+<h2 id="page-statuses">Page statuses</h2>
+<p>Page statuses move between these states</p>
+<ul>
+<li>TBD</li>
+<li>Incomplete</li>
+<li>Early Draft</li>
+<li>Draft (ready for others to review and comment on)</li>
+<li>Approved xN (N people have approved)</li>
+<li>Implemented in core</li>
+<li>Implemented in core + xN (N implementations are known to exist)</li>
+<li>Superceded (some other page now supercedes this)</li>
+</ul>
+<p>Note that developers are encouraged to comment on and discuss pages in any
+status, they don't have to wait for draft status.</p>
+<h2 id="versions-and-attribution">Versions and Attribution</h2>
+<p>Many people are expected to contribute to Mosaic and as a result there are
+various divergent viewpoints as to how Mosaic ought to be. As a result, we
+label this edition as the Steve Farroll edition. You will see this at the
+bottom of every page. Other Mosaic contributors can fork this and maintain
+their own editions. The community will eventually settle on something
+because people want to be compatible.</p>
+<h2 id="principles-of-design">Principles of Design</h2>
+<ul>
+<li>The protocol must be <em>simple</em> enough for multiple implementations to
+  be developed, but simplicity is not the only factor.</li>
+<li>The protocol must be <em>functional</em> enough to support a wide range of
+  applications beyond just social media.</li>
+<li>The protocol should not impede high-performance high-throughput
+  implementations.</li>
+<li>It is ok to do things multiple ways so long as there is <em>one default</em>
+  that all developers implement, and the rest of the "ways" are truly
+  optional. For example, we can have multiple transports (WebSockets,
+  WebTransport) without all the developers needing to move beyond WebSockets,
+  so long as every implementation implements the WebSockets transport.</li>
+<li>Code that isn't required by everybody should be defined outside of core
+  as an extension, transport, or application, as these are all optional.</li>
+</ul>
+<h2 id="core-library">Core Library</h2>
+<p>This specification is being developed in parallel to a
+<a href="https://github.com/SteveFarroll/mosaic-core">core library</a>. The
+findings from development feed back into this specification.</p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="status.html" class="btn btn-neutral float-right" title="Status and Development">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Mosaic Introduction"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="rationale.html" class="btn btn-neutral float-right" title="Rationale">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -238,8 +231,10 @@ capitalize it even in the middle of a sentence.</p>
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
+      <span><a href="index.html" style="color: #fcfcfc">&laquo; Previous</a></span>
     
-      <span><a href="status.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+      <span><a href="rationale.html" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
@@ -256,8 +251,3 @@ capitalize it even in the middle of a sentence.</p>
 
 </body>
 </html>
-
-<!--
-MkDocs version : 1.6.1
-Build Date UTC : 2025-03-20 03:08:28.580391+00:00
--->

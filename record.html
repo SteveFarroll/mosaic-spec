@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Record Format - Mosaic</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="style.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Record Format";
+        var mkdocs_page_input_path = "record.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html">
+          <img src="img/favicon-96x96.png" class="logo" alt="Logo"/>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Mosaic Introduction</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="status.html">Status and Development</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="rationale.html">Rationale</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Mosaic Core</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" >Identity</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="cryptography.html">Cryptography</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="identity.html">Identity</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="bootstrap.html">Bootstrap</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" >Record Type</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="timestamps.html">Timestamps</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Record Format</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="human_readable_content.html">Human Readable Content</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="core_tags.html">Core Tags</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="reference.html">References</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Core Records</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="keyschedule.html">Key Schedule Record</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="profile.html">Profile Record</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Protocol</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="filter.html">Filter</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="protocol.html">Core Protocol</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Registries</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="tag_types.html">Tag Type Registry</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="kinds.html">Record Kind Registry</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Mosaic Accessory</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="human_encodings.html">Human Encodings</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Mosaic Transport</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="quic.html">QUIC</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="websockets.html">WebSockets</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Extensions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="sync_protocol_extension.html">Sync Protocol Extension</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Applications</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Mosaic Social media</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="microblog.html">Microblogging</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="blog.html">Blog</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="reply_comment.html">Reply Comment</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="chat.html">Chat</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Mosaic</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Mosaic Core</li>
+          <li class="breadcrumb-item">Record Type</li>
+      <li class="breadcrumb-item active">Record Format</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="record">Record</h1>
+<p><status>PAGE STATUS: draft</status></p>
+<p>A record is a datum within Mosaic. All datums are records.</p>
+<h2 id="notation">Notation</h2>
+<p>Byte slice notation <code>[m:n]</code> indicates the bytes including <code>m</code> up to and
+including the byte <code>n-1</code> but not including the byte <code>n</code>. For example <code>[8:12]</code>
+represents bytes 8, 9, 10 and 11.</p>
+<p>Byte slices that are missing a beginning such as <code>[:64]</code> start at 0.</p>
+<p>Byte slices that are missing an ending such as <code>[112:]</code> continue until the
+end of the data.</p>
+<h2 id="maximum-size">Maximum Size</h2>
+<p>The
+<t>maximum size</t> <a href="rationale.html#maximum-size"><sup>rat</sup></a>
+of a record is 1 mebibyte (1,048,576 bytes).</p>
+<h2 id="layout">Layout</h2>
+<pre><code class="language-text">            1   2   3   4   4   5   6
+    0   8   6   4   2   0   8   6   4
+ 0  +-------------------------------+
+    | Signature 1/8                 |
+ 8  +-------------------------------+
+    | Signature 2/8                 |
+ 16 +-------------------------------+
+    | Signature 3/8                 |
+ 24 +-------------------------------+
+    | Signature 4/8                 |
+ 32 +-------------------------------+
+    | Signature 5/8                 |
+ 40 +-------------------------------+
+    | Signature 6/8                 |
+ 48 +-------------------------------+
+    | Signature 7/8                 |
+ 56 +-------------------------------+
+    | Signature 8/8                 |
+ 64 +-------------------------------+ &lt;-----|
+    | BE Timestamp           |  0   |
+ 72 +-------------------------------+       |
+    | Hash 1/5                      |       |
+ 80 +-------------------------------+       |
+    | Hash 2/5                      |  I    |
+ 88 +-------------------------------+  D    |
+    | Hash 3/5                      |       |
+ 96 +-------------------------------+       |
+    | Hash 4/5                      |       |
+104 +-------------------------------+       |
+    | Hash 5/5                      |       |
+112 +-------------------------------+ &lt;-----|
+    | Signing public key, 1/4       |
+120 +-------------------------------+
+    | Signing public key, 2/4       |
+128 +-------------------------------+
+    | Signing public key, 3/4       |
+136 +-------------------------------+
+    | Signing public key, 4/4       |
+144 +-------------------------------+ &lt;-----|
+    | Unique Address Nonce          |       |
+152 +-------------------------------+       |
+    | Unique Address Nonce  | Kind  |   A   |
+160 +-------------------------------+   D   |
+    | Author public key, 1/4        |   D   |
+168 +-------------------------------+   R   |
+    | Author public key, 2/4        |   E   |
+176 +-------------------------------+   S   |
+    | Author public key, 3/4        |   S   |
+184 +-------------------------------+       |
+    | Author public key, 4/4        |       |
+192 +-------------------------------+ &lt;-----|
+    | Flags | Timestamp             |
+200 +-------------------------------+
+    |AppFlgs| LenT  | LenP          |
+208 +-------------------------------+
+    | Tags...                       |
+    |                   .. +PADDING |
+  ? +-------------------------------+
+    | Payload ...                   |
+    |                   .. +PADDING |
+  ? +-------------------------------+
+</code></pre>
+<p><a href="rationale.html#layout">Rationale</a></p>
+<h2 id="fields">Fields</h2>
+<p>Records contain the following fields.</p>
+<h3 id="signature">Signature</h3>
+<p>64 bytes at <code>[0:64]</code></p>
+<p>The signature field is the EdDSA ed25519ph signature of the record
+produced using the <a href="#construction">construction</a> procedure.</p>
+<h3 id="id">ID</h3>
+<p>A 48 byte ID from <code>[64:112]</code> made up of the following three parts.</p>
+<h4 id="big-endian-timestamp">Big-endian Timestamp</h4>
+<p>6 bytes from <code>[64:70]</code></p>
+<p>This is the timestamp, but in big-endian form.</p>
+<p>This is the first part of the three-part ID.</p>
+<h4 id="zeroes">Zeroes</h4>
+<p>2 bytes of zeroes from <code>[70:72]</code>.</p>
+<p>This is the second part of the three-part ID.</p>
+<h3 id="hash">Hash</h3>
+<p>40 bytes at <code>[72:112]</code></p>
+<p>This is the first 40 bytes of the BLAKE3 hash.</p>
+<p>This is the third part of the three-part ID.</p>
+<h4 id="signing-public-key">Signing Public Key</h4>
+<p>32 bytes at <code>[112:144]</code></p>
+<p>This is the public key of the signing keypair, which is usually a subkey under
+the author's master keypair (but theoretically could be delegated in some other
+fashion in the future).</p>
+<h3 id="address">Address</h3>
+<p>A 48 byte Address from <code>[144:192]</code> made up of the following three parts.
+<a href="rationale.html#address-fields"><sup>ref</sup></a></p>
+<h4 id="unique-address-nonce">Unique Address Nonce</h4>
+<p>14 bytes at <code>[144:158]</code>.  These bytes must start with a 1 bit.</p>
+<p>These bytes make an address unique (within the context of an author and a
+kind). They can be created in a number of different ways, depending on the
+application and its purpose:</p>
+<ol>
+<li>They can be generated randomly.</li>
+<li>They can be generated as a big-endian timestamp concatenated with
+   randomly generated data. This is useful when the addresses should
+   sort in time order.</li>
+<li>They can be the first 14 bytes of a BLAKE3 hash of a fixed slice
+   of bytes. This is useful for applications that require seeking an
+   event by a known fixed string of bytes (and known author and kind).</li>
+<li>They can be copied from a previous event, to replace that event.</li>
+</ol>
+<h4 id="kind">Kind</h4>
+<p>2 bytes at <code>[158:160]</code></p>
+<p>This is the <a href="kinds.html">kind</a> of the record which determines the application
+this record is part of, which then determines the nature of the non-core tags
+and the payload. This is represented as an unsigned integer in little-endian
+format.</p>
+<h4 id="author-public-key">Author Public Key</h4>
+<p>32 bytes at <code>[160:192]</code></p>
+<p>This is the identity of the author, expressed as a public key from their master
+EdDSA ed25519 keypair.</p>
+<h3 id="flags">Flags</h3>
+<p>2 bytes at <code>[192:194]</code></p>
+<ul>
+<li><code>0x01 ZSTD</code> - The payload is compressed with Zstd</li>
+<li><code>0x02 FROM_AUTHOR</code> - Servers SHOULD only accept the record from the author (requiring authentication)</li>
+<li><code>0x04 TO_RECIPIENTS</code> - Servers SHOULD only serve the record to people tagged (requiring authentication)</li>
+<li><code>0x08 NO_BRIDGE</code> - Bridges SHOULD NOT propogate the record to other networks (nostr, mastodon, etc)</li>
+<li><code>0x10 EPHEMERAL</code> - The record is ephemeral; Servers should serve it to current subscribers and not keep it.</li>
+<li><code>0x20 - RESERVED</code> and MUST be 0</li>
+<li><code>0x80, 0x40</code> - Signature scheme:<ul>
+<li><code>00 - EDDSA</code> - EdDSA ed25519 (default)</li>
+<li><code>01 - NOSTR</code> - reserved for secp256k1 Schnorr signatures (not in use)</li>
+<li><code>10 - RESERVED</code></li>
+<li><code>11 - RESERVED</code></li>
+<li>NOTE: This only affects the signing key and the signature. The hash is
+  always created with BLAKE3, and the master key is always EdDSA
+  ed25519. This enables using nostr keys as subkeys (the records generated
+  however will not interoperate with nostr-only software).</li>
+</ul>
+</li>
+<li>All other bits - RESERVED and MUST be 0</li>
+</ul>
+<h3 id="timestamp">Timestamp</h3>
+<p>6 bytes at <code>[194:200]</code></p>
+<p>This is a timestamp represented in 6 bytes (48 bits) according to
+<a href="timestamps.html">timestamps</a>.</p>
+<h3 id="appflgs">AppFlgs</h3>
+<p>2 bytes at <code>[200:202]</code></p>
+<p>These are bitflags reserved for use by the specific application based on
+the <a href="#kind">kind</a>.</p>
+<h3 id="lent">LenT</h3>
+<p>2 bytes at <code>[202:204]</code> representing the length of the tags section in bytes
+as an unsigned integer in little-endian format.</p>
+<p>This represents the exact length of the tags section, not counting padding
+at the end to achieve 64-bit alignment.</p>
+<p>The maximum tags section length is 65536 bytes.</p>
+<h3 id="lenp">LenP</h3>
+<p>4 bytes at <code>[204:208]</code> representing the length of the payload section in
+bytes as an unsigned integer in little-endian format.</p>
+<p>This represents the exact length of the payload section, not counting padding
+at the end to achieve 64-bit alignment.</p>
+<p>The maximum payload section length is 1_048_384 bytes (which is the maximum record
+size minus the header size).</p>
+<h3 id="tags">Tags</h3>
+<p>Varying bytes at <code>[208:208+LenT]</code></p>
+<p>These are searchable key-value tags.</p>
+<p><t>Tags</t> <a href="rationale.html#tags"><sup>ref</sup></a>  are a maximum of 256 bytes long.</p>
+<p>All tags are searchable on servers. If an application requires unsearchable tags,
+these can be defined within that application's payload.</p>
+<p>Tags are laid out as follows:</p>
+<pre><code class="language-text">0           2         3         256 max
++-----------+---------+----------+
+| type      | length  | value ...|
++-----------+---------+----------+
+</code></pre>
+<p>Each tag has a 2-byte (16 bit) type <code>[0:2]</code>, a 1-byte (8 bit) length <code>[2:3]</code>,
+and a value that is at most 253 bytes long <code>[3:]</code>.</p>
+<p>Tags only have one value.</p>
+<p>The tags section is padded out to 64-bit alignment.</p>
+<p>The maximum tags section length is 65536 bytes.</p>
+<p>Tag types are documented at the <a href="tag_types.html">Tag Type Registry</a>
+which includes the defined <a href="core_tags.html">Core Tags</a>.</p>
+<h3 id="payload">Payload</h3>
+<p>Varying bytes at <code>[208+LenT:208+LenT+LenP].</code></p>
+<p>Payload is opaque (at this layer of specification) application-specific data.</p>
+<p>The payload section is padded out to 64-bit alignment.</p>
+<p>The maximum payload section length is 1_048_384 bytes (which is the maximum record
+size minus the header size).</p>
+<h1 id="construction">Construction</h1>
+<ol>
+<li>Fill in all the data from <code>[112:]</code>.</li>
+<li>Take a BLAKE3 hash of <code>[112:]</code>, unkeyed, and extend to 64 bytes
+   of output using BLAKE3's <code>finalize_xof()</code> function. This does not
+   directly go into the record.</li>
+<li>Generate EdDSA ed25519ph pre-hashed signature of that 512-bit hash
+   using the Signing secret key, and providing the context string
+   of "Mosaic". NOTE: ed25519 calls for a SHA-512 hash, but we use
+   a BLAKE3 hash instead. Place the signature at bytes <code>[0:64]</code>.</li>
+<li>Copy the first 40 bytes of the hash to <code>[72:112]</code>.</li>
+<li>Write the timestamp as a 48-bit unsigned big-endian to <code>[64:70]</code>.</li>
+<li>Set bytes 70 and 71 to 0 (if not already).</li>
+</ol>
+<h1 id="validation">Validation</h1>
+<p>Records MUST be fully validated by clients.</p>
+<p>Records MUST be fully validated by servers except for the
+steps marked CLIENTS ONLY.</p>
+<p>Validation steps</p>
+<ol>
+<li>The length must be between 208 and 1048576 bytes.</li>
+<li>The length must equal 208 + LenT + LenP.</li>
+<li>The Signing public key must be validated according to the
+   <a href="cryptography.html">cryptography</a> key validation checks.</li>
+<li>The Author public key must be validated according to the
+   <a href="cryptography.html">cryptography</a> key validation checks.</li>
+<li>CLIENTS ONLY: The Signing public key must be verified to be
+   a non-revoked subkey of the Author via the Author's
+   <a href="bootstrap.html">bootstrap</a>.</li>
+<li>Take a BLAKE3 hash of <code>[112:]</code>, unkeyed, and extend to
+   64 bytes of output using BLAKE3's <code>finalize_xof()</code> function.</li>
+<li>Verify the hash: Compare bytes <code>[0:40]</code> of this hash with bytes
+   <code>[72:112]</code> of the record. They MUST match.</li>
+<li>Verify the ID timestamp: bytes <code>[64:70]</code> taken as a big-endian
+   48-bit unsigned integer must equal bytes <code>[194:200]</code> taken as a
+   little-endian unsigned 48-bit integer.</li>
+<li>Verify the signature: The signature must be a valid EdDSA ed25519
+   signature of the full 64-byte BLAKE3 hash taken in step 6 with the
+   signing public key.</li>
+<li>The timestamp and the orig timestamp must be validated according to
+    <a href="timestamps.html">timestamps</a>.</li>
+<li>Bytes 70 and 71 must be 0.</li>
+<li>Reserved flags must be 0.</li>
+<li>CLIENTS ONLY: Application specific validation should be performed.</li>
+</ol>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="timestamps.html" class="btn btn-neutral float-left" title="Timestamps"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="human_readable_content.html" class="btn btn-neutral float-right" title="Human Readable Content">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  <div>
+    <i>Steve Farroll edition</i>
+  </div>
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="timestamps.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="human_readable_content.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
