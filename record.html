@@ -70,6 +70,40 @@
                 <li class="toctree-l2"><a class="reference internal" href="timestamps.html">Timestamps</a>
                 </li>
                 <li class="toctree-l2 current"><a class="reference internal current" href="#">Record Format</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#notation">Notation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#maximum-size">Maximum Size</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#layout">Layout</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#fields">Fields</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#signature">Signature</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#id">ID</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#hash">Hash</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#address">Address</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#flags">Flags</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#timestamp">Timestamp</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#appflgs">AppFlgs</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#lent">LenT</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#lenp">LenP</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#tags">Tags</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#payload">Payload</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="human_readable_content.html">Human Readable Content</a>
                 </li>
@@ -327,6 +361,9 @@ as an unsigned integer in little-endian format.</p>
 <p>This represents the exact length of the tags section, not counting padding
 at the end to achieve 64-bit alignment.</p>
 <p>The maximum tags section length is 65536 bytes.</p>
+<h4 id="lentpad">LenTPad</h4>
+<p>The length of the tags section including padding is called <code>LenTPad</code> and is
+calculated as <code>(LenT + 7) &amp; !7</code></p>
 <h3 id="lenp">LenP</h3>
 <p>4 bytes at <code>[204:208]</code> representing the length of the payload section in
 bytes as an unsigned integer in little-endian format.</p>
@@ -334,6 +371,9 @@ bytes as an unsigned integer in little-endian format.</p>
 at the end to achieve 64-bit alignment.</p>
 <p>The maximum payload section length is 1_048_384 bytes (which is the maximum record
 size minus the header size).</p>
+<h4 id="lenppad">LenPPad</h4>
+<p>The length of the payload section including padding is called <code>LenPPad</code> and is
+calculated as <code>(LenP + 7) &amp; !7</code></p>
 <h3 id="tags">Tags</h3>
 <p>Varying bytes at <code>[208:208+LenT]</code></p>
 <p>These are searchable key-value tags.</p>
@@ -354,7 +394,7 @@ and a value that is at most 253 bytes long <code>[3:]</code>.</p>
 <p>Tag types are documented at the <a href="tag_types.html">Tag Type Registry</a>
 which includes the defined <a href="core_tags.html">Core Tags</a>.</p>
 <h3 id="payload">Payload</h3>
-<p>Varying bytes at <code>[208+LenT:208+LenT+LenP].</code></p>
+<p>Varying bytes at <code>[208+LenTPad:208+LenTPad+LenP].</code></p>
 <p>Payload is opaque (at this layer of specification) application-specific data.</p>
 <p>The payload section is padded out to 64-bit alignment.</p>
 <p>The maximum payload section length is 1_048_384 bytes (which is the maximum record
@@ -380,7 +420,7 @@ steps marked CLIENTS ONLY.</p>
 <p>Validation steps</p>
 <ol>
 <li>The length must be between 208 and 1048576 bytes.</li>
-<li>The length must equal 208 + LenT + LenP.</li>
+<li>The length must equal 208 + LenTPad + LenPPad.</li>
 <li>The Signing public key must be validated according to the
    <a href="cryptography.html">cryptography</a> key validation checks.</li>
 <li>The Author public key must be validated according to the
