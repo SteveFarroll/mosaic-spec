@@ -108,8 +108,6 @@
               <ul class="current">
                   <li class="toctree-l1 current"><a class="reference internal current" href="#">Human Encodings</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#keys">Keys</a>
-    </li>
     </ul>
                   </li>
               </ul>
@@ -167,12 +165,13 @@
                 <h1 id="mosaic-human-encodings">Mosaic Human Encodings</h1>
 <p>Human encodings are defined to provide uniform compatible ways for
 sharing data between humans and software.</p>
-<p><a href="https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki#bech32">bech32</a>
-is used in many of these due to its superior properties. Refer to the link.</p>
-<h2 id="keys">Keys</h2>
-<p>Public keys are encoded with bech32 using the <code>mopub</code> prefix.</p>
-<p>Secret keys are encoded with bech32 using the <code>mosec</code> prefix.</p>
-<p>References are encoded with bech32 using the <code>moref</code> prefix.</p>
+<p><a href="https://philzimmermann.com/docs/human-oriented-base-32-encoding.txt">zbase32</a> is used for human-oriented rendering of binary data.</p>
+<p>Prefixes are used to specify the type of data being represented:</p>
+<ul>
+<li>Public keys are prefixed with <code>mopub0</code></li>
+<li>Secret keys are prefixed with <code>mosec0</code></li>
+<li>References are prefixed with <code>moref0</code></li>
+</ul>
               
             </div>
           </div><footer>

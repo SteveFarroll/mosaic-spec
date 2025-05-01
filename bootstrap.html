@@ -195,7 +195,7 @@
 context if it represents a user or a server. But sometimes you don't even
 know that.  You also may not know what servers this key uses to host it's
 <a href="keyschedule.html">key schedule</a> and <a href="profile.html">profile</a> information, or which
-it uses to publish it's records or receive messages.</p>
+it uses to publish its records or receive messages.</p>
 <p>Bootstraps are public digitally signed records designed to let you acquire
 this kind of information.</p>
 <p>We store bootstraps in Mainline DHT.</p>
@@ -220,7 +220,7 @@ according to <a href="https://www.bittorrent.org/beps/bep_0044.html">BitTorrent 
 </ul>
 <h3 id="salt">Salt</h3>
 <p>We use a <t>salt</t> <a href="rationale.html#salt"><sup>rat</sup></a>  of <code>msb24</code>
-for server bootstraps and <code>mub24</code> for user bootstraps.</p>
+for server bootstraps and <code>mub25</code> for user bootstraps.</p>
 <h3 id="sequence-numbers">Sequence Numbers</h3>
 <p><t>Sequence numbers</t> <a href="rationale.html#sequence-numbers"><sup>rat</sup></a>
 should start at 1 and monotonically increase with each write.</p>
@@ -300,26 +300,25 @@ server usages, which is invalid as such a line should not exist.</p>
 three usages, use <code>7</code>.</p>
 <p>Conveniently with this encoding the ASCII number also matches the relavant bits.</p>
 <h3 id="server-key">Server Key</h3>
-<p>The second part is the server's public key, encoded using base64 (using the
-standard alphabet of RFC 4648). This will be 44 characters long ending in an
-<code>=</code> symbol.</p>
+<p>The second part is the server's public key, encoded according to
+<a href="human_encodings.html">human encodings</a> as a <code>mopub0</code>. This are 58 characters
+long.</p>
 <h3 id="example">Example</h3>
 <p>Here is an example user bootstrap:</p>
 <pre><code>U
-1 FB42YsY/CV2FqlMrI4CNeaZ2LnCHXzXmmdGKA+UsuBc=
-3 GQ859t+vK9gfYolOMfGB0VD/+kjk3iGFjxHj0GfhMos=
-2 L+RDYOrIKID+eEK81510TJ1pQOQW7kMrA10MwKOu0Iw=
-3 uBpfOVe3ooWMnc1RdMbYKBAIcHlfl2FsQU67lK2CJ8A=
-6 VKLdex3KykACzM0JpRfduelqwytel1AZGaXuv4sZhfU=
+1 mopub0naeu8zzpu4g9g8jwqkpsrxoje5gwtwzh7bxzkek51mkwbe7x3oqo
+3 mopub04fapk8fyyuoxjuwjwp5cmnuaqtoc519jsmz7qnzjp6r73ect966o
+2 mopub09drnk9atpgk75qkhchyxn63nr7qzd1nfzxr8hk1xw8fd4xsznodo
+3 mopub0oemxqrm9mq16krm73n8au5ykerakcppkuzosrdu7im3h1bzhdnay
+6 mopub041wfk1mo87xzt8uazdng9dhhcz9ypzernfyeznhg7me7y9nsjkxy
 </code></pre>
-<p>Based on size limits of 983 bytes, no more than 20 server entries can be
-listed (but see below for other limitations on the number of servers).</p>
-<p>Should servers become unreliable, users can change servers and update these
-bootstrap entries at any time.</p>
+<p>Based on size limits of 983 bytes, no more than 16 server entries can be
+listed. But see below for other limitations on the number of servers.</p>
+<p>Users can change servers and update these bootstrap entries at any time.</p>
 <h3 id="usage-of-servers-and-limits-on-their-number">Usage of servers and limits on their number</h3>
 <p><em>Maximums</em>: Users SHOULD list no more than 3 redundant servers of any kind,
 since more redundancy provides strongly diminishing benefit at a linearly
-increasing network traffic cost.  Software MUST utilize the first four
+increasing network traffic cost. Software MUST utilize the first three
 servers of the appropriate kind listed, and MAY tolerate additional servers
 but optionally MAY ignore additional servers.</p>
 <p><em>Minimums</em>: Users SHOULD have at least one outbox and at least one inbox.

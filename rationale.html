@@ -66,7 +66,7 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#mainline-dht">Mainline DHT</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#salt">Salt</a>
+    <li class="toctree-l3"><a class="reference internal" href="#salt">Salt</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#sequence-numbers">Sequence Numbers</a>
     </li>
@@ -415,13 +415,15 @@ every application).</p>
 <p>Mainline DHT is distributed and censorship resistant, including being resistant to (or able
 to detect) Sybil attacks. It is the largest (or one of) and longest living DHT.</p>
 <p>It also has this mutable data functionality and works with ed25519 signed data.</p>
-<h3 id="salt">Salt</h3>
+<h3 id="salt">Salt</h3>
 <p>We use the salt to avoid collisions, in case the same ed25519 identity keypair is used by
 both mosaic and <a href="https://github.com/pubky">pubky</a>, or in case we need to change the format
 of the bootstrap in the future.</p>
 <p>We also need different salts because we have two different kinds of bootstraps already.
 Different salts allow a server keypair to also be a user keypair without collision.</p>
 <p>These salts are short enough to not use too much space.</p>
+<p>The user bootstrap salt used to be <code>mub24</code> but was changed to <code>mub25</code> when the format of
+printable public keys changed.</p>
 <h3 id="sequence-numbers">Sequence Numbers</h3>
 <p>We don't need collision protection here because writing this record requires the secure
 master key which is likely to be in only one place, and even if copied around we still
