@@ -61,35 +61,9 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="identity.html">Identity</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="url.html">URL</a>
+                </li>
                 <li class="toctree-l2 current"><a class="reference internal current" href="#">Bootstrap</a>
-    <ul class="current">
-    <li class="toctree-l3"><a class="reference internal" href="#mainline-dht">Mainline DHT</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#salt">Salt</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#sequence-numbers">Sequence Numbers</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#rust-code">Rust code</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#bootstrap-format">Bootstrap Format</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#server-bootstraps">Server Bootstraps</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#user-bootstrap">User Bootstrap</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#server-usage-character">Server Usage Character</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#server-key">Server Key</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#example">Example</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#usage-of-servers-and-limits-on-their-number">Usage of servers and limits on their number</a>
-    </li>
-        </ul>
-    </li>
-    </ul>
                 </li>
     </ul>
                   </li>
@@ -190,12 +164,13 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="bootstrap">Bootstrap</h1>
-<p><status>PAGE STATUS: draft</status></p>
+<p><status>PAGE STATUS: early draft</status></p>
 <p>When you first find out about a new public key, you may already know by the
 context if it represents a user or a server. But sometimes you don't even
 know that.  You also may not know what servers this key uses to host it's
 <a href="keyschedule.html">key schedule</a> and <a href="profile.html">profile</a> information, or which
-it uses to publish its records or receive messages.</p>
+it uses to publish its records or receive messages, or if a server, which URLs
+it is available at.</p>
 <p>Bootstraps are public digitally signed records designed to let you acquire
 this kind of information.</p>
 <p>We store bootstraps in Mainline DHT.</p>
@@ -233,32 +208,19 @@ ASCII Line Feed (LF) character (<code>\n</code>). Lines MUST not have trailing w
 <p>Two kinds of bootstraps may be stored, based on whether the identity
 represents a server or a user.</p>
 <h2 id="server-bootstraps">Server Bootstraps</h2>
-<p>Server bootstraps specify the Internet locations (protocol, host and
-port) that the server is available at.</p>
-<p>A server bootstrap starts with the line <code>S</code>.</p>
-<p>Each subsequent line in a server bootstrap specifies a URL where
-the server can be accessed.</p>
-<p>These URLs MUST contain a scheme and a host, may optionally contain a port
-(with defaults to 443 for wss and 1320 for quic), and must specify the root path
-(<code>/</code>). They must NOT contain user, password, query, or fragment section. If
-any of those is found in one of these URL, software MUST prune such
-information.</p>
-<p>Only secure transports with TLS are defined. TLS must be version 1.2 or 1.3,
-and for QUIC is must be 1.3.  The only known schemes currently are <code>wss</code> for
-<a href="websockets.html">WebSockets</a> and <code>quic</code> for <a href="quic.html">QUIC</a>.</p>
+<p>Server bootstraps provide the URLs that a server is available on.</p>
 <p>The order of the entries expresses the preference or priority. Earlier
 entries are preferred by the server to later ones.</p>
-<p>Here are some examples of server bootstrap lines:</p>
-<p><code>quic://203.0.113.1</code> specifies QUIC on port 1320 at IP address
-<code>203.0.113.1</code>.</p>
-<p><code>wss://203.0.113.0:5198</code> specifies WebSockets with TLS on port 5198 at IP
-address <code>203.0.113.0</code>.</p>
-<p><code>wss://myserverlk23lkjsefo8u.onion</code> specifies WebSockets with TLS on port 443
-over Tor to onion site <code>myserverlk23lkjsefo8u.onion</code>.</p>
-<p><code>wss://[2001::130F::09C0:876A:130B]</code> specifies WebSockets with TLS on port 443
-over IPv6 to address <code>2001::130F::09C0:876A:130B</code>.</p>
-<p><code>quic://mosaic.example:555</code> specifies QUIC on port 555 to DNS
-node mosaic.example</p>
+<p>A server bootstrap starts with the line <code>S</code>.</p>
+<p>Each subsequent line in a server bootstrap specifies a <a href="url.html">URL</a> where
+the server can be accessed.</p>
+<p>Here is an example server bootstrap:</p>
+<pre><code>S
+wss://myserverlk23lkjsefo8u.onion
+mosaic://203.0.113.1
+mosaic://203.0.113.2:5198
+mosaic://[2001::130F::09C0:876A:130B]
+</code></pre>
 <p>Servers are expected to operate as their own inbox/outbox and encryption
 server. So they do not require the same data as the user bootstrap.</p>
 <h2 id="user-bootstrap">User Bootstrap</h2>
@@ -328,7 +290,7 @@ encrypted messages.</p>
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="identity.html" class="btn btn-neutral float-left" title="Identity"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="url.html" class="btn btn-neutral float-left" title="URL"><span class="icon icon-circle-arrow-left"></span> Previous</a>
         <a href="timestamps.html" class="btn btn-neutral float-right" title="Timestamps">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
@@ -354,7 +316,7 @@ encrypted messages.</p>
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="identity.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="url.html" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
       <span><a href="timestamps.html" style="color: #fcfcfc">Next &raquo;</a></span>

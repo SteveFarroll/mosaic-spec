@@ -51,74 +51,6 @@
               </ul>
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="#">Rationale</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#binary-records">Binary Records</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#blake3">BLAKE3</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#client-server">Client-Server</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#distributed">Distributed</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#duplex-communication">Duplex Communication</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#eddsa-ed25519">EdDSA ed25519</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#mainline-dht">Mainline DHT</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#salt">Salt</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#sequence-numbers">Sequence Numbers</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#master-key-subkey">Master-Key Subkey</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#no-ip-privacy">No IP Privacy</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#quic">QUIC</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#records">Records</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#maximum-size">Maximum Size</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#layout">Layout</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#flags">Flags</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#duplicate-timestamp">Duplicate Timestamp</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#tags">Tags</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#references">References</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#id-fields">Id Fields</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#address-fields">Address Fields</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#server-identities">Server Identities</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#sovereign">Sovereign</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#storing-received-at-timestamps">Storing received-at timestamps</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#timestamps">Timestamps</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#leap-seconds">Leap Seconds</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#milliseconds">Milliseconds</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#bit-48">Bit 48</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#tls">TLS</a>
-    </li>
-    </ul>
                 </li>
               </ul>
               <p class="caption"><span class="caption-text">Mosaic Core</span></p>
@@ -128,6 +60,8 @@
                 <li class="toctree-l2"><a class="reference internal" href="cryptography.html">Cryptography</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="identity.html">Identity</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="url.html">URL</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="bootstrap.html">Bootstrap</a>
                 </li>
@@ -362,11 +296,16 @@ is good enough for that purpose.</p>
 We utilize this.</p>
 <hr />
 <h2 id="client-server">Client-Server</h2>
-<p>Mosaic is NOT peer-to-peer. It turns out that peer-to-peer is difficult because most computers are not
-fully connected to the Internet. And as there is nothing particular difficult in running a server that
-<em>is</em> fully connected to the Internet (given VPS availability), being strictly peer-to-peer doesn't seem
-advantageous. So we choose the more rock-solid client-server architecture.</p>
-<p>However, we opt for a dumb-server smart-client design to put more control into the hands of the users.</p>
+<p>Mosaic is client-server, not peer-to-peer.</p>
+<p>Mosaic servers are used in a way that presumes they will be online and available most of
+the time. Mosaic has built-in redundancy across such servers, but nonetheless a machine
+that is not even intended or capable of being up all the time (such as a phone or
+laptop) makes a poor mosaic server.</p>
+<p>Peer to peer architectures work well for situations when nodes do not need to remain
+online. Most social media situations instead seek to be always-on. Mosaic caters to
+the latter.</p>
+<p>We opt for a dumb-server smart-client design to put more control into the hands of the
+users.</p>
 <hr />
 <h2 id="distributed">Distributed</h2>
 <p>Centralized systems have a fatal flaw: they can easily be captured and controlled by people you do not

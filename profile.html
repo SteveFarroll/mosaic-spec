@@ -61,6 +61,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="identity.html">Identity</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="url.html">URL</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="bootstrap.html">Bootstrap</a>
                 </li>
     </ul>
@@ -84,14 +86,6 @@
                 <li class="toctree-l2"><a class="reference internal" href="keyschedule.html">Key Schedule Record</a>
                 </li>
                 <li class="toctree-l2 current"><a class="reference internal current" href="#">Profile Record</a>
-    <ul class="current">
-    <li class="toctree-l3"><a class="reference internal" href="#tags">Tags</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#content">Content</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#server-used">Server Used</a>
-    </li>
-    </ul>
                 </li>
     </ul>
                   </li>
@@ -185,9 +179,15 @@ All field names are snake-case.</p>
 <p>The following fields are available:</p>
 <ul>
 <li><code>name</code> - (REQUIRED) this is the user's name, used for <code>@name</code> tagging,
-  containing only typeable ASCII characters.</li>
+  containing only typeable ASCII characters. These cannot be guaranteed
+  to be unique. Users are encouraged to choose names that are uncommon
+  if not unique. Clients are encouraged to provide a way for users to
+  disambiguate name collisions such as via a
+  <a href="https://en.wikipedia.org/wiki/Petname">Petname</a> system,
+  which is out of scope of this specification.</li>
 <li><code>display_name</code> - this is a name for display purposes which can contain
-  any sort of UTF-8 character.</li>
+  any sort of UTF-8 character. Clients are encouraged to also display
+  <code>name</code> so that users can tag them with <code>@name</code> syntax.</li>
 <li><code>about</code> - This is prose where the user can describe themself.</li>
 <li><code>avatar</code> - This is a URL to an avatar (e.g. a profile picture) in a
   standard format (PNG, JPEG, SVG, WebP, GIF, BMP or ICO) expected to be

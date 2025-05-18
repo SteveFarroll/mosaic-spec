@@ -61,6 +61,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="identity.html">Identity</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="url.html">URL</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="bootstrap.html">Bootstrap</a>
                 </li>
     </ul>
@@ -82,14 +84,6 @@
                   <li class="toctree-l1 current"><a class="reference internal current" >Core Records</a>
     <ul class="current">
                 <li class="toctree-l2 current"><a class="reference internal current" href="#">Key Schedule Record</a>
-    <ul class="current">
-    <li class="toctree-l3"><a class="reference internal" href="#tags">Tags</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#payload">Payload</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#server-used">Server Used</a>
-    </li>
-    </ul>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="profile.html">Profile Record</a>
                 </li>
@@ -183,7 +177,7 @@ master key are not identical.</p>
 <a href="core_tags.html#subkey">subkey tag</a> listing the subkey.</p>
 <h2 id="payload">Payload</h2>
 <p>The payload is not <a href="human_readable_content.html">human readable</a>.</p>
-<p>`The payload contains a sequence of 40-byte subkey records laid out as follows:</p>
+<p>The payload contains a sequence of 40-byte subkey records laid out as follows:</p>
 <pre><code>            1   2   3   4   4   5   6
     0   8   6   4   2   0   8   6   4
  0  +-------------------------------+

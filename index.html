@@ -43,14 +43,6 @@
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="#">Mosaic Introduction</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#the-name-mosaic">The name Mosaic</a>
-    </li>
-        </ul>
-    </li>
-    </ul>
                 </li>
               </ul>
               <ul>
@@ -68,6 +60,8 @@
                 <li class="toctree-l2"><a class="reference internal" href="cryptography.html">Cryptography</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="identity.html">Identity</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="url.html">URL</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="bootstrap.html">Bootstrap</a>
                 </li>
@@ -183,7 +177,7 @@ architecture (as opposed to peer-to-peer).</p>
 <t>duplex communication</t> <a href="rationale.html#duplex-communication"><sup>rat</sup></a>
 transport protocol that is
 <t>TLS</t> <a href="rationale.html#tls"><sup>rat</sup></a>
-secured such as <a href="quic.html">QUIC</a>.</p>
+secured such as <t>QUIC</t> <a href="rationale.html#quic"><sup>rat</sup></a>.</p>
 <p>Mosaic does not provide
 <t>IP privacy</t> <a href="rationale.html#no-ip-privacy"><sup>rat</sup></a>
 because this is better provided at a lower network layer.</p>
@@ -193,7 +187,7 @@ keypairs and Mosaic uses a
 <a href="identity.html#master-keys-and-subkeys">master-key subkey</a>
 <a href="rationale.html#master-key-subkey"><sup>rat</sup></a>
 design.</p>
-<p>Mosaic <a href="identity.html#users-and-servers">servers</a> have key-based
+<p>Mosaic <a href="identity.html#users-versus-servers">servers</a> have key-based
 <t>server identites</t> <a href="rationale.html#server-identities"><sup>rat</sup></a>.</p>
 <p>Mosaic identity and endpoint information is <a href="bootstrap.html">bootstrapped</a> from
 <t>Mainline DHT</t> <a href="rationale.html#mainline-dht"><sup>rat</sup></a></p>
@@ -210,8 +204,7 @@ account for <t>leap seconds</t> and have <t>millisecond accuracy</t>.</p>
 <t>remember the time that records are received</t>
 <a href="rationale.html#storing-received-at-timestamps"><sup>rat</sup></a>.</p>
 <p>The Mosaic specification is layered with Core, Transport, Extensions, and
-Applications being separate specification layer. Only Core and Transport:QUIC
-are required by all participants.</p>
+Applications. Only Core and Transport:QUIC are required by all participants.</p>
 <p>Mosaic is an offshoot of <a href="https://github.com/nostr-protocol">nostr</a>.</p>
 <h3 id="the-name-mosaic">The name Mosaic</h3>
 <p>No reason. Just a name. Easy to remember and pronounce. A throwback to
@@ -267,5 +260,5 @@ capitalize it even in the middle of a sentence.</p>
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-05-01 09:20:48.887548+00:00
+Build Date UTC : 2025-05-18 02:43:44.144540+00:00
 -->

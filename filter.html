@@ -61,6 +61,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="identity.html">Identity</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="url.html">URL</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="bootstrap.html">Bootstrap</a>
                 </li>
     </ul>
@@ -90,30 +92,6 @@
                   <li class="toctree-l1 current"><a class="reference internal current" >Protocol</a>
     <ul class="current">
                 <li class="toctree-l2 current"><a class="reference internal current" href="#">Filter</a>
-    <ul class="current">
-    <li class="toctree-l3"><a class="reference internal" href="#exclude">Exclude</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#author-keys">Author Keys</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#signing-keys">Signing Keys</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#timestamps">Timestamps</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#since">Since</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#until">Until</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#received-ats">Received Ats</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#received-since">Received Since</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#received-until">Received Until</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#kinds">Kinds</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#tag-values">Tag Values</a>
-    </li>
-    </ul>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="protocol.html">Core Protocol</a>
                 </li>
@@ -188,64 +166,85 @@
                 <h1 id="filter">Filter</h1>
 <p><status>PAGE STATUS: early draft</status></p>
 <p>A filter is a binary structure used within the <a href="protocol.html">Core Protocol</a>.</p>
-<p>It is defined as a contiguous sequence of type-value pairs.  Some types
-specify a count or length within their value.</p>
-<p>Each entry restricts the set of records that the filter matches. For an
-event to pass the filter, it must pass all entries.</p>
-<p>Filter types MUST not be used more than once within a filter.</p>
+<p>It is defined as a contiguous sequence of type-selector pairs.  Some selector
+types specify a count or length within their value.</p>
+<p>Each selector restricts the set of records that the filter matches. For an
+event to pass the filter, it must pass all the selectors.</p>
+<p>Selector types MUST not be used more than once within a filter.</p>
 <p>Filters can be up to 65536 bytes long maximum, but this size may not be
 possible given other constraints.</p>
+<p>Filters SHOULD include at least one narrowly-tailored selector in order
+to narrow down the set of matching events to something reasonable. Software
+MAY reject filters that do not comply with this requirement.</p>
+<p>The following selectors are defined:</p>
 <table>
 <thead>
 <tr>
 <th>type</th>
 <th>name</th>
+<th>narrow</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0x1</td>
 <td><a href="#exclude">Exclude</a></td>
+<td>no</td>
 </tr>
 <tr>
 <td>0x4</td>
 <td><a href="#author-keys">Author Keys</a></td>
+<td>yes</td>
 </tr>
 <tr>
 <td>0x5</td>
 <td><a href="#signing-keys">Signing Keys</a></td>
+<td>yes</td>
 </tr>
 <tr>
 <td>0x6</td>
 <td><a href="#timestamps">Timestamps</a></td>
+<td>yes</td>
 </tr>
 <tr>
 <td>0x7</td>
 <td><a href="#since">Since</a></td>
+<td>no</td>
 </tr>
 <tr>
 <td>0x8</td>
 <td><a href="#until">Until</a></td>
+<td>no</td>
 </tr>
 <tr>
 <td>0x9</td>
 <td><a href="#received-ats">Received Ats</a></td>
+<td>yes</td>
 </tr>
 <tr>
 <td>0xA</td>
 <td><a href="#received-since">Received Since</a></td>
+<td>no</td>
 </tr>
 <tr>
 <td>0xB</td>
 <td><a href="#received-until">Received Until</a></td>
+<td>no</td>
 </tr>
 <tr>
 <td>0xC</td>
 <td><a href="#kinds">Kinds</a></td>
+<td>yes</td>
 </tr>
 <tr>
 <td>0xD</td>
-<td><a href="#tag-values">Tag Values</a></td>
+<td><a href="#includes-tag">Includes Tag</a></td>
+<td>yes</td>
+</tr>
+<tr>
+<td>0xE</td>
+<td><a href="#excludes-tag">Excludes Tag</a></td>
+<td>no</td>
 </tr>
 </tbody>
 </table>
@@ -477,18 +476,17 @@ this value.</p>
 <li><code>[7:8]</code> - A 1-byte count <code>n</code> of kinds</li>
 <li><code>[8]</code> - A sequence of <code>n</code> 4-byte <a href="kinds.html">kinds</a></li>
 </ul>
-<h2 id="tag-values">Tag Values</h2>
+<h2 id="includes-tag">Includes Tag</h2>
 <blockquote>
 <p><strong>0xD</strong></p>
 </blockquote>
-<p>Matches all records where the tags of the given tag type pass an
-encoded boolean algebraic condition.</p>
+<p>Matches all records that contain the given tag.</p>
 <pre><code class="language-text">            1   2   3   4   4   5   6
     0   8   6   4   2   0   8   6   4
  0  +-------------------------------+
     |0xD|0x0| TTYPE | 0x0   |  LEN  |
  8  +-------------------------------+
-    |   CONDITION..                 |
+    |   VALUE...  .                 |
     +-------------------------------+
 </code></pre>
 <ul>
@@ -497,30 +495,30 @@ encoded boolean algebraic condition.</p>
 <li><code>[2:4]</code> - A 2-byte <a href="tag_types.html">tag type</a> in little-endian format.</li>
 <li><code>[4:6]</code> - Zeroed</li>
 <li><code>[6:8]</code> - A 2-byte <code>LEN</code> unsigned integer in little-endian format
-  indicating the length in bytes of the <code>CONDITION</code></li>
-<li><code>[*]</code> - The <code>CONDITION</code> which is described next</li>
+  indicating the length of the <code>VALUE</code></li>
+<li><code>[*]</code> - The <code>VALUE</code> of the tag, up to 253 bytes.</li>
 </ul>
-<p>All boolean expressions can be reduced to
-<a href="https://en.wikipedia.org/wiki/Disjunctive_normal_form">disjunctive normal form</a>.
-We require this form.</p>
-<p><code>CONDITION</code> is encoded as follows:</p>
+<h2 id="excludes-tag">Excludes Tag</h2>
+<blockquote>
+<p><strong>0xE</strong></p>
+</blockquote>
+<p>Matches all records that do NOT contain the given tag.</p>
+<pre><code class="language-text">            1   2   3   4   4   5   6
+    0   8   6   4   2   0   8   6   4
+ 0  +-------------------------------+
+    |0xE|0x0| TTYPE | 0x0   |  LEN  |
+ 8  +-------------------------------+
+    |   VALUE...  .                 |
+    +-------------------------------+
+</code></pre>
 <ul>
-<li><code>[0:1]</code> - A count of how many values are listed (maximum of 127)</li>
-<li><code>[*]</code> - A sequence of Length-Value pairs with 1-byte length, where the
-  value is a tag value to match</li>
-<li><code>[*]</code> - The encoded <code>EXPRESSION</code> which references these previous values
-  by their index.</li>
-</ul>
-<p>The encoded <code>EXPRESSION</code> is written as follows:</p>
-<ul>
-<li><code>[0:1]</code> - Number of terms</li>
-<li><code>[*]</code> - the <code>TERMS</code></li>
-</ul>
-<p>The <code>TERMS</code> are written as follows</p>
-<ul>
-<li><code>[0:1]</code> - The number of values <code>n</code></li>
-<li><code>[1:n]</code> - <code>n</code> value references, referred to by the index where they were
-  defined in the <code>CONDITION</code>.</li>
+<li><code>[0:1]</code> - The type 0xE</li>
+<li><code>[1:2]</code> - Zeroed</li>
+<li><code>[2:4]</code> - A 2-byte <a href="tag_types.html">tag type</a> in little-endian format.</li>
+<li><code>[4:6]</code> - Zeroed</li>
+<li><code>[6:8]</code> - A 2-byte <code>LEN</code> unsigned integer in little-endian format
+  indicating the length of the <code>VALUE</code></li>
+<li><code>[*]</code> - The <code>VALUE</code> of the tag, up to 253 bytes.</li>
 </ul>
               
             </div>

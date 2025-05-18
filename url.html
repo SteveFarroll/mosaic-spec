@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="img/favicon.ico" />
-    <title>Blog - Mosaic</title>
+    <title>URL - Mosaic</title>
     <link rel="stylesheet" href="css/theme.css" />
     <link rel="stylesheet" href="css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,8 +13,8 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Blog";
-        var mkdocs_page_input_path = "blog.md";
+        var mkdocs_page_name = "URL";
+        var mkdocs_page_input_path = "url.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -54,14 +54,14 @@
                 </li>
               </ul>
               <p class="caption"><span class="caption-text">Mosaic Core</span></p>
-              <ul>
-                  <li class="toctree-l1"><a class="reference internal" >Identity</a>
-    <ul>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" >Identity</a>
+    <ul class="current">
                 <li class="toctree-l2"><a class="reference internal" href="cryptography.html">Cryptography</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="identity.html">Identity</a>
                 </li>
-                <li class="toctree-l2"><a class="reference internal" href="url.html">URL</a>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">URL</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="bootstrap.html">Bootstrap</a>
                 </li>
@@ -124,12 +124,12 @@
                   </li>
               </ul>
               <p class="caption"><span class="caption-text">Applications</span></p>
-              <ul class="current">
-                  <li class="toctree-l1 current"><a class="reference internal current" >Mosaic Social media</a>
-    <ul class="current">
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Mosaic Social media</a>
+    <ul>
                 <li class="toctree-l2"><a class="reference internal" href="microblog.html">Microblogging</a>
                 </li>
-                <li class="toctree-l2 current"><a class="reference internal current" href="#">Blog</a>
+                <li class="toctree-l2"><a class="reference internal" href="blog.html">Blog</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="reply_comment.html">Reply Comment</a>
                 </li>
@@ -152,9 +152,9 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
-          <li class="breadcrumb-item">Applications</li>
-          <li class="breadcrumb-item">Mosaic Social media</li>
-      <li class="breadcrumb-item active">Blog</li>
+          <li class="breadcrumb-item">Mosaic Core</li>
+          <li class="breadcrumb-item">Identity</li>
+      <li class="breadcrumb-item active">URL</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -163,31 +163,36 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="blog">Blog</h1>
+                <h1 id="url">URL</h1>
 <p><status>PAGE STATUS: early draft</status></p>
-<p>Kind = 0x6 - Blog post</p>
-<h2 id="tags">Tags</h2>
-<p>Blogs SHOULD not have the following tags: 0x1, 0x2, 0x3, 0x4, 0x5, 0x6.</p>
-<p>Blogs MAY have 0x7.</p>
-<h2 id="payload">Payload</h2>
-<p>The payload follows the <a href="human_readable_content.html">Human Readable Content</a> rules.</p>
-<h2 id="flags">Flags</h2>
+<p>Mosaic servers are located using URLs. Mosaic server URLs are subject to the
+following rules.</p>
 <ul>
-<li>0x01 ZSTD - may be on or off</li>
-<li>0x02 FROMAUTHOR - may be on or off to control distribution.</li>
-<li>0x04 TORECIPIENTS - MUST be off. Blogs are public.</li>
-<li>0x08 NOBRIDGE - may be on or off</li>
-<li>0x10 EPHEMERAL- MUST be off. Blogs are not ephemeral.</li>
+<li>Mosaic URLs MUST contain one of the following <strong>scheme</strong>s:<ul>
+<li><code>mosaic</code> for Mosaic over <a href="quic.html">QUIC</a></li>
+<li><code>wss</code> for Mosaic over <a href="websockets.html">WebSockets</a></li>
 </ul>
-<h2 id="tags_1">Tags</h2>
-<h2 id="server-used">Server Used</h2>
-<p>These are posted to all of the author's Outbox servers.</p>
+</li>
+<li>Mosaic URLs MUST contain a <strong>host</strong>. This SHOULD normally be an IP address (either
+  IPv4 or IPv6) but it MAY be a DNS name. DNS names are useful primarily when
+  using Tor (.onion) or I2P (.i2p), but regular DNS may also be used although this
+  is recommended against since DNS can be censored.</li>
+<li>Mosaic URLs MAY contain a <strong>port</strong>. If a port is not provided, then the following
+  defaults apply<ul>
+<li>The <code>mosaic</code> default port is 1320.</li>
+<li>The <code>wss</code> default port is 443.</li>
+</ul>
+</li>
+<li>Mosaic URLs MUST specify the root path <code>/</code>.</li>
+<li>Mosaic URLs MUST not contain a user, password, query, or fragment section. If any
+  of these is found, software MUST prune such information.</li>
+</ul>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="microblog.html" class="btn btn-neutral float-left" title="Microblogging"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="reply_comment.html" class="btn btn-neutral float-right" title="Reply Comment">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="identity.html" class="btn btn-neutral float-left" title="Identity"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="bootstrap.html" class="btn btn-neutral float-right" title="Bootstrap">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -212,10 +217,10 @@
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="microblog.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="identity.html" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="reply_comment.html" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="bootstrap.html" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

@@ -61,6 +61,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="identity.html">Identity</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="url.html">URL</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="bootstrap.html">Bootstrap</a>
                 </li>
     </ul>
@@ -70,40 +72,6 @@
                 <li class="toctree-l2"><a class="reference internal" href="timestamps.html">Timestamps</a>
                 </li>
                 <li class="toctree-l2 current"><a class="reference internal current" href="#">Record Format</a>
-    <ul class="current">
-    <li class="toctree-l3"><a class="reference internal" href="#notation">Notation</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#maximum-size">Maximum Size</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#layout">Layout</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#fields">Fields</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#signature">Signature</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#id">ID</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#hash">Hash</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#address">Address</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#flags">Flags</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#timestamp">Timestamp</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#appflgs">AppFlgs</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#lent">LenT</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#lenp">LenP</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#tags">Tags</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#payload">Payload</a>
-    </li>
-        </ul>
-    </li>
-    </ul>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="human_readable_content.html">Human Readable Content</a>
                 </li>
@@ -197,7 +165,8 @@
               
                 <h1 id="record">Record</h1>
 <p><status>PAGE STATUS: draft</status></p>
-<p>A record is a datum within Mosaic. All datums are records.</p>
+<p>All Mosaic persistent data is stored within Record structures (except for
+bootstrap data).</p>
 <h2 id="notation">Notation</h2>
 <p>Byte slice notation <code>[m:n]</code> indicates the bytes including <code>m</code> up to and
 including the byte <code>n-1</code> but not including the byte <code>n</code>. For example <code>[8:12]</code>
@@ -288,11 +257,11 @@ produced using the <a href="#construction">construction</a> procedure.</p>
 <h4 id="zeroes">Zeroes</h4>
 <p>2 bytes of zeroes from <code>[70:72]</code>.</p>
 <p>This is the second part of the three-part ID.</p>
-<h3 id="hash">Hash</h3>
+<h4 id="hash">Hash</h4>
 <p>40 bytes at <code>[72:112]</code></p>
 <p>This is the first 40 bytes of the BLAKE3 hash.</p>
 <p>This is the third part of the three-part ID.</p>
-<h4 id="signing-public-key">Signing Public Key</h4>
+<h3 id="signing-public-key">Signing Public Key</h3>
 <p>32 bytes at <code>[112:144]</code></p>
 <p>This is the public key of the signing keypair, which is usually a subkey under
 the author's master keypair (but theoretically could be delegated in some other
@@ -315,6 +284,7 @@ application and its purpose:</p>
    event by a known fixed string of bytes (and known author and kind).</li>
 <li>They can be copied from a previous event, to replace that event.</li>
 </ol>
+<p>The method of creation is determined by the application layer.</p>
 <h4 id="kind">Kind</h4>
 <p>2 bytes at <code>[158:160]</code></p>
 <p>This is the <a href="kinds.html">kind</a> of the record which determines the application
@@ -362,6 +332,7 @@ as an unsigned integer in little-endian format.</p>
 at the end to achieve 64-bit alignment.</p>
 <p>The maximum tags section length is 65536 bytes.</p>
 <h4 id="lentpad">LenTPad</h4>
+<p>This is NOT included in the record, it is calculated.</p>
 <p>The length of the tags section including padding is called <code>LenTPad</code> and is
 calculated as <code>(LenT + 7) &amp; !7</code></p>
 <h3 id="lenp">LenP</h3>
@@ -372,12 +343,13 @@ at the end to achieve 64-bit alignment.</p>
 <p>The maximum payload section length is 1_048_384 bytes (which is the maximum record
 size minus the header size).</p>
 <h4 id="lenppad">LenPPad</h4>
+<p>This is NOT included in the record, it is calculated.</p>
 <p>The length of the payload section including padding is called <code>LenPPad</code> and is
 calculated as <code>(LenP + 7) &amp; !7</code></p>
 <h3 id="tags">Tags</h3>
 <p>Varying bytes at <code>[208:208+LenT]</code></p>
 <p>These are searchable key-value tags.</p>
-<p><t>Tags</t> <a href="rationale.html#tags"><sup>ref</sup></a>  are a maximum of 256 bytes long.</p>
+<p><t>Tags</t> <a href="rationale.html#tags"><sup>ref</sup></a> are a maximum of 256 bytes long.</p>
 <p>All tags are searchable on servers. If an application requires unsearchable tags,
 these can be defined within that application's payload.</p>
 <p>Tags are laid out as follows:</p>
@@ -405,17 +377,17 @@ size minus the header size).</p>
 <li>Take a BLAKE3 hash of <code>[112:]</code>, unkeyed, and extend to 64 bytes
    of output using BLAKE3's <code>finalize_xof()</code> function. This does not
    directly go into the record.</li>
-<li>Generate EdDSA ed25519ph pre-hashed signature of that 512-bit hash
-   using the Signing secret key, and providing the context string
-   of "Mosaic". NOTE: ed25519 calls for a SHA-512 hash, but we use
-   a BLAKE3 hash instead. Place the signature at bytes <code>[0:64]</code>.</li>
-<li>Copy the first 40 bytes of the hash to <code>[72:112]</code>.</li>
+<li>Generate EdDSA ed25519ph pre-hashed signature of the 512-bit hash
+   generated in step 2 using the Signing secret key, and providing the
+   context string of "Mosaic". NOTE: ed25519 calls for a SHA-512 hash,
+   but we use a BLAKE3 hash instead. Place the signature at bytes <code>[0:64]</code>.</li>
+<li>Copy the first 40 bytes of the hash generated in step 2 to <code>[72:112]</code>.</li>
 <li>Write the timestamp as a 48-bit unsigned big-endian to <code>[64:70]</code>.</li>
 <li>Set bytes 70 and 71 to 0 (if not already).</li>
 </ol>
 <h1 id="validation">Validation</h1>
 <p>Records MUST be fully validated by clients.</p>
-<p>Records MUST be fully validated by servers except for the
+<p>Records MUST be fully validated by servers upon receipt except for the
 steps marked CLIENTS ONLY.</p>
 <p>Validation steps</p>
 <ol>
