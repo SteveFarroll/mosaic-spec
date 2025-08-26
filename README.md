@@ -1,5 +1,3 @@
-# Mosaic specification
+# THIS REPO IS DEFUNCT
 
-Mosaic is a distributed sovereign general-purpose application protocol for the Internet.
-
-Read the specification [here](https://stevefarroll.github.io/mosaic-spec/)
+Please instead use [this one](https://github.com/mikedilger/mosaic-spec/).
